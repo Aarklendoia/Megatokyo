@@ -23,7 +23,7 @@ namespace Megatokyo.Server.Controllers
         public async Task<IEnumerable<Rants>> GetNewRants([FromRoute] DateTime date)
         {
             // L'URL doit être au format /api/newrants/2018-07-30T23:08:00
-            return await _repoWrapper.Rants.FindByConditionAsync(s => s.Date >= date.Date).ConfigureAwait(false);
+            return await _repoWrapper.Rants.FindByConditionAsync(s => s.Date >= date.Date);
         }
     }
 }

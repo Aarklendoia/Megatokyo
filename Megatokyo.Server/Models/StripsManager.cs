@@ -48,7 +48,7 @@ namespace Megatokyo.Server.Models
         {
             IList<Chapter> chapters = ChaptersParser.Parse(Url);
 
-            IEnumerable<Chapters> chaptersInDatabase = await _repository.Chapters.FindAllAsync().ConfigureAwait(false);
+            IEnumerable<Chapters> chaptersInDatabase = await _repository.Chapters.FindAllAsync();
 
             foreach (Chapter chapter in chapters)
             {
@@ -63,7 +63,7 @@ namespace Megatokyo.Server.Models
                     _repository.Chapters.Create(newChapter);
                 }
             }
-            await _repository.Chapters.SaveAsync().ConfigureAwait(false);
+            await _repository.Chapters.SaveAsync();
             return chapters;
         }
 
@@ -74,11 +74,11 @@ namespace Megatokyo.Server.Models
         /// <returns></returns>
         public async Task ParseStripsAsync(IList<Chapter> chapters)
         {
-            IEnumerable<Strips> stripsInDatabase = await _repository.Strips.FindAllAsync().ConfigureAwait(false);
+            IEnumerable<Strips> stripsInDatabase = await _repository.Strips.FindAllAsync();
 
-            List<Strip> strips = await StripsParser.ParseAsync(Url, chapters, stripsInDatabase).ConfigureAwait(false);
+            List<Strip> strips = await StripsParser.ParseAsync(Url, chapters, stripsInDatabase);
 
-            IEnumerable<Chapters> chaptersInDatabase = await _repository.Chapters.FindAllAsync().ConfigureAwait(false);
+            IEnumerable<Chapters> chaptersInDatabase = await _repository.Chapters.FindAllAsync();
             foreach (Strip strip in strips)
             {
                 if (!stripsInDatabase.Where(s => s.Number == strip.Number).Any())
@@ -95,18 +95,18 @@ namespace Megatokyo.Server.Models
                     _repository.Strips.Create(newStrip);
                 }
             }
-            await _repository.Strips.SaveAsync().ConfigureAwait(false);
+            await _repository.Strips.SaveAsync();
         }
 
         public async Task<DetailedStrip> GetStripByNumberAsync(int number)
         {
-            IEnumerable<Strips> strips = await _repository.Strips.FindByConditionAsync(s => s.Number == number).ConfigureAwait(false);
+            IEnumerable<Strips> strips = await _repository.Strips.FindByConditionAsync(s => s.Number == number);
             return new DetailedStrip(strips.First());
         }
 
         public async Task<bool> CheckIfDataExistsAsync()
         {
-            IEnumerable<Strips> strips = await _repository.Strips.FindAllAsync().ConfigureAwait(false);
+            IEnumerable<Strips> strips = await _repository.Strips.FindAllAsync();
             return strips.Any();
         }
     }

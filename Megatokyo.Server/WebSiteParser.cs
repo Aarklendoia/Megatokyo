@@ -40,36 +40,36 @@ namespace Megatokyo.Server
 
         private async void DoWorkAsync(object state)
         {
-            bool haveStrips = await _stripManager.CheckIfDataExistsAsync().ConfigureAwait(false);
+            bool haveStrips = await _stripManager.CheckIfDataExistsAsync();
             if (!haveStrips)
             {
-                IList<Chapter> chapters = await _stripManager.ParseChaptersAsync().ConfigureAwait(false);
-                await _stripManager.ParseStripsAsync(chapters).ConfigureAwait(false);
+                IList<Chapter> chapters = await _stripManager.ParseChaptersAsync();
+                await _stripManager.ParseStripsAsync(chapters);
             }
-            bool haveRants = await _rantManager.CheckIfDataExistsAsync().ConfigureAwait(false);
+            bool haveRants = await _rantManager.CheckIfDataExistsAsync();
             if (!haveRants)
             {
-                await _rantManager.ParseRantsAsync().ConfigureAwait(false);
+                await _rantManager.ParseRantsAsync();
             }
 
-            //await _feedManager.LoadAsync().ConfigureAwait(false);
+            //await _feedManager.LoadAsync();
             //if (_feedManager.Strips.Count > 0)
             //{
-            //    IList<Chapter> chapters = await _stripManager.ParseChaptersAsync().ConfigureAwait(false);
-            //    await _stripManager.ParseStripsAsync(chapters).ConfigureAwait(false);
+            //    IList<Chapter> chapters = await _stripManager.ParseChaptersAsync();
+            //    await _stripManager.ParseStripsAsync(chapters);
             //}
             //foreach (Strip strip in _feedManager.Strips)
             //{
-            //    await SendLocalisedStripNotificationsAsync(strip).ConfigureAwait(false);
+            //    await SendLocalisedStripNotificationsAsync(strip);
             //}
 
             //if (_feedManager.Rants.Count > 0)
             //{
-            //    await _rantManager.ParseRantsAsync(_feedManager.LastRantNumber).ConfigureAwait(false);
+            //    await _rantManager.ParseRantsAsync(_feedManager.LastRantNumber);
             //}
             //foreach (Rant rant in _feedManager.Rants)
             //{
-            //    await SendLocalisedRantNotifications(rant).ConfigureAwait(false);
+            //    await SendLocalisedRantNotifications(rant);
             //}
         }
 
@@ -106,26 +106,26 @@ namespace Megatokyo.Server
 
         private async Task SendTemplateNotificationAsync(Dictionary<string, string> data)
         {
-            await _hub.SendTemplateNotificationAsync(data).ConfigureAwait(false);
+            await _hub.SendTemplateNotificationAsync(data);
         }
 
         private async Task SendLocalisedRantNotifications(Rant rant)
         {
-            Rant rantToNotify = await _rantManager.GetRantByNumber(rant.Number).ConfigureAwait(false);
+            Rant rantToNotify = await _rantManager.GetRantByNumber(rant.Number);
             //NewRantToast newrantToast = new NewRantToast(rantToNotify.Title, rantToNotify.Url, rantToNotify.Author, locale);
             //await SendTemplateNotificationAsync(newrantToast.Toast, locale);
         }
 
         private async Task SendLocalisedStripNotificationsAsync(Strip strip)
         {
-            DetailedStrip stripToNotify = await _stripManager.GetStripByNumberAsync(strip.Number).ConfigureAwait(false);
+            DetailedStrip stripToNotify = await _stripManager.GetStripByNumberAsync(strip.Number);
             Dictionary<string, string> templateParams = new Dictionary<string, string>
             {
                 ["title"] = stripToNotify.Title,
                 ["uri"] = stripToNotify.Url.OriginalString,
                 ["chapter"] = stripToNotify.Chapter.Number.ToString(CultureInfo.InvariantCulture) + " - " + stripToNotify.Chapter.Title
             };
-            await SendTemplateNotificationAsync(templateParams).ConfigureAwait(false);
+            await SendTemplateNotificationAsync(templateParams);
         }
     }
 }

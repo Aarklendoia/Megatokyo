@@ -16,12 +16,12 @@ namespace Megatokyo.Server.Database.Repository
 
         public override async Task<IEnumerable<Chapters>> FindAllAsync()
         {
-            return await RepositoryContext.Set<Chapters>().OrderBy(c => c.Number).ToListAsync().ConfigureAwait(false);
+            return await RepositoryContext.Set<Chapters>().OrderBy(c => c.Number).ToListAsync();
         }
 
         public async Task<IEnumerable<Chapters>> FindAllStoryChapters()
         {
-            return await RepositoryContext.Set<Chapters>().Where(c => c.Category.StartsWith("C-", System.StringComparison.InvariantCulture)).OrderBy(c => c.Number).ToListAsync().ConfigureAwait(false);
+            return await RepositoryContext.Set<Chapters>().Where(c => c.Category.StartsWith("C-", System.StringComparison.InvariantCulture)).OrderBy(c => c.Number).ToListAsync();
         }
     }
 }

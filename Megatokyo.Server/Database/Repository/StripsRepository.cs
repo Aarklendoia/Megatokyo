@@ -16,7 +16,7 @@ namespace Megatokyo.Server.Database.Repository
 
         public override async Task<IEnumerable<Strips>> FindAllAsync()
         {
-            return await RepositoryContext.Set<Strips>().OrderBy(s => s.Number).ToListAsync().ConfigureAwait(false);
+            return await RepositoryContext.Set<Strips>().OrderBy(s => s.Number).ToListAsync();
         }
     }
 }

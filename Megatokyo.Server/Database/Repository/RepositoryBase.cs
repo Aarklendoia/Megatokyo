@@ -15,12 +15,12 @@ namespace Megatokyo.Server.Database.Repository
 
         public virtual async Task<IEnumerable<T>> FindAllAsync()
         {
-            return await RepositoryContext.Set<T>().ToListAsync().ConfigureAwait(false);
+            return await RepositoryContext.Set<T>().ToListAsync();
         }
 
         public async Task<IEnumerable<T>> FindByConditionAsync(Expression<Func<T, bool>> expression)
         {
-            return await RepositoryContext.Set<T>().Where(expression).ToListAsync().ConfigureAwait(false);
+            return await RepositoryContext.Set<T>().Where(expression).ToListAsync();
         }
 
         public void Create(T entity)
@@ -40,12 +40,12 @@ namespace Megatokyo.Server.Database.Repository
 
         public async Task SaveAsync()
         {
-            await RepositoryContext.SaveChangesAsync().ConfigureAwait(false);
+            await RepositoryContext.SaveChangesAsync();
         }
 
         public async Task<T> LatestAsync(Expression<Func<T, DateTime>> expression)
         {
-            return await RepositoryContext.Set<T>().OrderByDescending(expression).FirstAsync().ConfigureAwait(false);
+            return await RepositoryContext.Set<T>().OrderByDescending(expression).FirstAsync();
         }
     }
 }

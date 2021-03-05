@@ -16,7 +16,7 @@ namespace Megatokyo.Server.Models
 
         private async Task<DetailedStrip> GetStrip()
         {
-            Strips strips = await _repoWrapper.Strips.LatestAsync(s => s.Date).ConfigureAwait(false);
+            Strips strips = await _repoWrapper.Strips.LatestAsync(s => s.Date);
             DetailedStrip strip = new DetailedStrip
             {
                 ChapterId = strips.ChapterId,
@@ -26,7 +26,7 @@ namespace Megatokyo.Server.Models
                 Title = strips.Title,
                 Url = strips.Url
             };
-            IEnumerable<Chapters> chapters = await _repoWrapper.Chapters.FindByConditionAsync(c => c.ChapterId == strips.ChapterId).ConfigureAwait(false);
+            IEnumerable<Chapters> chapters = await _repoWrapper.Chapters.FindByConditionAsync(c => c.ChapterId == strips.ChapterId);
             Chapters chapter = chapters.First();
             strip.LoadChapter(chapter);
             return strip;
@@ -34,7 +34,7 @@ namespace Megatokyo.Server.Models
 
         private async Task<Rants> GetRant()
         {
-            return await _repoWrapper.Rants.LatestAsync(r => r.Date).ConfigureAwait(false);
+            return await _repoWrapper.Rants.LatestAsync(r => r.Date);
         }
 
         public Home(IRepositoryWrapper repoWrapper)
@@ -44,8 +44,8 @@ namespace Megatokyo.Server.Models
 
         internal async Task Load()
         {
-            Strip = await GetStrip().ConfigureAwait(false);
-            Rant = await GetRant().ConfigureAwait(false);
+            Strip = await GetStrip();
+            Rant = await GetRant();
         }
     }
 }

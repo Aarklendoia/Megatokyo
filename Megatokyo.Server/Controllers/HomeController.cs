@@ -25,7 +25,7 @@ namespace Megatokyo.Server.Controllers
         public async Task<Home> GetHome()
         {
             Home home = new Home(_repoWrapper);
-            await home.Load().ConfigureAwait(false);
+            await home.Load();
             return home;
         }
     }

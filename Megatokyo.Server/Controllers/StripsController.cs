@@ -34,7 +34,7 @@ namespace Megatokyo.Server.Controllers
             if (!_cache.TryGetValue(CacheKeys.Strips, out List<Strip> stripsData))
             {
                 stripsData = new List<Strip>();
-                IEnumerable<Strips> strips = await _repoWrapper.Strips.FindAllAsync().ConfigureAwait(false);
+                IEnumerable<Strips> strips = await _repoWrapper.Strips.FindAllAsync();
                 foreach (Strips strip in strips)
                 {
                     stripsData.Add(new Strip
@@ -56,7 +56,7 @@ namespace Megatokyo.Server.Controllers
         [HttpGet]
         public async Task<List<Strip>> GetStrips()
         {
-            return await LoadData().ConfigureAwait(false);
+            return await LoadData();
         }
 
         [HttpGet("{number}/{full?}")]
@@ -66,7 +66,7 @@ namespace Megatokyo.Server.Controllers
             {
                 return BadRequest(ModelState);
             }
-            List<Strip> stripsData = await LoadData().ConfigureAwait(false);
+            List<Strip> stripsData = await LoadData();
             stripsData.Select(s => s.Number == number);
             Strip strip = stripsData.First();
             if (strip == null)
@@ -75,7 +75,7 @@ namespace Megatokyo.Server.Controllers
             }
             if (full)
             {
-                IEnumerable<Chapters> chapters = await _repoWrapper.Chapters.FindByConditionAsync(c => c.ChapterId == strip.ChapterId).ConfigureAwait(false);
+                IEnumerable<Chapters> chapters = await _repoWrapper.Chapters.FindByConditionAsync(c => c.ChapterId == strip.ChapterId);
                 Chapters chapter = chapters.First();
                 DetailedStrip detailedStrip = new DetailedStrip(strip);
                 detailedStrip.LoadChapter(chapter);

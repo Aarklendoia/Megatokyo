@@ -41,7 +41,7 @@ namespace Megatokyo.Server.Controllers
         [HttpGet]
         public async Task<IEnumerable<Rants>> GetRants()
         {
-            return await _repoWrapper.Rants.FindAllAsync().ConfigureAwait(false);
+            return await _repoWrapper.Rants.FindAllAsync();
         }
 
         [HttpGet("{number}/{language}")]
@@ -52,12 +52,12 @@ namespace Megatokyo.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            IEnumerable<Rants> rants = await _repoWrapper.Rants.FindByConditionAsync(r => r.Number == number).ConfigureAwait(false);
+            IEnumerable<Rants> rants = await _repoWrapper.Rants.FindByConditionAsync(r => r.Number == number);
             Rants rant = rants.First();
-            IEnumerable<RantsTranslations> rantsTranslations = await _repoWrapper.RantsTranslations.FindByConditionAsync(rt => rt.RantId == rant.RantId && (rt.Language == language || rt.Language == new CultureInfo("en-US").ToString())).ConfigureAwait(false);
+            IEnumerable<RantsTranslations> rantsTranslations = await _repoWrapper.RantsTranslations.FindByConditionAsync(rt => rt.RantId == rant.RantId && (rt.Language == language || rt.Language == new CultureInfo("en-US").ToString()));
             //if (rant.RantsTranslations.Count == 1)
             //{
-            //    RantsTranslations newRantsTranslations = await TranslateRant(rant.RantId, language).ConfigureAwait(false);
+            //    RantsTranslations newRantsTranslations = await TranslateRant(rant.RantId, language);
             //    rant.RantsTranslations.Add(newRantsTranslations);
             //}
             //else
@@ -85,12 +85,12 @@ namespace Megatokyo.Server.Controllers
             {
                 Debug.WriteLine(e.Message);
             }
-            IEnumerable<RantsTranslations> rantsTranslations = await _repoWrapper.RantsTranslations.FindByConditionAsync(rt => rt.RantId == rantId && rt.Language == language).ConfigureAwait(false);
+            IEnumerable<RantsTranslations> rantsTranslations = await _repoWrapper.RantsTranslations.FindByConditionAsync(rt => rt.RantId == rantId && rt.Language == language);
             if (!rantsTranslations.Any())
             {
-                IEnumerable<RantsTranslations> currentRantTranslation = await _repoWrapper.RantsTranslations.FindByConditionAsync(rt => rt.RantId == rantId && rt.Language == new CultureInfo("en-US").ToString()).ConfigureAwait(false);
+                IEnumerable<RantsTranslations> currentRantTranslation = await _repoWrapper.RantsTranslations.FindByConditionAsync(rt => rt.RantId == rantId && rt.Language == new CultureInfo("en-US").ToString());
                 RantsTranslations currentTranslation = currentRantTranslation.First();
-                string json = await _translator.Translate(languageCode, currentTranslation.Content).ConfigureAwait(false);
+                string json = await _translator.Translate(languageCode, currentTranslation.Content);
                 string translation = ExtractTranslationFromJson(json);
                 RantsTranslations newRantsTranslations = new RantsTranslations
                 {
@@ -100,7 +100,7 @@ namespace Megatokyo.Server.Controllers
                     Content = translation
                 };
                 _repoWrapper.RantsTranslations.Create(newRantsTranslations);
-                await _repoWrapper.RantsTranslations.SaveAsync().ConfigureAwait(false);
+                await _repoWrapper.RantsTranslations.SaveAsync();
                 return newRantsTranslations;
             }
             return rantsTranslations.First();

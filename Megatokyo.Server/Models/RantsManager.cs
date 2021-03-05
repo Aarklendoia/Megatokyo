@@ -44,7 +44,7 @@ namespace Megatokyo.Server.Models
         /// <returns></returns>
         public async Task<IList<Rant>> ParseRantsAsync()
         {
-            return await ParseRantsAsync(1).ConfigureAwait(false);
+            return await ParseRantsAsync(1);
         }
 
         /// <summary>
@@ -54,11 +54,11 @@ namespace Megatokyo.Server.Models
         /// <returns></returns>
         public async Task<IList<Rant>> ParseRantsAsync(int stripNumber)
         {
-            IEnumerable<Strips> StripsInDatabase = await _repository.Strips.FindAllAsync().ConfigureAwait(false);
+            IEnumerable<Strips> StripsInDatabase = await _repository.Strips.FindAllAsync();
 
             List<Rant> rants = RantsParser.Parse(stripNumber, StripsInDatabase.Max(s => s.Number));
 
-            IEnumerable<Rants> rantsInDatabase = await _repository.Rants.FindAllAsync().ConfigureAwait(false);
+            IEnumerable<Rants> rantsInDatabase = await _repository.Rants.FindAllAsync();
 
             foreach (Rant rant in rants)
             {
@@ -71,12 +71,12 @@ namespace Megatokyo.Server.Models
                         Author = rant.Author
                     };
                     _repository.Rants.Create(newRant);
-                    await _repository.Rants.SaveAsync().ConfigureAwait(false);
+                    await _repository.Rants.SaveAsync();
                     rant.RantId = newRant.RantId;
                 }
             }
 
-            IEnumerable<RantsTranslations> rantsTranslationInDatabase = await _repository.RantsTranslations.FindAllAsync().ConfigureAwait(false);
+            IEnumerable<RantsTranslations> rantsTranslationInDatabase = await _repository.RantsTranslations.FindAllAsync();
             foreach (Rant rant in rants)
             {
                 if (!rantsInDatabase.Where(c => c.Number == rant.Number).Any())
@@ -91,20 +91,20 @@ namespace Megatokyo.Server.Models
                     _repository.RantsTranslations.Create(newTranslation);
                 }
             }
-            await _repository.RantsTranslations.SaveAsync().ConfigureAwait(false);
+            await _repository.RantsTranslations.SaveAsync();
 
             return rants;
         }
 
         public async Task<Rant> GetRantByNumber(int number)
         {
-            IEnumerable<Rants> rants = await _repository.Rants.FindByConditionAsync(s => s.Number == number).ConfigureAwait(false);
+            IEnumerable<Rants> rants = await _repository.Rants.FindByConditionAsync(s => s.Number == number);
             return new Rant(rants.First());
         }
 
         public async Task<bool> CheckIfDataExistsAsync()
         {
-            IEnumerable<Rants> rants = await _repository.Rants.FindAllAsync().ConfigureAwait(false);
+            IEnumerable<Rants> rants = await _repository.Rants.FindAllAsync();
             return rants.Any();
         }
     }

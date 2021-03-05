@@ -35,8 +35,8 @@ namespace Megatokyo.Server.Models.Translations
                 Content = new StringContent(requestBody, Encoding.UTF8, "application/json")
             };
             request.Headers.Add("Ocp-Apim-Subscription-Key", ClientKey);
-            HttpResponseMessage response = await client.SendAsync(request).ConfigureAwait(false);
-            string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            HttpResponseMessage response = await client.SendAsync(request);
+            string responseBody = await response.Content.ReadAsStringAsync();
             return responseBody;
         }
 
@@ -53,8 +53,8 @@ namespace Megatokyo.Server.Models.Translations
                 Host = host,
                 Path = path
             };
-            HttpResponseMessage response = await client.GetAsync(uriBuilder.Uri).ConfigureAwait(false);
-            string result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            HttpResponseMessage response = await client.GetAsync(uriBuilder.Uri);
+            string result = await response.Content.ReadAsStringAsync();
             return JsonConvert.SerializeObject(JsonConvert.DeserializeObject(result), Formatting.Indented);
         }
     }

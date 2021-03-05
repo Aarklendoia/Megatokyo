@@ -26,7 +26,7 @@ namespace Megatokyo.Server.Models.Parsers
                 IEnumerable<HtmlNode> nodes = htmlDoc.DocumentNode.SelectNodes("//li/a").Where(w => w.ParentNode.ParentNode.ParentNode.ParentNode.SelectSingleNode(".//a").Id == chapter.Category);
                 foreach (HtmlNode node in nodes)
                 {
-                    Strip strip = await ExtractStripAsync(node, chapter.Category, stripsInDatabase).ConfigureAwait(false);
+                    Strip strip = await ExtractStripAsync(node, chapter.Category, stripsInDatabase);
                     if (strip != null)
                     {
                         strips.Add(strip);
@@ -47,7 +47,7 @@ namespace Megatokyo.Server.Models.Parsers
             strip.Category = category;
             if (!stripsInDatabase.Where(s => s.Number == strip.Number).Any())
             {
-                if (await GetFileTypeAsync(strip).ConfigureAwait(false))
+                if (await GetFileTypeAsync(strip))
                 {
                     return strip;
                 }
@@ -69,29 +69,29 @@ namespace Megatokyo.Server.Models.Parsers
             if (strip.Number < 1081)
             {
                 filePath = GetImagePath(strip, FileFormat.Gif);
-                formatFound = await CheckFileFormatAsync(filePath).ConfigureAwait(false);
+                formatFound = await CheckFileFormatAsync(filePath);
             }
             else
             {
                 filePath = GetImagePath(strip, FileFormat.Png);
-                formatFound = await CheckFileFormatAsync(filePath).ConfigureAwait(false);
+                formatFound = await CheckFileFormatAsync(filePath);
             }
             if (!formatFound)
             {
                 filePath = GetImagePath(strip, FileFormat.Jpeg);
-                formatFound = await CheckFileFormatAsync(filePath).ConfigureAwait(false);
+                formatFound = await CheckFileFormatAsync(filePath);
             }
             if (!formatFound)
             {
                 if (strip.Number >= 1081)
                 {
                     filePath = GetImagePath(strip, FileFormat.Gif);
-                    formatFound = await CheckFileFormatAsync(filePath).ConfigureAwait(false);
+                    formatFound = await CheckFileFormatAsync(filePath);
                 }
                 else
                 {
                     filePath = GetImagePath(strip, FileFormat.Png);
-                    formatFound = await CheckFileFormatAsync(filePath).ConfigureAwait(false);
+                    formatFound = await CheckFileFormatAsync(filePath);
                 }
             }
             strip.Url = filePath;
@@ -104,7 +104,7 @@ namespace Megatokyo.Server.Models.Parsers
             webRequest.Method = "HEAD";
             try
             {
-                WebResponse response = await webRequest.GetResponseAsync().ConfigureAwait(false);
+                WebResponse response = await webRequest.GetResponseAsync();
                 response.Dispose();
                 Debug.WriteLine("File found : " + filePath);
                 return true;

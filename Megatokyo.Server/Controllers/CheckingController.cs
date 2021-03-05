@@ -22,7 +22,7 @@ namespace Megatokyo.Server.Controllers
         [HttpGet]
         public async Task<Checking> GetChecking()
         {
-            IEnumerable<Checking> checkings = await _repoWrapper.Checking.FindByConditionAsync(c => c.ChekingId == 1).ConfigureAwait(false);
+            IEnumerable<Checking> checkings = await _repoWrapper.Checking.FindByConditionAsync(c => c.ChekingId == 1);
             Checking checking = checkings.First();
             return checking;
         }

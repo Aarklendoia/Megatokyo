@@ -23,7 +23,7 @@ namespace Megatokyo.Server.Controllers
         [HttpGet]
         public async Task<List<Chapter>> GetChapters()
         {
-            IEnumerable<Chapters> chapters = await _repoWrapper.Chapters.FindAllAsync().ConfigureAwait(false);
+            IEnumerable<Chapters> chapters = await _repoWrapper.Chapters.FindAllAsync();
 
             List<Chapter> chaptersToSend = new List<Chapter>();
 
@@ -49,7 +49,7 @@ namespace Megatokyo.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            IEnumerable<Chapters> chapters = await _repoWrapper.Chapters.FindByConditionAsync(c => c.Category == category).ConfigureAwait(false);
+            IEnumerable<Chapters> chapters = await _repoWrapper.Chapters.FindByConditionAsync(c => c.Category == category);
             Chapters chapter = chapters.First();
             Chapter chapterToSend;
             if (full)
@@ -61,7 +61,7 @@ namespace Megatokyo.Server.Controllers
                     Number = chapter.Number,
                     Title = chapter.Title
                 };
-                IEnumerable<Strips> strips = await _repoWrapper.Strips.FindByConditionAsync(s => s.ChapterId == chapter.ChapterId).ConfigureAwait(false);
+                IEnumerable<Strips> strips = await _repoWrapper.Strips.FindByConditionAsync(s => s.ChapterId == chapter.ChapterId);
                 ((DetailedChapter)chapterToSend).LoadStrips(strips);
             }
             else
