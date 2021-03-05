@@ -1,0 +1,26 @@
+﻿using System;
+
+namespace Megatokyo.Server.Models.Syndication
+{
+    /// <summary>
+    /// Représente un élément de flux.
+    /// </summary>
+    public class Item
+    {
+        public string Link { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+        public DateTime PublishDate { get; set; }
+        public FeedType FeedType { get; set; }
+
+        public Item()
+
+        {
+            Link = "";
+            Title = "";
+            Content = "";
+            PublishDate = DateTime.Today;
+            FeedType = FeedType.RSS;
+        }
+    }
+}
