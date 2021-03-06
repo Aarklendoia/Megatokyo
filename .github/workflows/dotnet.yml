@@ -20,6 +20,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore ./Megatokyo.Server/Megatokyo.Server.csproj
     - name: Build
-      run: dotnet build /Megatokyo.Server/Megatokyo.Server.csproj --no-restore
+      run: dotnet build ./Megatokyo.Server/Megatokyo.Server.csproj --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
