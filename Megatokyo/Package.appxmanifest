@@ -7,15 +7,15 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="cbe7739f-f9b7-44de-a19d-0cef6b1747c2"
-    Publisher="CN=edoua"
+    Name="37254Aarklendoia.Megatokyo"
+    Publisher="CN=05269D2A-5674-472F-9E0F-440AB0C48A10"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="cbe7739f-f9b7-44de-a19d-0cef6b1747c2" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="9174b692-cb48-40d5-87e1-75cccb0309ad" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>Megatokyo</DisplayName>
-    <PublisherDisplayName>edoua</PublisherDisplayName>
+    <PublisherDisplayName>Aarklendoïa</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
