@@ -15,6 +15,7 @@ namespace Megatokyo.Server.Database
         public DbSet<Strips> Strips { get; set; }
         public DbSet<Rants> Rants { get; set; }
         public DbSet<RantsTranslations> RantsTranslations { get; set; }
+        public DbSet<Checking> Checking { get; set; }
 
         public MegatokyoDbContext()
         {

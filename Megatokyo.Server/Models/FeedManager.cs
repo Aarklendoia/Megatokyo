@@ -52,7 +52,23 @@ namespace Megatokyo.Server.Models
             IList<Item> items = feedParser.ParseRss(new Uri("https://megatokyo.com/rss/megatokyo.xml"));
 
             IEnumerable<Checking> checkings = await _repository.Checking.FindByConditionAsync(c => c.ChekingId == 1);
-            Checking checking = checkings.First();
+            Checking checking;
+            if (!checkings.Any())
+            {
+                checking = new Checking
+                {
+                    LastCheck = DateTime.MinValue,
+                    LastRantNumber = 0,
+                    LastStripNumber = 0
+                };
+                _repository.Checking.Create(checking);
+                await _repository.Checking.SaveAsync();
+            }
+            else
+            {
+                checking = checkings.First();
+            }
+            
 #if DEBUG
             DateTime lastCheck = DateTime.Now.AddDays(-30);
 #else

@@ -16,6 +16,7 @@ namespace Megatokyo.Server
         private string _azureConnectionString;
         private string _megatokyoNotificationHub;
         private string _megatokyoArchiveUrl;
+        private bool _workInProgress;
         private readonly NotificationHubClient _hub;
         private readonly StripsManager _stripManager;
         private readonly RantsManager _rantManager;
@@ -40,37 +41,44 @@ namespace Megatokyo.Server
 
         private async void DoWorkAsync(object state)
         {
+            if (_workInProgress) return;
+            
             bool haveStrips = await _stripManager.CheckIfDataExistsAsync();
             if (!haveStrips)
+            {
+                _workInProgress = true;
+                IList<Chapter> chapters = await _stripManager.ParseChaptersAsync();
+                _workInProgress = !await _stripManager.ParseStripsAsync(chapters);
+            }
+
+            if (_workInProgress) return;
+            
+            bool haveRants = await _rantManager.CheckIfDataExistsAsync();
+            if (!haveRants)
+            {
+                _workInProgress = true;
+                _workInProgress = !await _rantManager.ParseRantsAsync();
+            }
+
+            await _feedManager.LoadAsync();
+            if (_feedManager.Strips.Count > 0)
             {
                 IList<Chapter> chapters = await _stripManager.ParseChaptersAsync();
                 await _stripManager.ParseStripsAsync(chapters);
             }
-            bool haveRants = await _rantManager.CheckIfDataExistsAsync();
-            if (!haveRants)
+            foreach (Strip strip in _feedManager.Strips)
             {
-                await _rantManager.ParseRantsAsync();
+                await SendLocalisedStripNotificationsAsync(strip);
             }
 
-            //await _feedManager.LoadAsync();
-            //if (_feedManager.Strips.Count > 0)
-            //{
-            //    IList<Chapter> chapters = await _stripManager.ParseChaptersAsync();
-            //    await _stripManager.ParseStripsAsync(chapters);
-            //}
-            //foreach (Strip strip in _feedManager.Strips)
-            //{
-            //    await SendLocalisedStripNotificationsAsync(strip);
-            //}
-
-            //if (_feedManager.Rants.Count > 0)
-            //{
-            //    await _rantManager.ParseRantsAsync(_feedManager.LastRantNumber);
-            //}
-            //foreach (Rant rant in _feedManager.Rants)
-            //{
-            //    await SendLocalisedRantNotifications(rant);
-            //}
+            if (_feedManager.Rants.Count > 0)
+            {
+                await _rantManager.ParseRantsAsync(_feedManager.LastRantNumber);
+            }
+            foreach (Rant rant in _feedManager.Rants)
+            {
+                await SendLocalisedRantNotifications(rant);
+            }
         }
 
         public Task StopAsync(CancellationToken stoppingToken)
@@ -78,7 +86,7 @@ namespace Megatokyo.Server
             _timer?.Change(Timeout.Infinite, 0);
             return Task.CompletedTask;
         }
-            
+
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)

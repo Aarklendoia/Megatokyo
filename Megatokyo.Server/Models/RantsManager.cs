@@ -42,7 +42,7 @@ namespace Megatokyo.Server.Models
         /// Extrait les diatribes puis les stocke en base de données.
         /// </summary>
         /// <returns></returns>
-        public async Task<IList<Rant>> ParseRantsAsync()
+        public async Task<bool> ParseRantsAsync()
         {
             return await ParseRantsAsync(1);
         }
@@ -52,7 +52,7 @@ namespace Megatokyo.Server.Models
         /// </summary>
         /// <param name="stripNumber">Dernière planche extraite à partir de laquelle chercher une nouvelle diatribe.</param>
         /// <returns></returns>
-        public async Task<IList<Rant>> ParseRantsAsync(int stripNumber)
+        public async Task<bool> ParseRantsAsync(int stripNumber)
         {
             IEnumerable<Strips> StripsInDatabase = await _repository.Strips.FindAllAsync();
 
@@ -93,7 +93,7 @@ namespace Megatokyo.Server.Models
             }
             await _repository.RantsTranslations.SaveAsync();
 
-            return rants;
+            return true;
         }
 
         public async Task<Rant> GetRantByNumber(int number)

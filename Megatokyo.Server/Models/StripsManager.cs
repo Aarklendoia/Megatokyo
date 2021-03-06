@@ -72,7 +72,7 @@ namespace Megatokyo.Server.Models
         /// </summary>
         /// <param name="chapters">Liste des chapitres pour lesquels il faut rechercher les planches.</param>
         /// <returns></returns>
-        public async Task ParseStripsAsync(IList<Chapter> chapters)
+        public async Task<bool> ParseStripsAsync(IList<Chapter> chapters)
         {
             IEnumerable<Strips> stripsInDatabase = await _repository.Strips.FindAllAsync();
 
@@ -96,6 +96,7 @@ namespace Megatokyo.Server.Models
                 }
             }
             await _repository.Strips.SaveAsync();
+            return true;
         }
 
         public async Task<DetailedStrip> GetStripByNumberAsync(int number)
