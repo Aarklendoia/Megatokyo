@@ -127,7 +127,7 @@ namespace Megatokyo.Server
         private async Task SendLocalisedStripNotificationsAsync(Strip strip)
         {
             DetailedStrip stripToNotify = await _stripManager.GetStripByNumberAsync(strip.Number);
-            Dictionary<string, string> templateParams = new Dictionary<string, string>
+            Dictionary<string, string> templateParams = new()
             {
                 ["title"] = stripToNotify.Title,
                 ["uri"] = stripToNotify.Url.OriginalString,
