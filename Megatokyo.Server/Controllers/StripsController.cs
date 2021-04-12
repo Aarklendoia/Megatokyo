@@ -2,12 +2,9 @@
 using Megatokyo.Server.Database.Contracts;
 using Megatokyo.Server.Database.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Megatokyo.Server.Controllers
 {

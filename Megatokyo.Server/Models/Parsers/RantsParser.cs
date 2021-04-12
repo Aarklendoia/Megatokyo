@@ -1,6 +1,5 @@
 ﻿using HtmlAgilityPack;
 using Megatokyo.Models;
-using Megatokyo.Server.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
