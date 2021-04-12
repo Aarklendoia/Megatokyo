@@ -7,6 +7,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="appsettings.Development.json" />
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="5.0.5" />
     <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="5.0.5">
@@ -26,5 +44,29 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="OpenAPI\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <OpenApiReference Include="OpenApi\Megatokyo.Server.json">
+      <CodeGenerator>NSwagCSharp</CodeGenerator>
+      <Namespace>Megatokyo.Server</Namespace>
+      <ClassName>MegatokyoServer</ClassName>
+      <OutputPath>..\Client\Client.g.cs</OutputPath>
+      <Options>/UseBaseUrl:false /GenerateClientInterfaces:true /OperationGenerationMode:SingleClientFromOperationId</Options>
+    </OpenApiReference>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\Megatokyo.Server\Megatokyo.Server.csproj" />
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="copy /y $(SolutionDir)Megatokyo.Server\obj\Megatokyo.Server.json $(SolutionDir)Megatokyo.Server.UnitTest\OpenApi\Megatokyo.Server.json&#xD;&#xA;" />
+  </Target>
 
 </Project>

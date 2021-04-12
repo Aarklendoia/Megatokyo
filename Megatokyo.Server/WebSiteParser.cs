@@ -24,13 +24,13 @@ namespace Megatokyo.Server
 
         private Timer _timer;
 
-        public WebSiteParser()
+        public WebSiteParser(IConfiguration configuration)
         {
             LoadConfiguration();
             _hub = NotificationHubClient.CreateClientFromConnectionString(_azureConnectionString, _megatokyoNotificationHub);
-            _stripManager = new StripsManager(new Uri(_megatokyoArchiveUrl));
-            _rantManager = new RantsManager();
-            _feedManager = new FeedManager();
+            _stripManager = new StripsManager(new Uri(_megatokyoArchiveUrl), configuration);
+            _rantManager = new RantsManager(configuration);
+            _feedManager = new FeedManager(configuration);
         }
 
         public Task StartAsync(CancellationToken stoppingToken)

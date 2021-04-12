@@ -10,11 +10,11 @@ namespace Megatokyo.Server.Extensions
 {
     public static class ServiceExtensions
     {
-        public static void ConfigureDbContext(this IServiceCollection services, IConfiguration config)
+        public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
         {
-            if (config == null)
+            if (configuration == null)
             {
-                throw new ArgumentNullException(nameof(config));
+                throw new ArgumentNullException(nameof(configuration));
             }
             services.AddDbContext<MegatokyoDbContext>();
         }
@@ -24,14 +24,14 @@ namespace Megatokyo.Server.Extensions
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         }
 
-        public static void ConfigureTranslator(this IServiceCollection services, IConfiguration config)
+        public static void ConfigureTranslator(this IServiceCollection services, IConfiguration configuration)
         {
-            if (config == null)
+            if (configuration == null)
             {
-                throw new ArgumentNullException(nameof(config));
+                throw new ArgumentNullException(nameof(configuration));
             }
 
-            string translatorKey = config["BingTranslator:ClientKey"];
+            string translatorKey = configuration["BingTranslator:ClientKey"];
             services.AddScoped<ITranslator, Translator>();
             services.Configure<TranslatorSettings>(settings => settings.ClientKey = translatorKey);
         }

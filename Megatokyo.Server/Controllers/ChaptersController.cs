@@ -19,7 +19,7 @@ namespace Megatokyo.Server.Controllers
             _repoWrapper = repoWrapper;
         }
 
-        [HttpGet]
+        [HttpGet(Name = nameof(GetChapters))]
         public async Task<List<Chapter>> GetChapters()
         {
             IEnumerable<Chapters> chapters = await _repoWrapper.Chapters.FindAllAsync();

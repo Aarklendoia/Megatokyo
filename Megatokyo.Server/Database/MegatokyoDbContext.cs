@@ -1,5 +1,6 @@
 ﻿using Megatokyo.Server.Database.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -11,14 +12,17 @@ namespace Megatokyo.Server.Database
 {
     public class MegatokyoDbContext : DbContext
     {
+        private readonly IConfiguration _configuration;
+
         public DbSet<Chapters> Chapters { get; set; }
         public DbSet<Strips> Strips { get; set; }
         public DbSet<Rants> Rants { get; set; }
         public DbSet<RantsTranslations> RantsTranslations { get; set; }
         public DbSet<Checking> Checking { get; set; }
 
-        public MegatokyoDbContext()
+        public MegatokyoDbContext(IConfiguration configuration)
         {
+            _configuration = configuration;
             if (Database.EnsureCreated())
             {
                 Database.Migrate();
@@ -29,7 +33,9 @@ namespace Megatokyo.Server.Database
         {
             Assembly assembly = Assembly.GetEntryAssembly();
 
-            optionsBuilder.UseSqlite("Filename=" + assembly.Location.Replace(".dll", ".db", true, CultureInfo.CurrentCulture), options =>
+            string connectionString = _configuration.GetConnectionString("SqliteConnection");
+
+            optionsBuilder.UseSqlite(connectionString, options =>
             {
                 options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName);
             });

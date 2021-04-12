@@ -4,6 +4,7 @@ using Megatokyo.Server.Database.Models;
 using Megatokyo.Server.Database.Repository;
 using Megatokyo.Server.Models.Entities;
 using Megatokyo.Server.Models.Syndication;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -22,9 +23,9 @@ namespace Megatokyo.Server.Models
         public int LastStripNumber { get; private set; }
         public int LastRantNumber { get; private set; }
 
-        public FeedManager()
+        public FeedManager(IConfiguration configuration)
         {
-            _repositoryContext = new MegatokyoDbContext();
+            _repositoryContext = new MegatokyoDbContext(configuration);
             _repository = new RepositoryWrapper(_repositoryContext);
             Strips = new List<Strip>();
             Rants = new List<Rant>();
@@ -48,7 +49,7 @@ namespace Megatokyo.Server.Models
             Strips.Clear();
             Rants.Clear();
 
-            FeedParser feedParser = new FeedParser();
+            FeedParser feedParser = new();
             IList<Item> items = feedParser.ParseRss(new Uri("https://megatokyo.com/rss/megatokyo.xml"));
 
             IEnumerable<Checking> checkings = await _repository.Checking.FindByConditionAsync(c => c.ChekingId == 1);
@@ -83,8 +84,8 @@ namespace Megatokyo.Server.Models
                 {
                     if (item.Title.StartsWith("Comic", StringComparison.InvariantCulture))
                     {
-                        StringExtractor stringExtractor = new StringExtractor(item.Title);
-                        Strip strip = new Strip
+                        StringExtractor stringExtractor = new(item.Title);
+                        Strip strip = new()
                         {
                             Number = int.Parse(stringExtractor.Extract("[", "]", false), NumberStyles.Integer, CultureInfo.InvariantCulture)
                         };
@@ -93,8 +94,8 @@ namespace Megatokyo.Server.Models
                     }
                     if (item.Title.StartsWith("Rant", StringComparison.InvariantCulture))
                     {
-                        StringExtractor stringExtractor = new StringExtractor(item.Title);
-                        Rant rant = new Rant
+                        StringExtractor stringExtractor = new(item.Title);
+                        Rant rant = new()
                         {
                             Number = int.Parse(stringExtractor.Extract("[", "]", false), NumberStyles.Integer, CultureInfo.InvariantCulture)
                         };
