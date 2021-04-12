@@ -1,3 +1,5 @@
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Aarklendoia/Megatokyo/.NET)
+
 # Megatokyo
 
 Megatokyo is an application that allows you to consult Fred Gallager's eponymous work. It allows you to browse all the strips by chapter, category or to search directly for a strip.
