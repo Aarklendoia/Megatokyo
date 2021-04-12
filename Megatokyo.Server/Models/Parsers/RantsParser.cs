@@ -19,8 +19,8 @@ namespace Megatokyo.Server.Models.Parsers
 
         public static List<Rant> Parse(int stripNumber, int stripNumberMax)
         {
-            List<Rant> rants = new List<Rant>();
-            HtmlWeb web = new HtmlWeb();
+            List<Rant> rants = new();
+            HtmlWeb web = new();
             for (int index = stripNumber; index <= stripNumberMax; index++)
             {
                 HtmlDocument htmlDoc = web.Load(new Uri("https://megatokyo.com/strip/" + index.ToString(CultureInfo.InvariantCulture)));
@@ -40,8 +40,8 @@ namespace Megatokyo.Server.Models.Parsers
 
         private static Rant ExtractRant(HtmlNode node, List<Rant> rants)
         {
-            Rant rant = new Rant();
-            StringExtractor stringExtractor = new StringExtractor(node.Attributes["id"].Value);
+            Rant rant = new();
+            StringExtractor stringExtractor = new(node.Attributes["id"].Value);
             stringExtractor.Remove("r", "t", true, out string number);
             rant.Number = int.Parse(number, CultureInfo.InvariantCulture);
             if (rants.Where(r => r.Number == rant.Number).Any())
@@ -50,7 +50,7 @@ namespace Megatokyo.Server.Models.Parsers
             }
 
             rant.Author = node.SelectSingleNode(".//h3").InnerHtml.Replace("&gt;", "", StringComparison.InvariantCultureIgnoreCase).Replace("&lt;", "", StringComparison.InvariantCultureIgnoreCase).Trim();
-            StringExtractor titleExtractor = new StringExtractor(WebUtility.HtmlDecode(node.SelectSingleNode(".//h4/a").InnerHtml));
+            StringExtractor titleExtractor = new(WebUtility.HtmlDecode(node.SelectSingleNode(".//h4/a").InnerHtml));
             rant.Title = titleExtractor.Extract("\"", "\"", false).Trim();
             rant.DateTime = DateTime.ParseExact(node.SelectSingleNode(".//p[contains(@class,'date')]").InnerHtml, "dddd - MMMM d, yyyy", new CultureInfo("en-US"));
             rant.Url = new Uri("https://megatokyo.com/" + node.SelectSingleNode(".//img").Attributes["src"].Value);

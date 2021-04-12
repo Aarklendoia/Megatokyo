@@ -21,34 +21,27 @@ namespace Megatokyo.Server.Controllers
     public class StripsController : ControllerBase
     {
         private readonly IRepositoryWrapper _repoWrapper;
-        private readonly IMemoryCache _cache;
 
-        public StripsController(IRepositoryWrapper repoWrapper, IMemoryCache memoryCache)
+        public StripsController(IRepositoryWrapper repoWrapper)
         {
             _repoWrapper = repoWrapper;
-            _cache = memoryCache;
         }
 
         private async Task<List<Strip>> LoadData()
         {
-            if (!_cache.TryGetValue(CacheKeys.Strips, out List<Strip> stripsData))
+            List<Strip> stripsData = new();
+            IEnumerable<Strips> strips = await _repoWrapper.Strips.FindAllAsync();
+            foreach (Strips strip in strips)
             {
-                stripsData = new List<Strip>();
-                IEnumerable<Strips> strips = await _repoWrapper.Strips.FindAllAsync();
-                foreach (Strips strip in strips)
+                stripsData.Add(new Strip
                 {
-                    stripsData.Add(new Strip
-                    {
-                        ChapterId = strip.ChapterId,
-                        Date = strip.Date,
-                        Number = strip.Number,
-                        StripId = strip.StripId,
-                        Title = strip.Title,
-                        Url = strip.Url
-                    });
-                }
-                var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromDays(1));
-                _cache.Set(CacheKeys.Strips, stripsData, cacheEntryOptions);
+                    ChapterId = strip.ChapterId,
+                    Date = strip.Date,
+                    Number = strip.Number,
+                    StripId = strip.StripId,
+                    Title = strip.Title,
+                    Url = strip.Url
+                });
             }
             return stripsData;
         }
@@ -67,17 +60,17 @@ namespace Megatokyo.Server.Controllers
                 return BadRequest(ModelState);
             }
             List<Strip> stripsData = await LoadData();
-            stripsData.Select(s => s.Number == number);
-            Strip strip = stripsData.First();
-            if (strip == null)
+            IEnumerable<bool> stripSelected = stripsData.Select(s => s.Number == number);
+            if (!stripSelected.Any())
             {
                 return NotFound();
             }
+            Strip strip = stripsData.First();
             if (full)
             {
                 IEnumerable<Chapters> chapters = await _repoWrapper.Chapters.FindByConditionAsync(c => c.ChapterId == strip.ChapterId);
                 Chapters chapter = chapters.First();
-                DetailedStrip detailedStrip = new DetailedStrip(strip);
+                DetailedStrip detailedStrip = new(strip);
                 detailedStrip.LoadChapter(chapter);
                 return Ok(detailedStrip);
             }

@@ -25,7 +25,7 @@ namespace Megatokyo.Server.Controllers
         {
             IEnumerable<Chapters> chapters = await _repoWrapper.Chapters.FindAllAsync();
 
-            List<Chapter> chaptersToSend = new List<Chapter>();
+            List<Chapter> chaptersToSend = new();
 
             foreach (Chapters chapter in chapters)
             {
@@ -42,7 +42,7 @@ namespace Megatokyo.Server.Controllers
         }
 
         [HttpGet("{category}/{full?}")]
-        public async Task<ActionResult<Chapters>> GetByCategory([FromQuery]string category, [FromQuery]bool full = false)
+        public async Task<ActionResult<Chapters>> GetByCategory([FromRoute] string category, bool full = false)
         {
             if (!ModelState.IsValid)
             {
