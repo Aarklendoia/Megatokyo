@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using Megatokyo.Server.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.Sqlite;
 
 namespace Megatokyo.Server.Extensions
 {
@@ -17,7 +18,15 @@ namespace Megatokyo.Server.Extensions
             {
                 throw new ArgumentNullException(nameof(configuration));
             }
-            services.AddDbContext<MegatokyoDbContext>(options =>
+            services.AddDbContext<ApiDbContext>(options =>
+            {
+                var connectionString = new SqliteConnectionStringBuilder(configuration.GetConnectionString("SqliteConnection"))
+                {
+                    Mode = SqliteOpenMode.ReadWriteCreate,
+                }.ToString();
+                options.UseSqlite(connectionString);
+            });
+            services.AddDbContext<BackgroundDbContext>(options =>
             {
                 options.UseSqlite(configuration.GetConnectionString("SqliteConnection"));
             }, ServiceLifetime.Singleton);

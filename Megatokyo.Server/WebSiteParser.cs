@@ -25,13 +25,13 @@ namespace Megatokyo.Server
 
         private Timer _timer;
 
-        public WebSiteParser(MegatokyoDbContext megatokyoDbContext)
+        public WebSiteParser(BackgroundDbContext backgroundDbContext)
         {
             LoadConfiguration();
             _hub = NotificationHubClient.CreateClientFromConnectionString(_azureConnectionString, _megatokyoNotificationHub);
-            _stripManager = new StripsManager(new Uri(_megatokyoArchiveUrl), megatokyoDbContext);
-            _rantManager = new RantsManager(megatokyoDbContext);
-            _feedManager = new FeedManager(megatokyoDbContext);
+            _stripManager = new StripsManager(new Uri(_megatokyoArchiveUrl), backgroundDbContext);
+            _rantManager = new RantsManager(backgroundDbContext);
+            _feedManager = new FeedManager(backgroundDbContext);
         }
 
         public Task StartAsync(CancellationToken stoppingToken)

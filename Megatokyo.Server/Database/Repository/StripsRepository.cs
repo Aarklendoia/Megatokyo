@@ -9,7 +9,7 @@ namespace Megatokyo.Server.Database.Repository
 {
     public class StripsRepository : RepositoryBase<Strips>, IStripsRepository
     {
-        public StripsRepository(MegatokyoDbContext repositoryContext)
+        public StripsRepository(IDbContext repositoryContext)
         {
             RepositoryContext = repositoryContext;
         }

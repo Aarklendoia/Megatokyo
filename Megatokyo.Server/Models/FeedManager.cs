@@ -13,7 +13,7 @@ namespace Megatokyo.Server.Models
 {
     internal class FeedManager: IDisposable
     {
-        private readonly MegatokyoDbContext _repositoryContext;
+        private readonly BackgroundDbContext _repositoryContext;
         private readonly RepositoryWrapper _repository;
 
         public List<Strip> Strips { get; }
@@ -21,9 +21,9 @@ namespace Megatokyo.Server.Models
         public int LastStripNumber { get; private set; }
         public int LastRantNumber { get; private set; }
 
-        public FeedManager(MegatokyoDbContext megatokyoDbContext)
+        public FeedManager(BackgroundDbContext backgroundDbContext)
         {
-            _repositoryContext = megatokyoDbContext;
+            _repositoryContext = backgroundDbContext;
             _repository = new RepositoryWrapper(_repositoryContext);
             Strips = new List<Strip>();
             Rants = new List<Rant>();

@@ -5,7 +5,7 @@ namespace Megatokyo.Server.Database.Repository
 {
     public class CheckingRepository : RepositoryBase<Checking>, ICheckingRepository
     {
-        public CheckingRepository(MegatokyoDbContext repositoryContext)
+        public CheckingRepository(IDbContext repositoryContext)
         {
             RepositoryContext = repositoryContext;
         }

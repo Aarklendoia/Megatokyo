@@ -12,7 +12,7 @@ namespace Megatokyo.Server.Models
 {
     internal class StripsManager
     {
-        private readonly MegatokyoDbContext _repositoryContext;
+        private readonly BackgroundDbContext _repositoryContext;
         private readonly RepositoryWrapper _repository;
         
 
@@ -22,10 +22,10 @@ namespace Megatokyo.Server.Models
         /// Extrait du site de Megatokyo les chapitres et les planches puis les stocke en base de données.
         /// </summary>
         /// <param name="url">URL de la page d'archives de Megatokyo.</param>
-        public StripsManager(Uri url, MegatokyoDbContext megatokyoDbContext)
+        public StripsManager(Uri url, BackgroundDbContext backgroundDbContext)
         {
             Url = url;
-            _repositoryContext = megatokyoDbContext;
+            _repositoryContext = backgroundDbContext;
             _repository = new RepositoryWrapper(_repositoryContext);
         }
 

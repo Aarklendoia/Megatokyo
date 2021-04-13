@@ -14,15 +14,15 @@ namespace Megatokyo.Server.Models
 {
     internal class RantsManager : IDisposable
     {
-        private readonly MegatokyoDbContext _repositoryContext;
+        private readonly BackgroundDbContext _repositoryContext;
         private readonly RepositoryWrapper _repository;
 
         /// <summary>
         /// Extrait du site de Megatokyo les diatribes puis les stocke en base de données.
         /// </summary>
-        public RantsManager(MegatokyoDbContext megatokyoDbContext)
+        public RantsManager(BackgroundDbContext backgroundDbContext)
         {
-            _repositoryContext = megatokyoDbContext;
+            _repositoryContext = backgroundDbContext;
             _repository = new RepositoryWrapper(_repositoryContext);
         }
 

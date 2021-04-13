@@ -9,7 +9,7 @@ namespace Megatokyo.Server.Database.Repository
 {
     public class ChaptersRepository : RepositoryBase<Chapters>, IChaptersRepository
     {
-        public ChaptersRepository(MegatokyoDbContext repositoryContext)
+        public ChaptersRepository(IDbContext repositoryContext)
         {
             RepositoryContext = repositoryContext;
         }

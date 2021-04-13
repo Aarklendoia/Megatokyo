@@ -10,7 +10,7 @@ namespace Megatokyo.Server.Database.Repository
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        protected MegatokyoDbContext RepositoryContext { get; set; }
+        protected IDbContext RepositoryContext { get; set; }
 
         public virtual async Task<IEnumerable<T>> FindAllAsync()
         {
