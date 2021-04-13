@@ -1,4 +1,5 @@
-﻿using Megatokyo.Server.Models;
+﻿using Megatokyo.Server.Database;
+using Megatokyo.Server.Models;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Megatokyo.Server
 {
-    public class WebSiteParser : IHostedService, IDisposable
+    public class WebSiteParser : IHostedService
     {
         private string _azureConnectionString;
         private string _megatokyoNotificationHub;
@@ -24,13 +25,13 @@ namespace Megatokyo.Server
 
         private Timer _timer;
 
-        public WebSiteParser(IConfiguration configuration)
+        public WebSiteParser(MegatokyoDbContext megatokyoDbContext)
         {
             LoadConfiguration();
             _hub = NotificationHubClient.CreateClientFromConnectionString(_azureConnectionString, _megatokyoNotificationHub);
-            _stripManager = new StripsManager(new Uri(_megatokyoArchiveUrl), configuration);
-            _rantManager = new RantsManager(configuration);
-            _feedManager = new FeedManager(configuration);
+            _stripManager = new StripsManager(new Uri(_megatokyoArchiveUrl), megatokyoDbContext);
+            _rantManager = new RantsManager(megatokyoDbContext);
+            _feedManager = new FeedManager(megatokyoDbContext);
         }
 
         public Task StartAsync(CancellationToken stoppingToken)
@@ -85,23 +86,6 @@ namespace Megatokyo.Server
         {
             _timer?.Change(Timeout.Infinite, 0);
             return Task.CompletedTask;
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _timer?.Dispose();
-                _stripManager.Dispose();
-                _rantManager.Dispose();
-                _feedManager.Dispose();
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
         private void LoadConfiguration()

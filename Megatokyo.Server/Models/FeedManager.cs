@@ -2,9 +2,7 @@
 using Megatokyo.Server.Database;
 using Megatokyo.Server.Database.Models;
 using Megatokyo.Server.Database.Repository;
-using Megatokyo.Server.Models.Entities;
 using Megatokyo.Server.Models.Syndication;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -23,9 +21,9 @@ namespace Megatokyo.Server.Models
         public int LastStripNumber { get; private set; }
         public int LastRantNumber { get; private set; }
 
-        public FeedManager(IConfiguration configuration)
+        public FeedManager(MegatokyoDbContext megatokyoDbContext)
         {
-            _repositoryContext = new MegatokyoDbContext(configuration);
+            _repositoryContext = megatokyoDbContext;
             _repository = new RepositoryWrapper(_repositoryContext);
             Strips = new List<Strip>();
             Rants = new List<Rant>();

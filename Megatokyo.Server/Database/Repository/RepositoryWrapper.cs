@@ -1,5 +1,4 @@
 ﻿using Megatokyo.Server.Database.Contracts;
-using Megatokyo.Server.Database.Models;
 
 namespace Megatokyo.Server.Database.Repository
 {

@@ -20,9 +20,9 @@ namespace Megatokyo.Server.Models
         /// <summary>
         /// Extrait du site de Megatokyo les diatribes puis les stocke en base de données.
         /// </summary>
-        public RantsManager(IConfiguration configuration)
+        public RantsManager(MegatokyoDbContext megatokyoDbContext)
         {
-            _repositoryContext = new MegatokyoDbContext(configuration);
+            _repositoryContext = megatokyoDbContext;
             _repository = new RepositoryWrapper(_repositoryContext);
         }
 

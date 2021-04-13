@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Megatokyo.Server.Models
 {
-    internal class StripsManager: IDisposable
+    internal class StripsManager
     {
         private readonly MegatokyoDbContext _repositoryContext;
         private readonly RepositoryWrapper _repository;
@@ -22,24 +22,11 @@ namespace Megatokyo.Server.Models
         /// Extrait du site de Megatokyo les chapitres et les planches puis les stocke en base de données.
         /// </summary>
         /// <param name="url">URL de la page d'archives de Megatokyo.</param>
-        public StripsManager(Uri url, IConfiguration configuration)
+        public StripsManager(Uri url, MegatokyoDbContext megatokyoDbContext)
         {
             Url = url;
-            _repositoryContext = new MegatokyoDbContext(configuration);
+            _repositoryContext = megatokyoDbContext;
             _repository = new RepositoryWrapper(_repositoryContext);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _repositoryContext.Dispose();
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
         }
 
         /// <summary>

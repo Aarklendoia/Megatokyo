@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Megatokyo.Server.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace Megatokyo.Server.Extensions
 {
@@ -16,7 +17,10 @@ namespace Megatokyo.Server.Extensions
             {
                 throw new ArgumentNullException(nameof(configuration));
             }
-            services.AddDbContext<MegatokyoDbContext>();
+            services.AddDbContext<MegatokyoDbContext>(options =>
+            {
+                options.UseSqlite(configuration.GetConnectionString("SqliteConnection"));
+            }, ServiceLifetime.Singleton);
         }
 
         public static void ConfigureRepositoryWrapper(this IServiceCollection services)

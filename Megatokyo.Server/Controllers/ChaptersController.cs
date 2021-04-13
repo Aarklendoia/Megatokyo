@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Megatokyo.Server.Controllers
 {
@@ -19,8 +20,11 @@ namespace Megatokyo.Server.Controllers
             _repoWrapper = repoWrapper;
         }
 
+        [ProducesResponseType(typeof(List<Chapter>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet(Name = nameof(GetChapters))]
-        public async Task<List<Chapter>> GetChapters()
+        public async Task<IActionResult> GetChapters()
         {
             IEnumerable<Chapters> chapters = await _repoWrapper.Chapters.FindAllAsync();
 
@@ -37,7 +41,7 @@ namespace Megatokyo.Server.Controllers
                 });
             }
 
-            return chaptersToSend;
+            return Ok(chaptersToSend);
         }
 
         [HttpGet("{category}/{full?}")]

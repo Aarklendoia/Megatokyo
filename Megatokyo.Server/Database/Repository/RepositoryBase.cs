@@ -1,5 +1,4 @@
 ﻿using Megatokyo.Server.Database.Contract;
-using Megatokyo.Server.Database.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
