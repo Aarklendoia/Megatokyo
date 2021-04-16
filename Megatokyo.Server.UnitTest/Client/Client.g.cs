@@ -29,12 +29,12 @@ namespace Megatokyo.Server
     
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Chapters> ChaptersAsync(string category, bool full);
+        System.Threading.Tasks.Task<Chapters> GetByCategoryAsync(string category, bool full);
     
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Chapters> ChaptersAsync(string category, bool full, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<Chapters> GetByCategoryAsync(string category, bool full, System.Threading.CancellationToken cancellationToken);
     
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -229,15 +229,15 @@ namespace Megatokyo.Server
     
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<Chapters> ChaptersAsync(string category, bool full)
+        public System.Threading.Tasks.Task<Chapters> GetByCategoryAsync(string category, bool full)
         {
-            return ChaptersAsync(category, full, System.Threading.CancellationToken.None);
+            return GetByCategoryAsync(category, full, System.Threading.CancellationToken.None);
         }
     
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<Chapters> ChaptersAsync(string category, bool full, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task<Chapters> GetByCategoryAsync(string category, bool full, System.Threading.CancellationToken cancellationToken)
         {
             if (category == null)
                 throw new System.ArgumentNullException("category");
@@ -288,6 +288,22 @@ namespace Megatokyo.Server
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Server Error", status_, responseText_, headers_, null);
                         }
                         else
                         {

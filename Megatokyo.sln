@@ -7,7 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Megatokyo", "Megatokyo\Mega
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Megatokyo.Server", "Megatokyo.Server\Megatokyo.Server.csproj", "{36C8D845-0526-4EEF-8945-8E07547E1ECF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Megatokyo.Server.UnitTest", "Megatokyo.Server.UnitTest\Megatokyo.Server.UnitTest.csproj", "{61A3A103-7922-465A-9DA2-A7A268BBD9DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Megatokyo.Server.UnitTest", "Megatokyo.Server.UnitTest\Megatokyo.Server.UnitTest.csproj", "{61A3A103-7922-465A-9DA2-A7A268BBD9DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Megatokyo.Domain", "Megatokyo.Domain\Megatokyo.Domain.csproj", "{B0026279-6C6D-4BB8-8A42-9D358DC39D32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,6 +79,22 @@ Global
 		{61A3A103-7922-465A-9DA2-A7A268BBD9DD}.Release|x64.Build.0 = Release|Any CPU
 		{61A3A103-7922-465A-9DA2-A7A268BBD9DD}.Release|x86.ActiveCfg = Release|Any CPU
 		{61A3A103-7922-465A-9DA2-A7A268BBD9DD}.Release|x86.Build.0 = Release|Any CPU
+		{B0026279-6C6D-4BB8-8A42-9D358DC39D32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0026279-6C6D-4BB8-8A42-9D358DC39D32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0026279-6C6D-4BB8-8A42-9D358DC39D32}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{B0026279-6C6D-4BB8-8A42-9D358DC39D32}.Debug|arm64.Build.0 = Debug|Any CPU
+		{B0026279-6C6D-4BB8-8A42-9D358DC39D32}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B0026279-6C6D-4BB8-8A42-9D358DC39D32}.Debug|x64.Build.0 = Debug|Any CPU
+		{B0026279-6C6D-4BB8-8A42-9D358DC39D32}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B0026279-6C6D-4BB8-8A42-9D358DC39D32}.Debug|x86.Build.0 = Debug|Any CPU
+		{B0026279-6C6D-4BB8-8A42-9D358DC39D32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0026279-6C6D-4BB8-8A42-9D358DC39D32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0026279-6C6D-4BB8-8A42-9D358DC39D32}.Release|arm64.ActiveCfg = Release|Any CPU
+		{B0026279-6C6D-4BB8-8A42-9D358DC39D32}.Release|arm64.Build.0 = Release|Any CPU
+		{B0026279-6C6D-4BB8-8A42-9D358DC39D32}.Release|x64.ActiveCfg = Release|Any CPU
+		{B0026279-6C6D-4BB8-8A42-9D358DC39D32}.Release|x64.Build.0 = Release|Any CPU
+		{B0026279-6C6D-4BB8-8A42-9D358DC39D32}.Release|x86.ActiveCfg = Release|Any CPU
+		{B0026279-6C6D-4BB8-8A42-9D358DC39D32}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

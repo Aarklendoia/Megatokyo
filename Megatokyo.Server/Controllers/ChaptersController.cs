@@ -44,8 +44,12 @@ namespace Megatokyo.Server.Controllers
             return Ok(chaptersToSend);
         }
 
-        [HttpGet("{category}/{full?}")]
-        public async Task<ActionResult<Chapters>> GetByCategory([FromRoute] string category, bool full = false)
+
+        [ProducesResponseType(typeof(Chapters), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpGet("{category}/{full?}", Name = nameof(GetByCategory))]
+        public async Task<IActionResult> GetByCategory([FromRoute] string category, bool full = false)
         {
             if (!ModelState.IsValid)
             {

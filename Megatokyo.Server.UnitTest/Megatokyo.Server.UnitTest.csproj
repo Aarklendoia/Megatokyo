@@ -65,8 +65,4 @@
     <ProjectReference Include="..\Megatokyo.Server\Megatokyo.Server.csproj" />
   </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="copy /y $(SolutionDir)Megatokyo.Server\obj\Megatokyo.Server.json $(SolutionDir)Megatokyo.Server.UnitTest\OpenApi\Megatokyo.Server.json&#xD;&#xA;" />
-  </Target>
-
 </Project>
