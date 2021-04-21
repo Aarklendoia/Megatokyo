@@ -1,4 +1,5 @@
 ﻿using EIG.Formation.ClientAPI.UnitTest;
+using Megatokyo.Infrastructure;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
