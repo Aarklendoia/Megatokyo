@@ -25,7 +25,7 @@ namespace Megatokyo.Logic.Queries
 
         public async Task<IEnumerable<StripDomain>> Handle(GetAllStripsQuery request, CancellationToken cancellationToken)
         {
-            return await _entityRepository.Strips.FindAllAsync();
+            return await _entityRepository.Strips.GetAllAsync();
         }
     }
 }

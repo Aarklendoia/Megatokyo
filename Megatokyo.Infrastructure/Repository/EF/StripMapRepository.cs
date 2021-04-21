@@ -23,7 +23,7 @@ namespace Megatokyo.Infrastructure.Repository.EF
             Mapper = mapper;
         }
 
-        public override async Task<IEnumerable<StripDomain>> FindAllAsync()
+        public override async Task<IEnumerable<StripDomain>> GetAllAsync()
         {
             IEnumerable<StripEntity> strips =
                 await DbSet.Include(strip => strip.Chapter).ToListAsync();
@@ -31,7 +31,7 @@ namespace Megatokyo.Infrastructure.Repository.EF
             return Mapper.Map<IEnumerable<StripDomain>>(strips);
         }
 
-        public async Task<StripDomain> FindAsync(int number)
+        public async Task<StripDomain> GetAsync(int number)
         {
             IEnumerable<StripEntity> strips =
                 await DbSet.Where(strip => strip.Number == number).Include(strip => strip.Chapter).ToListAsync();

@@ -4,6 +4,48 @@
         <name>Megatokyo.Server</name>
     </assembly>
     <members>
+        <member name="T:Megatokyo.Server.Controllers.v1.ChaptersController">
+            <summary>
+            API for chapters.
+            </summary>
+        </member>
+        <member name="M:Megatokyo.Server.Controllers.v1.ChaptersController.#ctor(MediatR.IMediator,AutoMapper.IMapper)">
+            <summary>
+            Create new ChaptersController instance.
+            </summary>
+            <param name="mediator"></param>
+            <param name="mapper"></param>
+        </member>
+        <member name="M:Megatokyo.Server.Controllers.v1.ChaptersController.GetAllChapters">
+            <summary>
+            Get all chapters.
+            </summary>
+            <returns>List of chapters</returns>
+            <response code="200">Return in case the list have some chapters.</response>
+            <response code="204">Return in case the list is empty.</response>
+            <response code="500">Return in case of internal server error.</response> 
+        </member>
+        <member name="M:Megatokyo.Server.Controllers.v1.ChaptersController.GetChapters(System.Int32)">
+            <summary>
+            Get a chapter by his number.
+            </summary>
+            <param name="number">Chapter's number</param>
+            <returns>A Chapter</returns>
+            <response code="200">Return in case the chapter exists.</response>
+            <response code="500">Return in case of internal server error.</response>
+        </member>
+        <member name="T:Megatokyo.Server.Controllers.v1.StripsController">
+            <summary>
+            API for strips.
+            </summary>
+        </member>
+        <member name="M:Megatokyo.Server.Controllers.v1.StripsController.#ctor(MediatR.IMediator,AutoMapper.IMapper)">
+            <summary>
+            Create new StripsController instance.
+            </summary>
+            <param name="mediator"></param>
+            <param name="mapper"></param>
+        </member>
         <member name="M:Megatokyo.Server.Controllers.v1.StripsController.GetAllStrips">
             <summary>
             Get all strips.

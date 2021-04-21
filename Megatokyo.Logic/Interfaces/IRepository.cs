@@ -7,7 +7,7 @@ namespace Megatokyo.Logic.Interfaces
 {
     public interface IRepository<T>
     {
-        Task<IEnumerable<T>> FindAllAsync();
+        Task<IEnumerable<T>> GetAllAsync();
         Task<IEnumerable<T>> FindByConditionAsync(Expression<Func<T, bool>> expression);
         Task<T> LatestAsync(Expression<Func<T, DateTime>> expression);
         void Create(T entity);

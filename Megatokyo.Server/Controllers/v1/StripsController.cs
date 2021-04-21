@@ -1,7 +1,4 @@
-﻿using Megatokyo.Server.Models;
-using Megatokyo.Server.Database.Contracts;
-using Megatokyo.Server.Database.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,9 +8,13 @@ using AutoMapper;
 using MediatR;
 using Megatokyo.Logic.Queries;
 using Megatokyo.Domain;
+using System;
 
 namespace Megatokyo.Server.Controllers.v1
 {
+    /// <summary>
+    /// API for strips.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class StripsController : ControllerBase
@@ -21,6 +22,11 @@ namespace Megatokyo.Server.Controllers.v1
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Create new StripsController instance.
+        /// </summary>
+        /// <param name="mediator"></param>
+        /// <param name="mapper"></param>
         public StripsController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
@@ -40,16 +46,23 @@ namespace Megatokyo.Server.Controllers.v1
         [HttpGet(Name = nameof(GetAllStrips))]
         public async Task<IActionResult> GetAllStrips()
         {
-            List<StripOutputDTO> stripsData = new();
-            IEnumerable<StripDomain> strips = await _mediator.Send(new GetAllStripsQuery());
-            if (!strips.Any())
-                return NoContent();
-            foreach (StripDomain strip in strips)
+            try
             {
-                StripOutputDTO stripOutputDTO = _mapper.Map<StripOutputDTO>(strip);
-                stripsData.Add(stripOutputDTO);
+                List<StripOutputDTO> stripsData = new();
+                IEnumerable<StripDomain> strips = await _mediator.Send(new GetAllStripsQuery());
+                if (!strips.Any())
+                    return NoContent();
+                foreach (StripDomain strip in strips)
+                {
+                    StripOutputDTO stripOutputDTO = _mapper.Map<StripOutputDTO>(strip);
+                    stripsData.Add(stripOutputDTO);
+                }
+                return Ok(stripsData);
             }
-            return Ok(stripsData);
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -65,9 +78,19 @@ namespace Megatokyo.Server.Controllers.v1
         [HttpGet("{number?}", Name = nameof(GetStrips))]
         public async Task<IActionResult> GetStrips(int number)
         {
-            StripDomain strip = await _mediator.Send(new GetStripQuery(number));
-
-            return Ok(strip);
+            try
+            {
+                StripDomain strip = await _mediator.Send(new GetStripQuery(number));
+                return Ok(strip);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

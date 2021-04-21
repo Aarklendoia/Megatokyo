@@ -7,28 +7,28 @@ using System.Threading.Tasks;
 
 namespace Megatokyo.Logic.Queries
 {
-    public class GetStripQuery : IRequest<StripDomain>
+    public class GetChapterQuery : IRequest<ChapterDomain>
     {
         public int Number { get; set; }
 
-        public GetStripQuery(int number)
+        public GetChapterQuery(int number)
         {
             Number = number;
         }
     }
 
-    public class GetStripQueryHandler : IRequestHandler<GetStripQuery, StripDomain>
+    public class GetChapterQueryHandler : IRequestHandler<GetChapterQuery, ChapterDomain>
     {
         private readonly IEntitiesRepository _entityRepository;
 
-        public GetStripQueryHandler(IEntitiesRepository entityRepository)
+        public GetChapterQueryHandler(IEntitiesRepository entityRepository)
         {
             _entityRepository = entityRepository;
         }
 
-        public async Task<StripDomain> Handle(GetStripQuery request, CancellationToken cancellationToken)
+        public async Task<ChapterDomain> Handle(GetChapterQuery request, CancellationToken cancellationToken)
         {
-            return await _entityRepository.Strips.GetAsync(request.Number);
+            return await _entityRepository.Chapters.GetAsync(request.Number);
         }
     }
 }

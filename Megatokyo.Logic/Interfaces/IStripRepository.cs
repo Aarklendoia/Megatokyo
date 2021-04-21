@@ -6,7 +6,7 @@ namespace Megatokyo.Logic.Interfaces
 {
     public interface IStripRepository
     {
-        Task<IEnumerable<StripDomain>> FindAllAsync();
-        Task<StripDomain> FindAsync(int number);
+        Task<IEnumerable<StripDomain>> GetAllAsync();
+        Task<StripDomain> GetAsync(int number);
     }
 }

@@ -13,7 +13,7 @@ namespace Megatokyo.Infrastructure.EF.Repository
     {
         protected APIContext RepositoryContext { get; set; }
 
-        public virtual async Task<IEnumerable<T>> FindAllAsync()
+        public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
             return await RepositoryContext.Set<T>().ToListAsync();
         }
