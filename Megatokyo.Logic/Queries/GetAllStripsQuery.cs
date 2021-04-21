@@ -16,16 +16,16 @@ namespace Megatokyo.Logic.Queries
 
     public class GetAllStripsQueryHandler : IRequestHandler<GetAllStripsQuery, IEnumerable<StripDomain>>
     {
-        private readonly IEntitiesRepository _entityRepository;
+        private readonly IStripRepository _stripRepository;
 
-        public GetAllStripsQueryHandler(IEntitiesRepository entityRepository)
+        public GetAllStripsQueryHandler(IStripRepository entityRepository)
         {
-            _entityRepository = entityRepository;
+            _stripRepository = entityRepository;
         }
 
         public async Task<IEnumerable<StripDomain>> Handle(GetAllStripsQuery request, CancellationToken cancellationToken)
         {
-            return await _entityRepository.Strips.GetAllAsync();
+            return await _stripRepository.GetAllAsync();
         }
     }
 }

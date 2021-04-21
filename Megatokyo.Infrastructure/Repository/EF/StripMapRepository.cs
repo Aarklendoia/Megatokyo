@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Megatokyo.Domain;
-using Megatokyo.Infrastructure.EF.Repository;
 using Megatokyo.Infrastructure.Repository.EF.Entity;
 using Megatokyo.Logic.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Megatokyo.Infrastructure.Repository.EF
 {
-    public class StripMapRepository : Repository<StripDomain>, IStripRepository
+    public class StripMapRepository : IStripRepository
     {
         private APIContext Context { get; }
         private IMapper Mapper { get; }
@@ -23,7 +22,7 @@ namespace Megatokyo.Infrastructure.Repository.EF
             Mapper = mapper;
         }
 
-        public override async Task<IEnumerable<StripDomain>> GetAllAsync()
+        public async Task<IEnumerable<StripDomain>> GetAllAsync()
         {
             IEnumerable<StripEntity> strips =
                 await DbSet.Include(strip => strip.Chapter).ToListAsync();

@@ -19,16 +19,16 @@ namespace Megatokyo.Logic.Queries
 
     public class GetChapterQueryHandler : IRequestHandler<GetChapterQuery, ChapterDomain>
     {
-        private readonly IEntitiesRepository _entityRepository;
+        private readonly IChapterRepository _chapterRepository;
 
-        public GetChapterQueryHandler(IEntitiesRepository entityRepository)
+        public GetChapterQueryHandler(IChapterRepository entityRepository)
         {
-            _entityRepository = entityRepository;
+            _chapterRepository = entityRepository;
         }
 
         public async Task<ChapterDomain> Handle(GetChapterQuery request, CancellationToken cancellationToken)
         {
-            return await _entityRepository.Chapters.GetAsync(request.Number);
+            return await _chapterRepository.GetAsync(request.Number);
         }
     }
 }

@@ -34,6 +34,36 @@
             <response code="200">Return in case the chapter exists.</response>
             <response code="500">Return in case of internal server error.</response>
         </member>
+        <member name="T:Megatokyo.Server.Controllers.v1.RantsController">
+            <summary>
+            API for rants.
+            </summary>
+        </member>
+        <member name="M:Megatokyo.Server.Controllers.v1.RantsController.#ctor(MediatR.IMediator,AutoMapper.IMapper)">
+            <summary>
+            Create new RantsController instance.
+            </summary>
+            <param name="mediator"></param>
+            <param name="mapper"></param>
+        </member>
+        <member name="M:Megatokyo.Server.Controllers.v1.RantsController.GetAllRants">
+            <summary>
+            Get all rants.
+            </summary>
+            <returns>List of rants</returns>
+            <response code="200">Return in case the list have some rants.</response>
+            <response code="204">Return in case the list is empty.</response>
+            <response code="500">Return in case of internal server error.</response> 
+        </member>
+        <member name="M:Megatokyo.Server.Controllers.v1.RantsController.GetRants(System.Int32)">
+            <summary>
+            Get a rant by his number.
+            </summary>
+            <param name="number">Rant's number</param>
+            <returns>A rant</returns>
+            <response code="200">Return in case the rant exists.</response>
+            <response code="500">Return in case of internal server error.</response>
+        </member>
         <member name="T:Megatokyo.Server.Controllers.v1.StripsController">
             <summary>
             API for strips.
@@ -164,6 +194,30 @@
             Récupère la liste des langues disponibles pour la traduction.
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:Megatokyo.Server.Startup">
+            <summary>
+            Startup.
+            </summary>
+        </member>
+        <member name="M:Megatokyo.Server.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Create a new Startup instance.
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:Megatokyo.Server.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:Megatokyo.Server.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
         </member>
         <member name="T:Megatokyo.Models.StringExtractor">
             <summary>
