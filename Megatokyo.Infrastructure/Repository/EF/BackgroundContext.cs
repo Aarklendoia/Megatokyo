@@ -13,10 +13,18 @@ namespace Megatokyo.Infrastructure.Repository.EF
 
         public BackgroundContext()
         {
+            if (Database.EnsureCreated())
+            {
+                Database.Migrate();
+            }
         }
 
         public BackgroundContext(DbContextOptions<BackgroundContext> options) : base(options)
         {
+            if (Database.EnsureCreated())
+            {
+                Database.Migrate();
+            }
         }
     }
 }

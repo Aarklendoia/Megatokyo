@@ -1,4 +1,6 @@
-﻿using Megatokyo.Server.Database;
+﻿using MediatR;
+using Megatokyo.Domain;
+using Megatokyo.Infrastructure.Repository.EF;
 using Megatokyo.Server.Models;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.Configuration;
@@ -25,13 +27,13 @@ namespace Megatokyo.Server
 
         private Timer _timer;
 
-        public WebSiteParser(BackgroundDbContext backgroundDbContext)
+        public WebSiteParser(IMediator mediator)
         {
             LoadConfiguration();
             _hub = NotificationHubClient.CreateClientFromConnectionString(_azureConnectionString, _megatokyoNotificationHub);
-            _stripManager = new StripsManager(new Uri(_megatokyoArchiveUrl), backgroundDbContext);
-            _rantManager = new RantsManager(backgroundDbContext);
-            _feedManager = new FeedManager(backgroundDbContext);
+            _stripManager = new StripsManager(new Uri(_megatokyoArchiveUrl), mediator);
+            _rantManager = new RantsManager(mediator);
+            _feedManager = new FeedManager(mediator);
         }
 
         public Task StartAsync(CancellationToken stoppingToken)
@@ -48,7 +50,7 @@ namespace Megatokyo.Server
             if (!haveStrips)
             {
                 _workInProgress = true;
-                IList<Chapter> chapters = await _stripManager.ParseChaptersAsync();
+                IList<ChapterDomain> chapters = await _stripManager.ParseChaptersAsync();
                 _workInProgress = !await _stripManager.ParseStripsAsync(chapters);
             }
 
@@ -64,10 +66,10 @@ namespace Megatokyo.Server
             await _feedManager.LoadAsync();
             if (_feedManager.Strips.Count > 0)
             {
-                IList<Chapter> chapters = await _stripManager.ParseChaptersAsync();
+                IList<ChapterDomain> chapters = await _stripManager.ParseChaptersAsync();
                 await _stripManager.ParseStripsAsync(chapters);
             }
-            foreach (Strip strip in _feedManager.Strips)
+            foreach (StripDomain strip in _feedManager.Strips)
             {
                 await SendLocalisedStripNotificationsAsync(strip);
             }
@@ -76,7 +78,7 @@ namespace Megatokyo.Server
             {
                 await _rantManager.ParseRantsAsync(_feedManager.LastRantNumber);
             }
-            foreach (Rant rant in _feedManager.Rants)
+            foreach (RantDomain rant in _feedManager.Rants)
             {
                 await SendLocalisedRantNotifications(rant);
             }
@@ -101,16 +103,16 @@ namespace Megatokyo.Server
             await _hub.SendTemplateNotificationAsync(data);
         }
 
-        private async Task SendLocalisedRantNotifications(Rant rant)
+        private async Task SendLocalisedRantNotifications(RantDomain rant)
         {
-            Rant rantToNotify = await _rantManager.GetRantByNumber(rant.Number);
+            RantDomain rantToNotify = await _rantManager.GetRantByNumber(rant.Number);
             //NewRantToast newrantToast = new NewRantToast(rantToNotify.Title, rantToNotify.Url, rantToNotify.Author, locale);
             //await SendTemplateNotificationAsync(newrantToast.Toast, locale);
         }
 
-        private async Task SendLocalisedStripNotificationsAsync(Strip strip)
+        private async Task SendLocalisedStripNotificationsAsync(StripDomain strip)
         {
-            DetailedStrip stripToNotify = await _stripManager.GetStripByNumberAsync(strip.Number);
+            StripDomain stripToNotify = await _stripManager.GetStripByNumberAsync(strip.Number);
             Dictionary<string, string> templateParams = new()
             {
                 ["title"] = stripToNotify.Title,

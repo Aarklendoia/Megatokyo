@@ -3,6 +3,7 @@ using Megatokyo.Domain;
 using Megatokyo.Infrastructure.Repository.EF.Entity;
 using Megatokyo.Logic.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,6 +36,18 @@ namespace Megatokyo.Infrastructure.Repository.EF
                 await DbSet.Where(strip => strip.Number == number).ToListAsync();
 
             return Mapper.Map<ChapterDomain>(strips);
+        }
+
+        public async Task<ChapterDomain> CreateAsync(ChapterDomain chapterDomain)
+        {
+            ChapterEntity chapterEntity = Mapper.Map<ChapterEntity>(chapterDomain);
+            EntityEntry<ChapterEntity> entity = await DbSet.AddAsync(chapterEntity);
+            return Mapper.Map<ChapterDomain>(entity.Entity);
+        }
+
+        public async Task<int> SaveAsync()
+        {
+            return await Context.SaveChangesAsync();
         }
     }
 }

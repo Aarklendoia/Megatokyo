@@ -23,6 +23,15 @@ namespace Megatokyo.Domain
             ChapterValidator(Chapter);
         }
 
+        public StripDomain(int number)
+        {
+            Number = number;
+        }
+
+        public StripDomain()
+        {
+        }
+
         private static void ChapterValidator(ChapterDomain chapter)
         {
             ChaptersDomain chapterDomain = new();

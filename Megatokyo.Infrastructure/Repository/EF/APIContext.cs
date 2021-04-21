@@ -11,12 +11,9 @@ namespace Megatokyo.Infrastructure.Repository.EF
         //public DbSet<RantsTranslations> RantsTranslations { get; set; }
         //public DbSet<Checking> Checking { get; set; }
 
-        public APIContext()
-        {
-        }
-
         public APIContext(DbContextOptions<APIContext> options) : base(options)
         {
+
         }
     }
 }

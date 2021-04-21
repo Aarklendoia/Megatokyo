@@ -14,6 +14,11 @@ namespace Megatokyo.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddDbContext<BackgroundContext>(options =>
+            {
+                options.UseSqlite(configuration.GetConnectionString("SqliteConnection"));
+            }, ServiceLifetime.Singleton);
+
             services.AddDbContext<APIContext>(options =>
             {
                 var connectionString = new SqliteConnectionStringBuilder(configuration.GetConnectionString("SqliteConnection"))
@@ -22,11 +27,6 @@ namespace Megatokyo.Infrastructure
                 }.ToString();
                 options.UseSqlite(connectionString);
             });
-
-            services.AddDbContext<BackgroundContext>(options =>
-            {
-                options.UseSqlite(configuration.GetConnectionString("SqliteConnection"));
-            }, ServiceLifetime.Singleton);
 
             services.AddScoped<IStripRepository, StripMapRepository>();
             services.AddScoped<StripMapRepository>();

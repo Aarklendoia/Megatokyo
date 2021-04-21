@@ -1,6 +1,6 @@
 ﻿using HtmlAgilityPack;
+using Megatokyo.Domain;
 using Megatokyo.Models;
-using Megatokyo.Server.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,9 +9,9 @@ namespace Megatokyo.Server.Models.Parsers
 {
     internal class ChaptersParser
     {
-        public static IList<Chapter> Parse(Uri url)
+        public static IList<ChapterDomain> Parse(Uri url)
         {
-            IList<Chapter> chapters = new List<Chapter>();
+            IList<ChapterDomain> chapters = new List<ChapterDomain>();
             HtmlWeb web = new HtmlWeb();
             HtmlDocument htmlDoc = web.Load(url);
             HtmlNodeCollection nodes = htmlDoc.DocumentNode.SelectNodes("//body/div[@id='typelinks']/div/ul/li/a");
@@ -19,7 +19,7 @@ namespace Megatokyo.Server.Models.Parsers
             {
                 StringExtractor stringExtractor = new StringExtractor(node.OuterHtml);
                 StringExtractor categoryExtractor = new StringExtractor(node.GetAttributeValue("href", ""));
-                Chapter chapter = new Chapter();
+                ChapterDomain chapter = new();
                 if (node.OuterHtml.Contains("Chapter", StringComparison.InvariantCultureIgnoreCase))
                 {
                     if (!node.OuterHtml.Contains("Chapter 0", StringComparison.InvariantCultureIgnoreCase))

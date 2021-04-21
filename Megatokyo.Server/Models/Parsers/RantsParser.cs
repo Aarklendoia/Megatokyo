@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Megatokyo.Domain;
 using Megatokyo.Models;
 using System;
 using System.Collections.Generic;
@@ -11,14 +12,14 @@ namespace Megatokyo.Server.Models.Parsers
 {
     internal static class RantsParser
     {
-        public static List<Rant> Parse(int stripNumberMax)
+        public static List<RantDomain> Parse(int stripNumberMax)
         {
             return Parse(1, stripNumberMax);
         }
 
-        public static List<Rant> Parse(int stripNumber, int stripNumberMax)
+        public static List<RantDomain> Parse(int stripNumber, int stripNumberMax)
         {
-            List<Rant> rants = new();
+            List<RantDomain> rants = new();
             HtmlWeb web = new();
             for (int index = stripNumber; index <= stripNumberMax; index++)
             {
@@ -26,7 +27,7 @@ namespace Megatokyo.Server.Models.Parsers
                 HtmlNodeCollection nodes = htmlDoc.DocumentNode.SelectNodes("//div[contains(@id,'rant')]");
                 foreach (HtmlNode node in nodes)
                 {
-                    Rant rant = ExtractRant(node, rants);
+                    RantDomain rant = ExtractRant(node, rants);
                     if (rant != null)
                     {
                         rants.Add(rant);
@@ -37,9 +38,9 @@ namespace Megatokyo.Server.Models.Parsers
             return rants;
         }
 
-        private static Rant ExtractRant(HtmlNode node, List<Rant> rants)
+        private static RantDomain ExtractRant(HtmlNode node, List<RantDomain> rants)
         {
-            Rant rant = new();
+            RantDomain rant = new();
             StringExtractor stringExtractor = new(node.Attributes["id"].Value);
             stringExtractor.Remove("r", "t", true, out string number);
             rant.Number = int.Parse(number, CultureInfo.InvariantCulture);

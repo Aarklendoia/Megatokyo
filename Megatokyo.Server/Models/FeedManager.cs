@@ -1,7 +1,7 @@
-﻿using Megatokyo.Models;
-using Megatokyo.Server.Database;
-using Megatokyo.Server.Database.Models;
-using Megatokyo.Server.Database.Repository;
+﻿using MediatR;
+using Megatokyo.Domain;
+using Megatokyo.Infrastructure.Repository.EF;
+using Megatokyo.Models;
 using Megatokyo.Server.Models.Syndication;
 using System;
 using System.Collections.Generic;
@@ -11,35 +11,20 @@ using System.Threading.Tasks;
 
 namespace Megatokyo.Server.Models
 {
-    internal class FeedManager: IDisposable
+    internal class FeedManager
     {
-        private readonly BackgroundDbContext _repositoryContext;
-        private readonly RepositoryWrapper _repository;
+        private readonly IMediator _mediator;
 
-        public List<Strip> Strips { get; }
-        public List<Rant> Rants { get; }
+        public List<StripDomain> Strips { get; }
+        public List<RantDomain> Rants { get; }
         public int LastStripNumber { get; private set; }
         public int LastRantNumber { get; private set; }
 
-        public FeedManager(BackgroundDbContext backgroundDbContext)
+        public FeedManager(IMediator mediator)
         {
-            _repositoryContext = backgroundDbContext;
-            _repository = new RepositoryWrapper(_repositoryContext);
-            Strips = new List<Strip>();
-            Rants = new List<Rant>();
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _repositoryContext.Dispose();
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
+            _mediator = mediator;
+            Strips = new List<StripDomain>();
+            Rants = new List<RantDomain>();
         }
 
         public async Task LoadAsync()
@@ -50,31 +35,31 @@ namespace Megatokyo.Server.Models
             FeedParser feedParser = new();
             IList<Item> items = feedParser.ParseRss(new Uri("https://megatokyo.com/rss/megatokyo.xml"));
 
-            IEnumerable<Checking> checkings = await _repository.Checking.FindByConditionAsync(c => c.ChekingId == 1);
-            Checking checking;
-            if (!checkings.Any())
-            {
-                checking = new Checking
-                {
-                    LastCheck = DateTime.MinValue,
-                    LastRantNumber = 0,
-                    LastStripNumber = 0
-                };
-                _repository.Checking.Create(checking);
-                await _repository.Checking.SaveAsync();
-            }
-            else
-            {
-                checking = checkings.First();
-            }
+            //IEnumerable<Checking> checkings = await _repository.Checking.FindByConditionAsync(c => c.ChekingId == 1);
+            //Checking checking;
+            //if (!checkings.Any())
+            //{
+            //    checking = new Checking
+            //    {
+            //        LastCheck = DateTime.MinValue,
+            //        LastRantNumber = 0,
+            //        LastStripNumber = 0
+            //    };
+            //    _repository.Checking.Create(checking);
+            //    await _repository.Checking.SaveAsync();
+            //}
+            //else
+            //{
+            //    checking = checkings.First();
+            //}
             
 #if DEBUG
             DateTime lastCheck = DateTime.Now.AddDays(-30);
 #else
             DateTime lastCheck = checking.LastCheck;
 #endif
-            LastStripNumber = checking.LastStripNumber;
-            LastRantNumber = checking.LastRantNumber;
+            //LastStripNumber = checking.LastStripNumber;
+            //LastRantNumber = checking.LastRantNumber;
 
             foreach (Item item in items)
             {
@@ -83,27 +68,24 @@ namespace Megatokyo.Server.Models
                     if (item.Title.StartsWith("Comic", StringComparison.InvariantCulture))
                     {
                         StringExtractor stringExtractor = new(item.Title);
-                        Strip strip = new()
-                        {
-                            Number = int.Parse(stringExtractor.Extract("[", "]", false), NumberStyles.Integer, CultureInfo.InvariantCulture)
-                        };
+                        StripDomain strip = new(int.Parse(stringExtractor.Extract("[", "]", false), NumberStyles.Integer, CultureInfo.InvariantCulture));
                         Strips.Add(strip);
-                        checking.LastStripNumber = strip.Number;
+                        //checking.LastStripNumber = strip.Number;
                     }
                     if (item.Title.StartsWith("Rant", StringComparison.InvariantCulture))
                     {
                         StringExtractor stringExtractor = new(item.Title);
-                        Rant rant = new()
+                        RantDomain rant = new()
                         {
                             Number = int.Parse(stringExtractor.Extract("[", "]", false), NumberStyles.Integer, CultureInfo.InvariantCulture)
                         };
                         Rants.Add(rant);
-                        checking.LastRantNumber = rant.Number;
+                        //checking.LastRantNumber = rant.Number;
                     }
                 }
             }
-            _repository.Checking.Update(checking);
-            await _repository.Checking.SaveAsync();
+            //_repository.Checking.Update(checking);
+            //await _repository.Checking.SaveAsync();
         }
     }
 }

@@ -3,6 +3,7 @@ using Megatokyo.Domain;
 using Megatokyo.Infrastructure.Repository.EF.Entity;
 using Megatokyo.Logic.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,6 +36,18 @@ namespace Megatokyo.Infrastructure.Repository.EF
                 await DbSet.Where(rant => rant.Number == number).ToListAsync();
 
             return Mapper.Map<RantDomain>(rants);
+        }
+
+        public async Task<RantDomain> CreateAsync(RantDomain rantDomain)
+        {
+            RantEntity rantEntity = Mapper.Map<RantEntity>(rantDomain);
+            EntityEntry<RantEntity> entity = await DbSet.AddAsync(rantEntity);
+            return Mapper.Map<RantDomain>(entity.Entity);
+        }
+
+        public async Task<int> SaveAsync()
+        {
+            return await Context.SaveChangesAsync();
         }
     }
 }

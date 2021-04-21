@@ -1,8 +1,9 @@
-﻿using Megatokyo.Server.Database;
-using Megatokyo.Server.Database.Models;
-using Megatokyo.Server.Database.Repository;
+﻿using MediatR;
+using Megatokyo.Domain;
+using Megatokyo.Infrastructure.Repository.EF;
+using Megatokyo.Logic.Commands;
+using Megatokyo.Logic.Queries;
 using Megatokyo.Server.Models.Parsers;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,7 @@ namespace Megatokyo.Server.Models
 {
     internal class StripsManager
     {
-        private readonly BackgroundDbContext _repositoryContext;
-        private readonly RepositoryWrapper _repository;
-        
+        private readonly IMediator _mediator;
 
         public Uri Url { get; set; }
 
@@ -22,36 +21,36 @@ namespace Megatokyo.Server.Models
         /// Extrait du site de Megatokyo les chapitres et les planches puis les stocke en base de données.
         /// </summary>
         /// <param name="url">URL de la page d'archives de Megatokyo.</param>
-        public StripsManager(Uri url, BackgroundDbContext backgroundDbContext)
+        /// <param name="mediator"></param>
+        public StripsManager(Uri url, IMediator mediator)
         {
             Url = url;
-            _repositoryContext = backgroundDbContext;
-            _repository = new RepositoryWrapper(_repositoryContext);
+            _mediator = mediator;
         }
 
         /// <summary>
         /// Extrait les chapitres puis les stocke en base de données.
         /// </summary>
-        public async Task<IList<Chapter>> ParseChaptersAsync()
+        public async Task<IList<ChapterDomain>> ParseChaptersAsync()
         {
-            IList<Chapter> chapters = ChaptersParser.Parse(Url);
+            IList<ChapterDomain> chapters = ChaptersParser.Parse(Url);
 
-            IEnumerable<Chapters> chaptersInDatabase = await _repository.Chapters.FindAllAsync();
+            IEnumerable<ChapterDomain> chaptersInDatabase = await _mediator.Send(new GetAllChaptersQuery());
 
-            foreach (Chapter chapter in chapters)
+            foreach (ChapterDomain chapter in chapters)
             {
                 if (!chaptersInDatabase.Where(c => c.Number == chapter.Number).Any())
                 {
-                    Chapters newChapter = new()
+                    ChapterDomain newChapter = new()
                     {
                         Category = chapter.Category,
                         Number = chapter.Number,
                         Title = chapter.Title
                     };
-                    _repository.Chapters.Create(newChapter);
+                    await _mediator.Send(new CreateChapterCommand(newChapter));
                 }
             }
-            await _repository.Chapters.SaveAsync();
+            await _mediator.Send(new SaveChapterCommand());
             return chapters;
         }
 
@@ -60,42 +59,41 @@ namespace Megatokyo.Server.Models
         /// </summary>
         /// <param name="chapters">Liste des chapitres pour lesquels il faut rechercher les planches.</param>
         /// <returns></returns>
-        public async Task<bool> ParseStripsAsync(IList<Chapter> chapters)
+        public async Task<bool> ParseStripsAsync(IList<ChapterDomain> chapters)
         {
-            IEnumerable<Strips> stripsInDatabase = await _repository.Strips.FindAllAsync();
+            IEnumerable<StripDomain> stripsInDatabase = await _mediator.Send(new GetAllStripsQuery());
 
-            List<Strip> strips = await StripsParser.ParseAsync(Url, chapters, stripsInDatabase);
+            List<StripDomain> strips = await StripsParser.ParseAsync(Url, chapters, stripsInDatabase);
 
-            IEnumerable<Chapters> chaptersInDatabase = await _repository.Chapters.FindAllAsync();
-            foreach (Strip strip in strips)
+            IEnumerable<ChapterDomain> chaptersInDatabase = await _mediator.Send(new GetAllChaptersQuery());
+            foreach (StripDomain strip in strips)
             {
                 if (!stripsInDatabase.Where(s => s.Number == strip.Number).Any())
                 {
-                    Chapters currentChapter = chaptersInDatabase.Where(c => c.Category == strip.Category).First();
-                    Strips newStrip = new()
+                    ChapterDomain currentChapter = chaptersInDatabase.Where(c => c.Category == strip.Category).First();
+                    StripDomain newStrip = new()
                     {
                         Title = strip.Title,
                         Number = strip.Number,
-                        ChapterId = currentChapter.ChapterId,
+                        Chapter = currentChapter,
                         Url = strip.Url,
                         Date = strip.Date
                     };
-                    _repository.Strips.Create(newStrip);
+                    await _mediator.Send(new CreateStripCommand(newStrip));
                 }
             }
-            await _repository.Strips.SaveAsync();
+            await _mediator.Send(new SaveStripCommand());
             return true;
         }
 
-        public async Task<DetailedStrip> GetStripByNumberAsync(int number)
+        public async Task<StripDomain> GetStripByNumberAsync(int number)
         {
-            IEnumerable<Strips> strips = await _repository.Strips.FindByConditionAsync(s => s.Number == number);
-            return new DetailedStrip(strips.First());
+            return await _mediator.Send(new GetStripQuery(number));
         }
 
         public async Task<bool> CheckIfDataExistsAsync()
         {
-            IEnumerable<Strips> strips = await _repository.Strips.FindAllAsync();
+            IEnumerable<StripDomain> strips = await _mediator.Send(new GetAllStripsQuery());
             return strips.Any();
         }
     }

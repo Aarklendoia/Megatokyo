@@ -1,6 +1,6 @@
 ﻿using HtmlAgilityPack;
+using Megatokyo.Domain;
 using Megatokyo.Models;
-using Megatokyo.Server.Database.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,18 +15,18 @@ namespace Megatokyo.Server.Models.Parsers
     {
         private enum FileFormat { Png, Jpeg, Gif };
 
-        public static async Task<List<Strip>> ParseAsync(Uri url, IList<Chapter> chapters, IEnumerable<Strips> stripsInDatabase)
+        public static async Task<List<StripDomain>> ParseAsync(Uri url, IList<ChapterDomain> chapters, IEnumerable<StripDomain> stripsInDatabase)
         {
-            List<Strip> strips = new List<Strip>();
+            List<StripDomain> strips = new List<StripDomain>();
             HtmlWeb web = new HtmlWeb();
             HtmlDocument htmlDoc = web.Load(url);
 
-            foreach (Chapter chapter in chapters)
+            foreach (ChapterDomain chapter in chapters)
             {
                 IEnumerable<HtmlNode> nodes = htmlDoc.DocumentNode.SelectNodes("//li/a").Where(w => w.ParentNode.ParentNode.ParentNode.ParentNode.SelectSingleNode(".//a").Id == chapter.Category);
                 foreach (HtmlNode node in nodes)
                 {
-                    Strip strip = await ExtractStripAsync(node, chapter.Category, stripsInDatabase);
+                    StripDomain strip = await ExtractStripAsync(node, chapter.Category, stripsInDatabase);
                     if (strip != null)
                     {
                         strips.Add(strip);
@@ -36,9 +36,9 @@ namespace Megatokyo.Server.Models.Parsers
             return strips;
         }
 
-        private static async Task<Strip> ExtractStripAsync(HtmlNode node, string category, IEnumerable<Strips> stripsInDatabase)
+        private static async Task<StripDomain> ExtractStripAsync(HtmlNode node, string category, IEnumerable<StripDomain> stripsInDatabase)
         {
-            Strip strip = new Strip();
+            StripDomain strip = new StripDomain();
             StringExtractor stringExtractor = new StringExtractor(node.OuterHtml);
             strip.Date = DateTime.ParseExact(stringExtractor.Extract("title=\"", "\" name=\"", false).Replace("th,", "", StringComparison.InvariantCultureIgnoreCase).Replace("rd,", "", StringComparison.InvariantCultureIgnoreCase).Replace("nd,", "", StringComparison.InvariantCultureIgnoreCase).Replace("st,", "", StringComparison.InvariantCultureIgnoreCase), "MMMM d yyyy", new CultureInfo("en-US"));
             strip.Number = int.Parse(node.Attributes["name"].Value, CultureInfo.InvariantCulture);
@@ -62,7 +62,7 @@ namespace Megatokyo.Server.Models.Parsers
             }
         }
 
-        private static async Task<bool> GetFileTypeAsync(Strip strip)
+        private static async Task<bool> GetFileTypeAsync(StripDomain strip)
         {
             Uri filePath;
             bool formatFound;
@@ -116,7 +116,7 @@ namespace Megatokyo.Server.Models.Parsers
             }
         }
 
-        private static Uri GetImagePath(Strip strip, FileFormat fileType)
+        private static Uri GetImagePath(StripDomain strip, FileFormat fileType)
         {
             var filePath = fileType switch
             {

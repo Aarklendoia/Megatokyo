@@ -8,5 +8,7 @@ namespace Megatokyo.Logic.Interfaces
     {
         Task<IEnumerable<StripDomain>> GetAllAsync();
         Task<StripDomain> GetAsync(int number);
+        Task<StripDomain> CreateAsync(StripDomain rantDomain);
+        Task<int> SaveAsync();
     }
 }
