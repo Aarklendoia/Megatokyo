@@ -2,7 +2,7 @@
 
 namespace Megatokyo.Server.DTO.v1
 {
-    public class ChapterOutputDTO
+    internal class ChapterOutputDTO
     {
         public int Id { get; set; }
         public int Number { get; set; }

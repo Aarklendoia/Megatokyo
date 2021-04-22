@@ -5,8 +5,7 @@ using System.Resources;
 
 namespace Megatokyo.Models
 {
-
-    public class ExtractorException : Exception
+    internal class ExtractorException : Exception
     {
         public ExtractorException()
         {

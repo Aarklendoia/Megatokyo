@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Megatokyo.Server.DTO.v1
 {
-    public class RantOutputDTO
+    internal class RantOutputDTO
     {
         public int RantId { get; set; }
         public string Title { get; set; }

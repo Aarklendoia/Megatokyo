@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Megatokyo.Server.DTO.v1
 {
-    public class StripOutputDTO
+    internal class StripOutputDTO
     {
         public ChapterOutputDTO Chapter { get; set; }
         public int Number { get; set; }

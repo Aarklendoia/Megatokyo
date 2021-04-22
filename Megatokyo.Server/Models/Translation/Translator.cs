@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Megatokyo.Server.Models.Translations
 {
-    public class Translator : ITranslator
+    internal class Translator : ITranslator
     {
         private const string host = "https://api.cognitive.microsofttranslator.com";
         private const string path = "/translate?api-version=3.0";
@@ -27,8 +27,8 @@ namespace Megatokyo.Server.Models.Translations
                 new { Text = text }
             };
             string requestBody = JsonConvert.SerializeObject(body);
-            using HttpClient client = new HttpClient();
-            using HttpRequestMessage request = new HttpRequestMessage
+            using HttpClient client = new();
+            using HttpRequestMessage request = new()
             {
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(uri),
@@ -46,9 +46,9 @@ namespace Megatokyo.Server.Models.Translations
         /// <returns></returns>
         public async Task<string> GetLanguages()
         {
-            using HttpClient client = new HttpClient();
+            using HttpClient client = new();
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ClientKey);
-            UriBuilder uriBuilder = new UriBuilder
+            UriBuilder uriBuilder = new()
             {
                 Host = host,
                 Path = path

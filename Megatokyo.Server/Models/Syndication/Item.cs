@@ -5,7 +5,7 @@ namespace Megatokyo.Server.Models.Syndication
     /// <summary>
     /// Représente un élément de flux.
     /// </summary>
-    public class Item
+    internal class Item
     {
         public string Link { get; set; }
         public string Title { get; set; }

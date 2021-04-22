@@ -11,7 +11,7 @@ namespace Megatokyo.Server.Models.Syndication
     /// <summary>
     /// Un simple analyseur de flux RSS, RDF et ATOM.
     /// </summary>
-    public class FeedParser
+    internal class FeedParser
     {
         /// <summary>
         /// Analyse le <see cref="FeedType"/> donné et retourne un <see cref="IList&lt;Item&gt;"/>.
@@ -139,7 +139,7 @@ namespace Megatokyo.Server.Models.Syndication
             }
         }
 
-        private DateTime ParseDate(string date)
+        private static DateTime ParseDate(string date)
         {
             if (DateTime.TryParse(date, out DateTime result))
             {
