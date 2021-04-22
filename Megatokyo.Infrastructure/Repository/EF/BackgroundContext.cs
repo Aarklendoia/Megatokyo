@@ -9,7 +9,7 @@ namespace Megatokyo.Infrastructure.Repository.EF
         public DbSet<StripEntity> Strips { get; set; }
         public DbSet<RantEntity> Rants { get; set; }
         //public DbSet<RantsTranslations> RantsTranslations { get; set; }
-        //public DbSet<Checking> Checking { get; set; }
+        public DbSet<CheckingEntity> Checking { get; set; }
 
         public BackgroundContext()
         {

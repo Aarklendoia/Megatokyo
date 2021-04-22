@@ -37,6 +37,9 @@ namespace Megatokyo.Infrastructure
             services.AddScoped<IRantRepository, RantMapRepository>();
             services.AddScoped<RantMapRepository>();
 
+            services.AddScoped<ICheckingRepository, CheckingMapRepository>();
+            services.AddScoped<CheckingMapRepository>();
+
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MegatokyoMappingProfile());

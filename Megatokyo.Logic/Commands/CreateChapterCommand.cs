@@ -6,28 +6,28 @@ using System.Threading.Tasks;
 
 namespace Megatokyo.Logic.Commands
 {
-    public class CreateChapterCommand : IRequest<ChapterDomain>
+    public class CreateCheckingCommand : IRequest<CheckingDomain>
     {
-        public ChapterDomain ChapterToCreate { get; }
+        public CheckingDomain CheckingToCreate { get; }
 
-        public CreateChapterCommand(ChapterDomain chapterToCreate)
+        public CreateCheckingCommand(CheckingDomain checkingToCreate)
         {
-            ChapterToCreate = chapterToCreate;
+            CheckingToCreate = checkingToCreate;
         }
     }
 
-    public class CreateChapterCommandHandler : IRequestHandler<CreateChapterCommand, ChapterDomain>
+    public class CreateCheckingCommandHandler : IRequestHandler<CreateCheckingCommand, CheckingDomain>
     {
-        private readonly IChapterRepository _chapterRepository;
+        private readonly ICheckingRepository _checkingRepository;
 
-        public CreateChapterCommandHandler(IChapterRepository aliasRepository)
+        public CreateCheckingCommandHandler(ICheckingRepository checkingRepository)
         {
-            _chapterRepository = aliasRepository;
+            _checkingRepository = checkingRepository;
         }
 
-        public async Task<ChapterDomain> Handle(CreateChapterCommand request, CancellationToken cancellationToken)
+        public async Task<CheckingDomain> Handle(CreateCheckingCommand request, CancellationToken cancellationToken)
         {
-            return await _chapterRepository.CreateAsync(request.ChapterToCreate);
+            return await _checkingRepository.CreateAsync(request.CheckingToCreate);
         }
     }
 }

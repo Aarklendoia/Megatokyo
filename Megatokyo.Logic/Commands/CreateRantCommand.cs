@@ -20,9 +20,9 @@ namespace Megatokyo.Logic.Commands
     {
         private readonly IRantRepository _rantRepository;
 
-        public CreateRantCommandHandler(IRantRepository aliasRepository)
+        public CreateRantCommandHandler(IRantRepository rantRepository)
         {
-            _rantRepository = aliasRepository;
+            _rantRepository = rantRepository;
         }
 
         public async Task<RantDomain> Handle(CreateRantCommand request, CancellationToken cancellationToken)

@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using Megatokyo.Domain;
-using Megatokyo.Infrastructure.Repository.EF;
+using Megatokyo.Logic.Commands;
+using Megatokyo.Logic.Queries;
 using Megatokyo.Models;
 using Megatokyo.Server.Models.Syndication;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Megatokyo.Server.Models
@@ -35,31 +35,25 @@ namespace Megatokyo.Server.Models
             FeedParser feedParser = new();
             IList<Item> items = feedParser.ParseRss(new Uri("https://megatokyo.com/rss/megatokyo.xml"));
 
-            //IEnumerable<Checking> checkings = await _repository.Checking.FindByConditionAsync(c => c.ChekingId == 1);
-            //Checking checking;
-            //if (!checkings.Any())
-            //{
-            //    checking = new Checking
-            //    {
-            //        LastCheck = DateTime.MinValue,
-            //        LastRantNumber = 0,
-            //        LastStripNumber = 0
-            //    };
-            //    _repository.Checking.Create(checking);
-            //    await _repository.Checking.SaveAsync();
-            //}
-            //else
-            //{
-            //    checking = checkings.First();
-            //}
-            
+            CheckingDomain checking = await _mediator.Send(new GetCheckingQuery(1));
+            if (checking.Id < 0)
+            {
+                checking = new CheckingDomain
+                {
+                    LastCheck = DateTime.MinValue,
+                    LastRantNumber = 0,
+                    LastStripNumber = 0
+                };
+                await _mediator.Send(new CreateCheckingCommand(checking));
+            }
+
 #if DEBUG
             DateTime lastCheck = DateTime.Now.AddDays(-30);
 #else
             DateTime lastCheck = checking.LastCheck;
 #endif
-            //LastStripNumber = checking.LastStripNumber;
-            //LastRantNumber = checking.LastRantNumber;
+            LastStripNumber = checking.LastStripNumber;
+            LastRantNumber = checking.LastRantNumber;
 
             foreach (Item item in items)
             {
@@ -70,7 +64,7 @@ namespace Megatokyo.Server.Models
                         StringExtractor stringExtractor = new(item.Title);
                         StripDomain strip = new(int.Parse(stringExtractor.Extract("[", "]", false), NumberStyles.Integer, CultureInfo.InvariantCulture));
                         Strips.Add(strip);
-                        //checking.LastStripNumber = strip.Number;
+                        checking.LastStripNumber = strip.Number;
                     }
                     if (item.Title.StartsWith("Rant", StringComparison.InvariantCulture))
                     {
@@ -80,12 +74,11 @@ namespace Megatokyo.Server.Models
                             Number = int.Parse(stringExtractor.Extract("[", "]", false), NumberStyles.Integer, CultureInfo.InvariantCulture)
                         };
                         Rants.Add(rant);
-                        //checking.LastRantNumber = rant.Number;
+                        checking.LastRantNumber = rant.Number;
                     }
                 }
             }
-            //_repository.Checking.Update(checking);
-            //await _repository.Checking.SaveAsync();
+            await _mediator.Send(new UpdateCheckingCommand(checking));
         }
     }
 }
