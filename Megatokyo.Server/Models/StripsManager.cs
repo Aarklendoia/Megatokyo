@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Megatokyo.Domain;
-using Megatokyo.Infrastructure.Repository.EF;
 using Megatokyo.Logic.Commands;
 using Megatokyo.Logic.Queries;
 using Megatokyo.Server.Models.Parsers;
@@ -71,7 +70,7 @@ namespace Megatokyo.Server.Models
                 if (!stripsInDatabase.Where(s => s.Number == strip.Number).Any())
                 {
                     ChapterDomain currentChapter = chaptersInDatabase.Where(c => c.Category == strip.Category).First();
-                    StripDomain newStrip = new(currentChapter, strip.Number, strip.Title,  strip.Url, strip.Timestamp);
+                    StripDomain newStrip = new(currentChapter, strip.Number, strip.Title, strip.Url, strip.Timestamp);
                     await _mediator.Send(new CreateStripCommand(newStrip));
                 }
             }

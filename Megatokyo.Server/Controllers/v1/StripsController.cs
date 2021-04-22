@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using MediatR;
+using Megatokyo.Domain;
+using Megatokyo.Logic.Queries;
+using Megatokyo.Server.DTO.v1;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Megatokyo.Server.DTO.v1;
-using AutoMapper;
-using MediatR;
-using Megatokyo.Logic.Queries;
-using Megatokyo.Domain;
-using System;
 
 namespace Megatokyo.Server.Controllers.v1
 {

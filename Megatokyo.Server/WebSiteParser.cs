@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Megatokyo.Domain;
-using Megatokyo.Infrastructure.Repository.EF;
 using Megatokyo.Server.Models;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.Configuration;
@@ -45,7 +44,7 @@ namespace Megatokyo.Server
         private async void DoWorkAsync(object state)
         {
             if (_workInProgress) return;
-            
+
             bool haveStrips = await _stripManager.CheckIfDataExistsAsync();
             if (!haveStrips)
             {
@@ -55,7 +54,7 @@ namespace Megatokyo.Server
             }
 
             if (_workInProgress) return;
-            
+
             bool haveRants = await _rantManager.CheckIfDataExistsAsync();
             if (!haveRants)
             {

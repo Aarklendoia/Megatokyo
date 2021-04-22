@@ -42,7 +42,6 @@ namespace Megatokyo.Server
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = $"{Assembly.GetExecutingAssembly().GetName().Name}", Version = "v1" });
                 c.IncludeXmlComments($"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
             });
-            //services.ConfigureRepositoryWrapper();
         }
 
         /// <summary>
