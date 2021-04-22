@@ -1,17 +1,14 @@
 ﻿using MediatR;
 using Megatokyo.Domain;
-using Megatokyo.Server.Models;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace Megatokyo.Server
+namespace Megatokyo.Server.Models
 {
     internal class WebSiteParser
     {
