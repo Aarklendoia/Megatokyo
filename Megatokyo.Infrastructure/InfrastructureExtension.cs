@@ -14,17 +14,14 @@ namespace Megatokyo.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<BackgroundContext>(options =>
-            {
-                options.UseSqlite(configuration.GetConnectionString("SqliteConnection"));
-            }, ServiceLifetime.Singleton);
+            //services.AddDbContext<BackgroundContext>(options =>
+            //{
+            //    options.UseSqlite(configuration.GetConnectionString("SqliteConnection"));
+            //}, ServiceLifetime.Singleton);
 
             services.AddDbContext<APIContext>(options =>
             {
-                var connectionString = new SqliteConnectionStringBuilder(configuration.GetConnectionString("SqliteConnection"))
-                {
-                    Mode = SqliteOpenMode.ReadOnly,
-                }.ToString();
+                var connectionString = new SqliteConnectionStringBuilder(configuration.GetConnectionString("SqliteConnection")).ToString();
                 options.UseSqlite(connectionString);
             });
 

@@ -13,7 +13,10 @@ namespace Megatokyo.Infrastructure.Repository.EF
 
         public APIContext(DbContextOptions<APIContext> options) : base(options)
         {
-
+            if (Database.EnsureCreated())
+            {
+                Database.Migrate();
+            }
         }
     }
 }
