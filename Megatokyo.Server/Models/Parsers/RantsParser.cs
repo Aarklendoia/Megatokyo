@@ -40,22 +40,20 @@ namespace Megatokyo.Server.Models.Parsers
 
         private static RantDomain ExtractRant(HtmlNode node, List<RantDomain> rants)
         {
-            RantDomain rant = new();
             StringExtractor stringExtractor = new(node.Attributes["id"].Value);
-            stringExtractor.Remove("r", "t", true, out string number);
-            rant.Number = int.Parse(number, CultureInfo.InvariantCulture);
-            if (rants.Where(r => r.Number == rant.Number).Any())
+            stringExtractor.Remove("r", "t", true, out string extractednumber);
+            int number = int.Parse(extractednumber, CultureInfo.InvariantCulture);
+            if (rants.Where(r => r.Number == number).Any())
             {
                 return null;
             }
-
-            rant.Author = node.SelectSingleNode(".//h3").InnerHtml.Replace("&gt;", "", StringComparison.InvariantCultureIgnoreCase).Replace("&lt;", "", StringComparison.InvariantCultureIgnoreCase).Trim();
+            string author = node.SelectSingleNode(".//h3").InnerHtml.Replace("&gt;", "", StringComparison.InvariantCultureIgnoreCase).Replace("&lt;", "", StringComparison.InvariantCultureIgnoreCase).Trim();
             StringExtractor titleExtractor = new(WebUtility.HtmlDecode(node.SelectSingleNode(".//h4/a").InnerHtml));
-            rant.Title = titleExtractor.Extract("\"", "\"", false).Trim();
-            rant.DateTime = DateTime.ParseExact(node.SelectSingleNode(".//p[contains(@class,'date')]").InnerHtml, "dddd - MMMM d, yyyy", new CultureInfo("en-US"));
-            rant.Url = new Uri("https://megatokyo.com/" + node.SelectSingleNode(".//img").Attributes["src"].Value);
-            rant.Content = node.SelectSingleNode(".//div[contains(@class,'rantbody')]").InnerHtml;
-            return rant;
+            string title = titleExtractor.Extract("\"", "\"", false).Trim();
+            DateTime timestamp = DateTime.ParseExact(node.SelectSingleNode(".//p[contains(@class,'date')]").InnerHtml, "dddd - MMMM d, yyyy", new CultureInfo("en-US"));
+            Uri url = new("https://megatokyo.com/" + node.SelectSingleNode(".//img").Attributes["src"].Value);
+            string content = node.SelectSingleNode(".//div[contains(@class,'rantbody')]").InnerHtml;
+            return new RantDomain(title, number, author, url, timestamp, content);
         }
     }
 }

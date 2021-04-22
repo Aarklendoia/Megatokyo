@@ -9,16 +9,16 @@ namespace Megatokyo.Domain
         public int Number { get; set; }
         public string Title { get; set; }
         public Uri Url { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime Timestamp { get; set; }
         public string Category { get; set; }
 
-        public StripDomain(ChapterDomain chapter, int number, string title, Uri url, DateTime date)
+        public StripDomain(ChapterDomain chapter, int number, string title, Uri url, DateTime timestamp)
         {
             Chapter = chapter;
             Number = number;
             Title = title;
             Url = url;
-            Date = date;
+            Timestamp = timestamp;
 
             ChapterValidator(Chapter);
         }
@@ -26,10 +26,6 @@ namespace Megatokyo.Domain
         public StripDomain(int number)
         {
             Number = number;
-        }
-
-        public StripDomain()
-        {
         }
 
         private static void ChapterValidator(ChapterDomain chapter)

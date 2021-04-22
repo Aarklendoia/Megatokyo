@@ -71,14 +71,7 @@ namespace Megatokyo.Server.Models
                 if (!stripsInDatabase.Where(s => s.Number == strip.Number).Any())
                 {
                     ChapterDomain currentChapter = chaptersInDatabase.Where(c => c.Category == strip.Category).First();
-                    StripDomain newStrip = new()
-                    {
-                        Title = strip.Title,
-                        Number = strip.Number,
-                        Chapter = currentChapter,
-                        Url = strip.Url,
-                        Date = strip.Date
-                    };
+                    StripDomain newStrip = new(currentChapter, strip.Number, strip.Title,  strip.Url, strip.Timestamp);
                     await _mediator.Send(new CreateStripCommand(newStrip));
                 }
             }

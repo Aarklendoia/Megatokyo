@@ -47,14 +47,8 @@ namespace Megatokyo.Server.Models
             {
                 if (!rantsInDatabase.Where(c => c.Number == rant.Number).Any())
                 {
-                    RantDomain newRant = new()
-                    {
-                        Number = rant.Number,
-                        DateTime = rant.DateTime,
-                        Author = rant.Author
-                    };
+                    RantDomain newRant = new(rant.Title, rant.Number, rant.Author, rant.Url, rant.Timestamp, rant.Content);
                     await _mediator.Send(new CreateRantCommand(newRant));
-                    rant.RantId = newRant.RantId;
                 }
             }
             await _mediator.Send(new SaveRantCommand());

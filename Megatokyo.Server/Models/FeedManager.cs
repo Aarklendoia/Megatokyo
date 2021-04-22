@@ -38,12 +38,7 @@ namespace Megatokyo.Server.Models
             CheckingDomain checking = await _mediator.Send(new GetCheckingQuery(1));
             if (checking.Id < 0)
             {
-                checking = new CheckingDomain
-                {
-                    LastCheck = DateTime.MinValue,
-                    LastRantNumber = 0,
-                    LastStripNumber = 0
-                };
+                checking = new(DateTime.MinValue, 0, 0);
                 await _mediator.Send(new CreateCheckingCommand(checking));
             }
 
@@ -69,10 +64,7 @@ namespace Megatokyo.Server.Models
                     if (item.Title.StartsWith("Rant", StringComparison.InvariantCulture))
                     {
                         StringExtractor stringExtractor = new(item.Title);
-                        RantDomain rant = new()
-                        {
-                            Number = int.Parse(stringExtractor.Extract("[", "]", false), NumberStyles.Integer, CultureInfo.InvariantCulture)
-                        };
+                        RantDomain rant = new(int.Parse(stringExtractor.Extract("[", "]", false), NumberStyles.Integer, CultureInfo.InvariantCulture));
                         Rants.Add(rant);
                         checking.LastRantNumber = rant.Number;
                     }

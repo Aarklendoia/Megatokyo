@@ -16,7 +16,7 @@ namespace Megatokyo.Infrastructure.Repository.EF.Entity
         [Required]
         public Uri Url { get; set; }
         [Required]
-        public DateTime DateTime { get; set; }
+        public DateTime TimeStamp { get; set; }
         [Required]
         public string Content { get; set; }
     }
