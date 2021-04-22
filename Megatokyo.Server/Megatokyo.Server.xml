@@ -196,6 +196,17 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:Megatokyo.Server.Program">
+            <summary>
+            Main program of the webAPI.
+            </summary>
+        </member>
+        <member name="M:Megatokyo.Server.Program.Main(System.String[])">
+            <summary>
+            Main function.
+            </summary>
+            <param name="args"></param>
+        </member>
         <member name="T:Megatokyo.Server.Startup">
             <summary>
             Startup.

@@ -13,18 +13,15 @@ using System.Threading.Tasks;
 
 namespace Megatokyo.Server
 {
-    public class WebSiteParser : IHostedService
+    internal class WebSiteParser
     {
         private string _azureConnectionString;
         private string _megatokyoNotificationHub;
         private string _megatokyoArchiveUrl;
-        private bool _workInProgress;
         private readonly NotificationHubClient _hub;
         private readonly StripsManager _stripManager;
         private readonly RantsManager _rantManager;
         private readonly FeedManager _feedManager;
-
-        private Timer _timer;
 
         public WebSiteParser(IMediator mediator)
         {
@@ -35,31 +32,19 @@ namespace Megatokyo.Server
             _feedManager = new FeedManager(mediator);
         }
 
-        public Task StartAsync(CancellationToken stoppingToken)
+        public async Task ParseAsync()
         {
-            _timer = new Timer(DoWorkAsync, null, TimeSpan.Zero, TimeSpan.FromMinutes(5));
-            return Task.CompletedTask;
-        }
-
-        private async void DoWorkAsync(object state)
-        {
-            if (_workInProgress) return;
-
             bool haveStrips = await _stripManager.CheckIfDataExistsAsync();
             if (!haveStrips)
             {
-                _workInProgress = true;
                 IList<ChapterDomain> chapters = await _stripManager.ParseChaptersAsync();
-                _workInProgress = !await _stripManager.ParseStripsAsync(chapters);
+                await _stripManager.ParseStripsAsync(chapters);
             }
-
-            if (_workInProgress) return;
 
             bool haveRants = await _rantManager.CheckIfDataExistsAsync();
             if (!haveRants)
             {
-                _workInProgress = true;
-                _workInProgress = !await _rantManager.ParseRantsAsync();
+                await _rantManager.ParseRantsAsync();
             }
 
             await _feedManager.LoadAsync();
@@ -81,12 +66,6 @@ namespace Megatokyo.Server
             {
                 await SendLocalisedRantNotifications(rant);
             }
-        }
-
-        public Task StopAsync(CancellationToken stoppingToken)
-        {
-            _timer?.Change(Timeout.Infinite, 0);
-            return Task.CompletedTask;
         }
 
         private void LoadConfiguration()
