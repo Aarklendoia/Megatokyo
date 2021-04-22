@@ -3,6 +3,7 @@ using Megatokyo.Server.Database.Models;
 using Megatokyo.Server.Database.Repository;
 using Megatokyo.Server.Models.Entities;
 using Megatokyo.Server.Models.Parsers;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,15 +14,15 @@ namespace Megatokyo.Server.Models
 {
     internal class RantsManager : IDisposable
     {
-        private readonly MegatokyoDbContext _repositoryContext;
+        private readonly BackgroundDbContext _repositoryContext;
         private readonly RepositoryWrapper _repository;
 
         /// <summary>
         /// Extrait du site de Megatokyo les diatribes puis les stocke en base de données.
         /// </summary>
-        public RantsManager()
+        public RantsManager(BackgroundDbContext backgroundDbContext)
         {
-            _repositoryContext = new MegatokyoDbContext();
+            _repositoryContext = backgroundDbContext;
             _repository = new RepositoryWrapper(_repositoryContext);
         }
 
@@ -64,7 +65,7 @@ namespace Megatokyo.Server.Models
             {
                 if (!rantsInDatabase.Where(c => c.Number == rant.Number).Any())
                 {
-                    Rants newRant = new Rants
+                    Rants newRant = new()
                     {
                         Number = rant.Number,
                         Date = rant.DateTime,
@@ -81,7 +82,7 @@ namespace Megatokyo.Server.Models
             {
                 if (!rantsInDatabase.Where(c => c.Number == rant.Number).Any())
                 {
-                    RantsTranslations newTranslation = new RantsTranslations
+                    RantsTranslations newTranslation = new()
                     {
                         Title = rant.Title,
                         RantId = rant.RantId,

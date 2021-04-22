@@ -1,11 +1,10 @@
 ﻿using Megatokyo.Server.Database.Contracts;
-using Megatokyo.Server.Database.Models;
 
 namespace Megatokyo.Server.Database.Repository
 {
     public class RepositoryWrapper : IRepositoryWrapper
     {
-        private readonly MegatokyoDbContext _repoContext;
+        private readonly IDbContext _repoContext;
         private IChaptersRepository _chapters;
         private IStripsRepository _strips;
         private IRantsRepository _rants;
@@ -77,7 +76,7 @@ namespace Megatokyo.Server.Database.Repository
             }
         }
 
-        public RepositoryWrapper(MegatokyoDbContext repositoryContext)
+        public RepositoryWrapper(BackgroundDbContext repositoryContext)
         {
             _repoContext = repositoryContext;
         }

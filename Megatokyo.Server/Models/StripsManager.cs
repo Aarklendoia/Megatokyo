@@ -2,6 +2,7 @@
 using Megatokyo.Server.Database.Models;
 using Megatokyo.Server.Database.Repository;
 using Megatokyo.Server.Models.Parsers;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace Megatokyo.Server.Models
 {
-    internal class StripsManager: IDisposable
+    internal class StripsManager
     {
-        private readonly MegatokyoDbContext _repositoryContext;
+        private readonly BackgroundDbContext _repositoryContext;
         private readonly RepositoryWrapper _repository;
         
 
@@ -21,24 +22,11 @@ namespace Megatokyo.Server.Models
         /// Extrait du site de Megatokyo les chapitres et les planches puis les stocke en base de données.
         /// </summary>
         /// <param name="url">URL de la page d'archives de Megatokyo.</param>
-        public StripsManager(Uri url)
+        public StripsManager(Uri url, BackgroundDbContext backgroundDbContext)
         {
             Url = url;
-            _repositoryContext = new MegatokyoDbContext();
+            _repositoryContext = backgroundDbContext;
             _repository = new RepositoryWrapper(_repositoryContext);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _repositoryContext.Dispose();
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
         }
 
         /// <summary>
@@ -54,7 +42,7 @@ namespace Megatokyo.Server.Models
             {
                 if (!chaptersInDatabase.Where(c => c.Number == chapter.Number).Any())
                 {
-                    Chapters newChapter = new Chapters
+                    Chapters newChapter = new()
                     {
                         Category = chapter.Category,
                         Number = chapter.Number,
@@ -84,7 +72,7 @@ namespace Megatokyo.Server.Models
                 if (!stripsInDatabase.Where(s => s.Number == strip.Number).Any())
                 {
                     Chapters currentChapter = chaptersInDatabase.Where(c => c.Category == strip.Category).First();
-                    Strips newStrip = new Strips
+                    Strips newStrip = new()
                     {
                         Title = strip.Title,
                         Number = strip.Number,

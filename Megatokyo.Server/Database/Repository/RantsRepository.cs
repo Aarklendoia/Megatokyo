@@ -9,7 +9,7 @@ namespace Megatokyo.Server.Database.Repository
 {
     public class RantsRepository : RepositoryBase<Rants>, IRantsRepository
     {
-        public RantsRepository(MegatokyoDbContext repositoryContext)
+        public RantsRepository(IDbContext repositoryContext)
         {
             RepositoryContext = repositoryContext;
         }
