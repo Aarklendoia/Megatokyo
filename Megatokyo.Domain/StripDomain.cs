@@ -19,22 +19,11 @@ namespace Megatokyo.Domain
             Title = title;
             Url = url;
             Timestamp = timestamp;
-
-            ChapterValidator(Chapter);
         }
 
         public StripDomain(int number)
         {
             Number = number;
-        }
-
-        private static void ChapterValidator(ChapterDomain chapter)
-        {
-            ChaptersDomain chapterDomain = new();
-            if (!chapterDomain.Contains(chapter))
-            {
-                throw new ArgumentException("Invalid chapter");
-            }
         }
     }
 }

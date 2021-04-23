@@ -15,6 +15,7 @@ namespace Megatokyo.Server.Models
         private string _azureConnectionString;
         private string _megatokyoNotificationHub;
         private string _megatokyoArchiveUrl;
+        private bool _workInProgress;
         private readonly NotificationHubClient _hub;
         private readonly StripsManager _stripManager;
         private readonly RantsManager _rantManager;
@@ -31,23 +32,29 @@ namespace Megatokyo.Server.Models
 
         public async Task ParseAsync()
         {
+            if (_workInProgress) return;
+
             bool haveStrips = await _stripManager.CheckIfDataExistsAsync();
             if (!haveStrips)
             {
-                IList<ChapterDomain> chapters = await _stripManager.ParseChaptersAsync();
-                await _stripManager.ParseStripsAsync(chapters);
+                _workInProgress = true;
+                ChaptersDomain chapters = await _stripManager.ParseChaptersAsync();
+                _workInProgress = !await _stripManager.ParseStripsAsync(chapters);
             }
+
+            if (_workInProgress) return;
 
             bool haveRants = await _rantManager.CheckIfDataExistsAsync();
             if (!haveRants)
             {
-                await _rantManager.ParseRantsAsync();
+                _workInProgress = true;
+                _workInProgress = !await _rantManager.ParseRantsAsync();
             }
 
             await _feedManager.LoadAsync();
             if (_feedManager.Strips.Count > 0)
             {
-                IList<ChapterDomain> chapters = await _stripManager.ParseChaptersAsync();
+                ChaptersDomain chapters = await _stripManager.ParseChaptersAsync();
                 await _stripManager.ParseStripsAsync(chapters);
             }
             foreach (StripDomain strip in _feedManager.Strips)

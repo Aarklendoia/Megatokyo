@@ -32,10 +32,9 @@ namespace Megatokyo.Infrastructure.Repository.EF
 
         public async Task<ChapterDomain> GetAsync(int number)
         {
-            IEnumerable<ChapterEntity> strips =
-                await DbSet.Where(strip => strip.Number == number).ToListAsync();
+            ChapterEntity chapter = await DbSet.SingleOrDefaultAsync(strip => strip.Number == number);
 
-            return Mapper.Map<ChapterDomain>(strips);
+            return Mapper.Map<ChapterDomain>(chapter);
         }
 
         public async Task<ChapterDomain> CreateAsync(ChapterDomain chapterDomain)

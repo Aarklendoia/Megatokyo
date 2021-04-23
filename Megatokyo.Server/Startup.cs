@@ -1,4 +1,7 @@
+using AutoMapper;
 using Megatokyo.Infrastructure;
+using Megatokyo.Infrastructure.Mapping;
+using Megatokyo.Server.Mapping;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -34,6 +37,14 @@ namespace Megatokyo.Server
         {
             services.AddApplication();
             services.AddInfrastructure(Configuration);
+
+            //var mapperConfiguration = new MapperConfiguration(mc =>
+            //{
+            //    mc.AddProfile(new DTOMappingProfile());
+            //    mc.AddProfile(new DomainMappingProfile());
+            //});
+            //IMapper mapper = mapperConfiguration.CreateMapper();
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddControllers();
 

@@ -4,9 +4,9 @@ using Megatokyo.Infrastructure.Repository.EF.Entity;
 
 namespace Megatokyo.Infrastructure.Mapping
 {
-    public class MegatokyoMappingProfile : Profile
+    public class DomainMappingProfile : Profile
     {
-        public MegatokyoMappingProfile()
+        public DomainMappingProfile()
         {
             CreateMap<StripEntity, StripDomain>()
                 .ConstructUsing((stripEntity, ctx) => new StripDomain(ctx.Mapper.Map<ChapterDomain>(stripEntity), stripEntity.Number, stripEntity.Title, stripEntity.Url, stripEntity.DateTime))

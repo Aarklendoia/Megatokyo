@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Megatokyo.Domain
 {
-    internal class ChaptersDomain : IEnumerable<ChapterDomain>
+    public class ChaptersDomain : IEnumerable<ChapterDomain>
     {
         private readonly List<ChapterDomain> _chapters;
 

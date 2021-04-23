@@ -94,6 +94,16 @@
             <response code="200">Return in case the strip exists.</response>
             <response code="500">Return in case of internal server error.</response>
         </member>
+        <member name="T:Megatokyo.Server.Mapping.DTOMappingProfile">
+            <summary>
+            MApping for the DTO.
+            </summary>
+        </member>
+        <member name="M:Megatokyo.Server.Mapping.DTOMappingProfile.#ctor">
+            <summary>
+            Create a new instance of the mapping profile.
+            </summary>
+        </member>
         <member name="M:Megatokyo.Server.Models.RantsManager.#ctor(MediatR.IMediator)">
             <summary>
             Extrait du site de Megatokyo les diatribes puis les stocke en base de données.
@@ -124,7 +134,7 @@
             Extrait les chapitres puis les stocke en base de données.
             </summary>
         </member>
-        <member name="M:Megatokyo.Server.Models.StripsManager.ParseStripsAsync(System.Collections.Generic.IList{Megatokyo.Domain.ChapterDomain})">
+        <member name="M:Megatokyo.Server.Models.StripsManager.ParseStripsAsync(Megatokyo.Domain.ChaptersDomain)">
             <summary>
             Recherches toutes les planches des chapitres fournis.
             </summary>

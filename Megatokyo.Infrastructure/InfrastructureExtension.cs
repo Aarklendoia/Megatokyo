@@ -14,11 +14,6 @@ namespace Megatokyo.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            //services.AddDbContext<BackgroundContext>(options =>
-            //{
-            //    options.UseSqlite(configuration.GetConnectionString("SqliteConnection"));
-            //}, ServiceLifetime.Singleton);
-
             services.AddDbContext<APIContext>(options =>
             {
                 var connectionString = new SqliteConnectionStringBuilder(configuration.GetConnectionString("SqliteConnection")).ToString();
@@ -37,11 +32,11 @@ namespace Megatokyo.Infrastructure
             services.AddScoped<ICheckingRepository, CheckingMapRepository>();
             services.AddScoped<CheckingMapRepository>();
 
-            var mapperConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MegatokyoMappingProfile());
-            });
-            IMapper mapper = mapperConfig.CreateMapper();
+            //var mapperConfig = new MapperConfiguration(mc =>
+            //{
+            //    mc.AddProfile(new DomainMappingProfile());
+            //});
+            //IMapper mapper = mapperConfig.CreateMapper();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

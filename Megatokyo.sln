@@ -9,11 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Megatokyo.Server", "Megatok
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Megatokyo.Server.UnitTest", "Megatokyo.Server.UnitTest\Megatokyo.Server.UnitTest.csproj", "{61A3A103-7922-465A-9DA2-A7A268BBD9DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Megatokyo.Domain", "Megatokyo.Domain\Megatokyo.Domain.csproj", "{B0026279-6C6D-4BB8-8A42-9D358DC39D32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Megatokyo.Domain", "Megatokyo.Domain\Megatokyo.Domain.csproj", "{B0026279-6C6D-4BB8-8A42-9D358DC39D32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Megatokyo.Infrastructure", "Megatokyo.Infrastructure\Megatokyo.Infrastructure.csproj", "{D90DDAFB-0175-47B7-A93E-A02BBC65303A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Megatokyo.Infrastructure", "Megatokyo.Infrastructure\Megatokyo.Infrastructure.csproj", "{D90DDAFB-0175-47B7-A93E-A02BBC65303A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Megatokyo.Logic", "Megatokyo.Logic\Megatokyo.Logic.csproj", "{27B7263E-8780-47DF-BB11-6A1CEDDFDFD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Megatokyo.Logic", "Megatokyo.Logic\Megatokyo.Logic.csproj", "{27B7263E-8780-47DF-BB11-6A1CEDDFDFD9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

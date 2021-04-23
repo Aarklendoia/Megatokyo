@@ -23,11 +23,11 @@
     <ProjectReference Include="..\Megatokyo.Infrastructure\Megatokyo.Infrastructure.csproj" />
     <ProjectReference Include="..\Megatokyo.Logic\Megatokyo.Logic.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <None Update="Megatokyo.Server.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
+  
 </Project>

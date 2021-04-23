@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
 using Megatokyo.Domain;
-using Megatokyo.Logic.Queries;
 using Megatokyo.Server.DTO.v1;
+using Megatokyo.Logic.Queries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;

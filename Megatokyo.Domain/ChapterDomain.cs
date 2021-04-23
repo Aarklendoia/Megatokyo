@@ -26,9 +26,5 @@ namespace Megatokyo.Domain
             Strips = new();
             Strips.AddRange(strips);
         }
-
-        public ChapterDomain()
-        {
-        }
     }
 }

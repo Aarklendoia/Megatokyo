@@ -30,9 +30,9 @@ namespace Megatokyo.Server.Models
         /// <summary>
         /// Extrait les chapitres puis les stocke en base de données.
         /// </summary>
-        public async Task<IList<ChapterDomain>> ParseChaptersAsync()
+        public async Task<ChaptersDomain> ParseChaptersAsync()
         {
-            IList<ChapterDomain> chapters = ChaptersParser.Parse(Url);
+            ChaptersDomain chapters = ChaptersParser.Parse(Url);
 
             IEnumerable<ChapterDomain> chaptersInDatabase = await _mediator.Send(new GetAllChaptersQuery());
 
@@ -40,12 +40,7 @@ namespace Megatokyo.Server.Models
             {
                 if (!chaptersInDatabase.Where(c => c.Number == chapter.Number).Any())
                 {
-                    ChapterDomain newChapter = new()
-                    {
-                        Category = chapter.Category,
-                        Number = chapter.Number,
-                        Title = chapter.Title
-                    };
+                    ChapterDomain newChapter = new(chapter.Number, chapter.Title, chapter.Category);
                     await _mediator.Send(new CreateChapterCommand(newChapter));
                 }
             }
@@ -58,7 +53,7 @@ namespace Megatokyo.Server.Models
         /// </summary>
         /// <param name="chapters">Liste des chapitres pour lesquels il faut rechercher les planches.</param>
         /// <returns></returns>
-        public async Task<bool> ParseStripsAsync(IList<ChapterDomain> chapters)
+        public async Task<bool> ParseStripsAsync(ChaptersDomain chapters)
         {
             IEnumerable<StripDomain> stripsInDatabase = await _mediator.Send(new GetAllStripsQuery());
 

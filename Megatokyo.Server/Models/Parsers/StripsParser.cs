@@ -15,7 +15,7 @@ namespace Megatokyo.Server.Models.Parsers
     {
         private enum FileFormat { Png, Jpeg, Gif };
 
-        public static async Task<List<StripDomain>> ParseAsync(Uri url, IList<ChapterDomain> chapters, IEnumerable<StripDomain> stripsInDatabase)
+        public static async Task<List<StripDomain>> ParseAsync(Uri url, ChaptersDomain chapters, IEnumerable<StripDomain> stripsInDatabase)
         {
             List<StripDomain> strips = new();
             HtmlWeb web = new();
