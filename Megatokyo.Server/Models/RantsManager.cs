@@ -1,111 +1,74 @@
-﻿using Megatokyo.Server.Database;
-using Megatokyo.Server.Database.Models;
-using Megatokyo.Server.Database.Repository;
-using Megatokyo.Server.Models.Entities;
+﻿using MediatR;
+using Megatokyo.Domain;
+using Megatokyo.Logic.Commands;
+using Megatokyo.Logic.Queries;
 using Megatokyo.Server.Models.Parsers;
-using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Megatokyo.Server.Models
 {
-    internal class RantsManager : IDisposable
+    internal class RantsManager
     {
-        private readonly BackgroundDbContext _repositoryContext;
-        private readonly RepositoryWrapper _repository;
+        private readonly IMediator _mediator;
 
-        /// <summary>
-        /// Extrait du site de Megatokyo les diatribes puis les stocke en base de données.
-        /// </summary>
-        public RantsManager(BackgroundDbContext backgroundDbContext)
+        public RantsManager(IMediator mediator)
         {
-            _repositoryContext = backgroundDbContext;
-            _repository = new RepositoryWrapper(_repositoryContext);
+            _mediator = mediator;
         }
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _repositoryContext.Dispose();
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-
-        /// <summary>
-        /// Extrait les diatribes puis les stocke en base de données.
-        /// </summary>
-        /// <returns></returns>
         public async Task<bool> ParseRantsAsync()
         {
             return await ParseRantsAsync(1);
         }
 
-        /// <summary>
-        /// Extrait les diatribes puis les stocke en base de données.
-        /// </summary>
-        /// <param name="stripNumber">Dernière planche extraite à partir de laquelle chercher une nouvelle diatribe.</param>
-        /// <returns></returns>
         public async Task<bool> ParseRantsAsync(int stripNumber)
         {
-            IEnumerable<Strips> StripsInDatabase = await _repository.Strips.FindAllAsync();
+            IEnumerable<StripDomain> StripsInDatabase = await _mediator.Send(new GetAllStripsQuery());
 
-            List<Rant> rants = RantsParser.Parse(stripNumber, StripsInDatabase.Max(s => s.Number));
+            List<RantDomain> rants = RantsParser.Parse(stripNumber, StripsInDatabase.Max(s => s.Number));
 
-            IEnumerable<Rants> rantsInDatabase = await _repository.Rants.FindAllAsync();
+            IEnumerable<RantDomain> rantsInDatabase = await _mediator.Send(new GetAllRantsQuery());
 
-            foreach (Rant rant in rants)
+            foreach (RantDomain rant in rants)
             {
                 if (!rantsInDatabase.Where(c => c.Number == rant.Number).Any())
                 {
-                    Rants newRant = new()
-                    {
-                        Number = rant.Number,
-                        Date = rant.DateTime,
-                        Author = rant.Author
-                    };
-                    _repository.Rants.Create(newRant);
-                    await _repository.Rants.SaveAsync();
-                    rant.RantId = newRant.RantId;
+                    RantDomain newRant = new(rant.Title, rant.Number, rant.Author, rant.Url, rant.Timestamp, rant.Content);
+                    await _mediator.Send(new CreateRantCommand(newRant));
                 }
             }
+            await _mediator.Send(new SaveRantCommand());
 
-            IEnumerable<RantsTranslations> rantsTranslationInDatabase = await _repository.RantsTranslations.FindAllAsync();
-            foreach (Rant rant in rants)
-            {
-                if (!rantsInDatabase.Where(c => c.Number == rant.Number).Any())
-                {
-                    RantsTranslations newTranslation = new()
-                    {
-                        Title = rant.Title,
-                        RantId = rant.RantId,
-                        Language = new CultureInfo("en-US").ToString(),
-                        Content = rant.Content
-                    };
-                    _repository.RantsTranslations.Create(newTranslation);
-                }
-            }
-            await _repository.RantsTranslations.SaveAsync();
+            //IEnumerable<RantsTranslations> rantsTranslationInDatabase = await _repository.RantsTranslations.FindAllAsync();
+            //foreach (Rant rant in rants)
+            //{
+            //    if (!rantsInDatabase.Where(c => c.Number == rant.Number).Any())
+            //    {
+            //        RantsTranslations newTranslation = new()
+            //        {
+            //            Title = rant.Title,
+            //            RantId = rant.RantId,
+            //            Language = new CultureInfo("en-US").ToString(),
+            //            Content = rant.Content
+            //        };
+            //        _repository.RantsTranslations.Create(newTranslation);
+            //    }
+            //}
+            //await _repository.RantsTranslations.SaveAsync();
 
             return true;
         }
 
-        public async Task<Rant> GetRantByNumber(int number)
+        public async Task<RantDomain> GetRantByNumber(int number)
         {
-            IEnumerable<Rants> rants = await _repository.Rants.FindByConditionAsync(s => s.Number == number);
-            return new Rant(rants.First());
+            return await _mediator.Send(new GetRantQuery(number));
         }
 
         public async Task<bool> CheckIfDataExistsAsync()
         {
-            IEnumerable<Rants> rants = await _repository.Rants.FindAllAsync();
+            IEnumerable<RantDomain> rants = await _mediator.Send(new GetAllRantsQuery());
             return rants.Any();
         }
     }

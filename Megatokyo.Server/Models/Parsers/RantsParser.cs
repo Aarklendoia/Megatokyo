@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Megatokyo.Domain;
 using Megatokyo.Models;
 using System;
 using System.Collections.Generic;
@@ -11,14 +12,14 @@ namespace Megatokyo.Server.Models.Parsers
 {
     internal static class RantsParser
     {
-        public static List<Rant> Parse(int stripNumberMax)
+        public static List<RantDomain> Parse(int stripNumberMax)
         {
             return Parse(1, stripNumberMax);
         }
 
-        public static List<Rant> Parse(int stripNumber, int stripNumberMax)
+        public static List<RantDomain> Parse(int stripNumber, int stripNumberMax)
         {
-            List<Rant> rants = new();
+            List<RantDomain> rants = new();
             HtmlWeb web = new();
             for (int index = stripNumber; index <= stripNumberMax; index++)
             {
@@ -26,7 +27,7 @@ namespace Megatokyo.Server.Models.Parsers
                 HtmlNodeCollection nodes = htmlDoc.DocumentNode.SelectNodes("//div[contains(@id,'rant')]");
                 foreach (HtmlNode node in nodes)
                 {
-                    Rant rant = ExtractRant(node, rants);
+                    RantDomain rant = ExtractRant(node, rants);
                     if (rant != null)
                     {
                         rants.Add(rant);
@@ -37,24 +38,22 @@ namespace Megatokyo.Server.Models.Parsers
             return rants;
         }
 
-        private static Rant ExtractRant(HtmlNode node, List<Rant> rants)
+        private static RantDomain ExtractRant(HtmlNode node, List<RantDomain> rants)
         {
-            Rant rant = new();
             StringExtractor stringExtractor = new(node.Attributes["id"].Value);
-            stringExtractor.Remove("r", "t", true, out string number);
-            rant.Number = int.Parse(number, CultureInfo.InvariantCulture);
-            if (rants.Where(r => r.Number == rant.Number).Any())
+            stringExtractor.Remove("r", "t", true, out string extractednumber);
+            int number = int.Parse(extractednumber, CultureInfo.InvariantCulture);
+            if (rants.Where(r => r.Number == number).Any())
             {
                 return null;
             }
-
-            rant.Author = node.SelectSingleNode(".//h3").InnerHtml.Replace("&gt;", "", StringComparison.InvariantCultureIgnoreCase).Replace("&lt;", "", StringComparison.InvariantCultureIgnoreCase).Trim();
+            string author = node.SelectSingleNode(".//h3").InnerHtml.Replace("&gt;", "", StringComparison.InvariantCultureIgnoreCase).Replace("&lt;", "", StringComparison.InvariantCultureIgnoreCase).Trim();
             StringExtractor titleExtractor = new(WebUtility.HtmlDecode(node.SelectSingleNode(".//h4/a").InnerHtml));
-            rant.Title = titleExtractor.Extract("\"", "\"", false).Trim();
-            rant.DateTime = DateTime.ParseExact(node.SelectSingleNode(".//p[contains(@class,'date')]").InnerHtml, "dddd - MMMM d, yyyy", new CultureInfo("en-US"));
-            rant.Url = new Uri("https://megatokyo.com/" + node.SelectSingleNode(".//img").Attributes["src"].Value);
-            rant.Content = node.SelectSingleNode(".//div[contains(@class,'rantbody')]").InnerHtml;
-            return rant;
+            string title = titleExtractor.Extract("\"", "\"", false).Trim();
+            DateTime timestamp = DateTime.ParseExact(node.SelectSingleNode(".//p[contains(@class,'date')]").InnerHtml, "dddd - MMMM d, yyyy", new CultureInfo("en-US"));
+            Uri url = new("https://megatokyo.com/" + node.SelectSingleNode(".//img").Attributes["src"].Value);
+            string content = node.SelectSingleNode(".//div[contains(@class,'rantbody')]").InnerHtml;
+            return new RantDomain(title, number, author, url, timestamp, content);
         }
     }
 }

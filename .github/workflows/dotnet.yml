@@ -2,24 +2,23 @@ name: .NET
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
-
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore Megatokyo.Server/Megatokyo.Server.csproj
-    - name: Test
-      run: dotnet test --verbosity normal Megatokyo.Server.UnitTest/Megatokyo.Server.UnitTest.csproj
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore Megatokyo.Server/Megatokyo.Server.csproj
+      - name: Test
+        run: dotnet test --verbosity normal Megatokyo.Server.UnitTest/Megatokyo.Server.UnitTest.csproj

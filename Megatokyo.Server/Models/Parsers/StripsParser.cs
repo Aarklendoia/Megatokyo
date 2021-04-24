@@ -1,6 +1,6 @@
 ﻿using HtmlAgilityPack;
+using Megatokyo.Domain;
 using Megatokyo.Models;
-using Megatokyo.Server.Database.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,18 +15,18 @@ namespace Megatokyo.Server.Models.Parsers
     {
         private enum FileFormat { Png, Jpeg, Gif };
 
-        public static async Task<List<Strip>> ParseAsync(Uri url, IList<Chapter> chapters, IEnumerable<Strips> stripsInDatabase)
+        public static async Task<List<StripDomain>> ParseAsync(Uri url, ChaptersDomain chapters, IEnumerable<StripDomain> stripsInDatabase)
         {
-            List<Strip> strips = new List<Strip>();
-            HtmlWeb web = new HtmlWeb();
+            List<StripDomain> strips = new();
+            HtmlWeb web = new();
             HtmlDocument htmlDoc = web.Load(url);
 
-            foreach (Chapter chapter in chapters)
+            foreach (ChapterDomain chapter in chapters)
             {
                 IEnumerable<HtmlNode> nodes = htmlDoc.DocumentNode.SelectNodes("//li/a").Where(w => w.ParentNode.ParentNode.ParentNode.ParentNode.SelectSingleNode(".//a").Id == chapter.Category);
                 foreach (HtmlNode node in nodes)
                 {
-                    Strip strip = await ExtractStripAsync(node, chapter.Category, stripsInDatabase);
+                    StripDomain strip = await ExtractStripAsync(node, chapter, stripsInDatabase);
                     if (strip != null)
                     {
                         strips.Add(strip);
@@ -36,17 +36,16 @@ namespace Megatokyo.Server.Models.Parsers
             return strips;
         }
 
-        private static async Task<Strip> ExtractStripAsync(HtmlNode node, string category, IEnumerable<Strips> stripsInDatabase)
+        private static async Task<StripDomain> ExtractStripAsync(HtmlNode node, ChapterDomain chapter, IEnumerable<StripDomain> stripsInDatabase)
         {
-            Strip strip = new Strip();
-            StringExtractor stringExtractor = new StringExtractor(node.OuterHtml);
-            strip.Date = DateTime.ParseExact(stringExtractor.Extract("title=\"", "\" name=\"", false).Replace("th,", "", StringComparison.InvariantCultureIgnoreCase).Replace("rd,", "", StringComparison.InvariantCultureIgnoreCase).Replace("nd,", "", StringComparison.InvariantCultureIgnoreCase).Replace("st,", "", StringComparison.InvariantCultureIgnoreCase), "MMMM d yyyy", new CultureInfo("en-US"));
-            strip.Number = int.Parse(node.Attributes["name"].Value, CultureInfo.InvariantCulture);
-            strip.Title = WebUtility.HtmlDecode(stringExtractor.Extract(" - ", "<", false));
-            strip.Url = new Uri("https://megatokyo.com/strips/" + strip.Number.ToString("D4", CultureInfo.InvariantCulture));
-            strip.Category = category;
-            if (!stripsInDatabase.Where(s => s.Number == strip.Number).Any())
+            StringExtractor stringExtractor = new(node.OuterHtml);
+            DateTime timestamp = DateTime.ParseExact(stringExtractor.Extract("title=\"", "\" name=\"", false).Replace("th,", "", StringComparison.InvariantCultureIgnoreCase).Replace("rd,", "", StringComparison.InvariantCultureIgnoreCase).Replace("nd,", "", StringComparison.InvariantCultureIgnoreCase).Replace("st,", "", StringComparison.InvariantCultureIgnoreCase), "MMMM d yyyy", new CultureInfo("en-US"));
+            int number = int.Parse(node.Attributes["name"].Value, CultureInfo.InvariantCulture);
+            string title = WebUtility.HtmlDecode(stringExtractor.Extract(" - ", "<", false));
+            Uri url = new("https://megatokyo.com/strips/" + number.ToString("D4", CultureInfo.InvariantCulture));
+            if (!stripsInDatabase.Where(s => s.Number == number).Any())
             {
+                StripDomain strip = new(chapter, number, title, url, timestamp);
                 if (await GetFileTypeAsync(strip))
                 {
                     return strip;
@@ -62,7 +61,7 @@ namespace Megatokyo.Server.Models.Parsers
             }
         }
 
-        private static async Task<bool> GetFileTypeAsync(Strip strip)
+        private static async Task<bool> GetFileTypeAsync(StripDomain strip)
         {
             Uri filePath;
             bool formatFound;
@@ -116,7 +115,7 @@ namespace Megatokyo.Server.Models.Parsers
             }
         }
 
-        private static Uri GetImagePath(Strip strip, FileFormat fileType)
+        private static Uri GetImagePath(StripDomain strip, FileFormat fileType)
         {
             var filePath = fileType switch
             {

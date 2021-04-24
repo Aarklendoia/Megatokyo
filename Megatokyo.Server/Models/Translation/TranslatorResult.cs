@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Megatokyo.Server.Models.Translations
 {
     [DataContract]
-    public class DetectedLanguage
+    internal class DetectedLanguage
     {
         [DataMember(Name = "language")]
         public string Language { get; set; }
@@ -14,7 +14,7 @@ namespace Megatokyo.Server.Models.Translations
     }
 
     [DataContract]
-    public class Translation
+    internal class Translation
     {
         [DataMember(Name = "text")]
         public string Text { get; set; }
@@ -24,7 +24,7 @@ namespace Megatokyo.Server.Models.Translations
     }
 
     [DataContract]
-    public class TranslatorResult
+    internal class TranslatorResult
     {
         [DataMember(Name = "detectedLanguage")]
         public DetectedLanguage DetectedLanguage { get; set; }

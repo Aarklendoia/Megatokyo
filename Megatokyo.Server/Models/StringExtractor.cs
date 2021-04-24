@@ -5,8 +5,7 @@ using System.Resources;
 
 namespace Megatokyo.Models
 {
-
-    public class ExtractorException : Exception
+    internal class ExtractorException : Exception
     {
         public ExtractorException()
         {
@@ -26,9 +25,6 @@ namespace Megatokyo.Models
         }
     }
 
-    /// <summary>
-    /// Extrait une chaîne de caractère d'un texte.
-    /// </summary>
     public class StringExtractor
     {
         private readonly ResourceManager stringManager;
@@ -36,15 +32,8 @@ namespace Megatokyo.Models
         private int _length;
         private string _startDelimiter;
 
-        /// <summary>
-        /// Position à laquelle commencer la recherche de la chaîne à extraire. Evolue automatiquement après chaque extraction.
-        /// </summary>
         public int Offset { get; set; }
 
-        /// <summary>
-        /// Initialise l'extracteur de chaîne avec le texte source.
-        /// </summary>
-        /// <param name="text">Texte source dans lequel seront extraites les chaînes.</param>
         public StringExtractor(string text)
         {
             stringManager = new ResourceManager("StringExtractorStrings", typeof(StringExtractor).Assembly);
@@ -53,13 +42,6 @@ namespace Megatokyo.Models
             _length = 0;
         }
 
-        /// <summary>
-        /// Extrait la chaîne de texte comprise entre les deux délimiteurs.
-        /// </summary>
-        /// <param name="startDelimiter">Délimiteur de début de la chaîne à extraire.</param>
-        /// <param name="endDelimiter">Délimiteur de fin de la chaîne à extraire.</param>
-        /// <param name="includeDelimiters">Indique si la chaîne extraite doit contenir ou non les délimiteurs.</param>
-        /// <returns>Chaîne extraite contenue entre les deux délimiteurs.</returns>
         public string Extract(string startDelimiter, string endDelimiter, bool includeDelimiters)
         {
             if (endDelimiter == null)
@@ -116,12 +98,6 @@ namespace Megatokyo.Models
             return extractedValue;
         }
 
-        /// <summary>
-        /// Extrait la chaîne de texte comprise entre l'offset actuel et le délimiteur.
-        /// </summary>
-        /// <param name="endDelimiter">Délimiteur de fin de la chaîne à extraire.</param>
-        /// <param name="includeDelimiters">Indique si la chaîne extraite doit contenir ou non le délimiteur.</param>
-        /// <returns>Chaîne extraite contenue entre les deux délimiteurs.</returns>
         public string Extract(string endDelimiter, bool includeDelimiters)
         {
             if (endDelimiter == null)
@@ -157,14 +133,6 @@ namespace Megatokyo.Models
             return extractedValue;
         }
 
-        /// <summary>
-        /// Retire la chaîne de texte comprise entre les deux délimiteurs.
-        /// </summary>
-        /// <param name="startDelimiter">Délimiteur de début de la chaîne à retirer.</param>
-        /// <param name="endDelimiter">Délimiteur de fin de la chaîne à retirer.</param>
-        /// <param name="includeDelimiters">Indique si la chaîne retirée doit contenir ou non les délimiteurs.</param>
-        /// <param name="content">Chaîne de texte résiduelle après le retrait.</param>
-        /// <returns>Indique si une nouvelle recherche de chaîne à supprimer est possible.</returns>
         public bool Remove(string startDelimiter, string endDelimiter, bool includeDelimiters, out string content)
         {
             if (endDelimiter == null)

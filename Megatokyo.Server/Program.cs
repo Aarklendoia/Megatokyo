@@ -1,12 +1,7 @@
+using Megatokyo.Server.Models.Services;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Megatokyo.Server
 {
@@ -17,13 +12,13 @@ namespace Megatokyo.Server
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args)
-        {
-            return Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); })
-                .ConfigureServices(services =>
-                {
-                    services.AddHostedService<WebSiteParser>();
-                });
-        }
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); })
+            .ConfigureServices((hostContext, services) =>
+            {
+                services.AddHostedService<ConsumeScopedServiceHostedService>();
+                services.AddScoped<IScopedProcessingService, ScopedProcessingService>();
+            });
     }
 }
