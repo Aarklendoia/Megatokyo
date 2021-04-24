@@ -48,7 +48,6 @@
 
   <ItemGroup>
     <Folder Include="Client\" />
-    <Folder Include="OpenAPI\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -56,7 +55,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <OpenApiReference Include="OpenApi\Megatokyo.Server.json">
+    <OpenApiReference Include="..\Megatokyo.Server\obj\Megatokyo.Server.json">
       <CodeGenerator>NSwagCSharp</CodeGenerator>
       <Namespace>Megatokyo.Server</Namespace>
       <ClassName>MegatokyoClient</ClassName>
@@ -64,9 +63,5 @@
       <Options>/UseBaseUrl:false /GenerateClientInterfaces:true /OperationGenerationMode:SingleClientFromOperationId</Options>
     </OpenApiReference>
   </ItemGroup>
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="copy /y $(SolutionDir)Megatokyo.Server\obj\Megatokyo.Server.json $(SolutionDir)Megatokyo.Server.UnitTest\OpenApi\Megatokyo.Server.json&#xD;&#xA;" />
-  </Target>
   
 </Project>
