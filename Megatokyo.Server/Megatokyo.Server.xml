@@ -25,19 +25,15 @@
             <response code="204">Return in case the list is empty.</response>
             <response code="500">Return in case of internal server error.</response> 
         </member>
-        <member name="M:Megatokyo.Server.Controllers.v1.ChaptersController.GetChapters(System.String)">
+        <member name="M:Megatokyo.Server.Controllers.v1.ChaptersController.GetChapter(System.String)">
             <summary>
             Get a chapter by his number.
             </summary>
             <param name="category">Chapter's category</param>
             <returns>A Chapter</returns>
             <response code="200">Return in case the chapter exists.</response>
+            <response code="400">Return in case the parameters are incorect.</response>
             <response code="500">Return in case of internal server error.</response>
-        </member>
-        <member name="T:Megatokyo.Server.Controllers.v1.RantsController">
-            <summary>
-            API for rants.
-            </summary>
         </member>
         <member name="M:Megatokyo.Server.Controllers.v1.RantsController.#ctor(MediatR.IMediator,AutoMapper.IMapper)">
             <summary>
@@ -93,172 +89,6 @@
             <returns>A strip</returns>
             <response code="200">Return in case the strip exists.</response>
             <response code="500">Return in case of internal server error.</response>
-        </member>
-        <member name="T:Megatokyo.Server.Mapping.DTOMappingProfile">
-            <summary>
-            MApping for the DTO.
-            </summary>
-        </member>
-        <member name="M:Megatokyo.Server.Mapping.DTOMappingProfile.#ctor">
-            <summary>
-            Create a new instance of the mapping profile.
-            </summary>
-        </member>
-        <member name="M:Megatokyo.Server.Models.RantsManager.#ctor(MediatR.IMediator)">
-            <summary>
-            Extrait du site de Megatokyo les diatribes puis les stocke en base de données.
-            </summary>
-        </member>
-        <member name="M:Megatokyo.Server.Models.RantsManager.ParseRantsAsync">
-            <summary>
-            Extrait les diatribes puis les stocke en base de données.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Megatokyo.Server.Models.RantsManager.ParseRantsAsync(System.Int32)">
-            <summary>
-            Extrait les diatribes puis les stocke en base de données.
-            </summary>
-            <param name="stripNumber">Dernière planche extraite à partir de laquelle chercher une nouvelle diatribe.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Megatokyo.Server.Models.StripsManager.#ctor(System.Uri,MediatR.IMediator)">
-            <summary>
-            Extrait du site de Megatokyo les chapitres et les planches puis les stocke en base de données.
-            </summary>
-            <param name="url">URL de la page d'archives de Megatokyo.</param>
-            <param name="mediator"></param>
-        </member>
-        <member name="M:Megatokyo.Server.Models.StripsManager.ParseChaptersAsync">
-            <summary>
-            Extrait les chapitres puis les stocke en base de données.
-            </summary>
-        </member>
-        <member name="M:Megatokyo.Server.Models.StripsManager.ParseStripsAsync(Megatokyo.Domain.ChaptersDomain)">
-            <summary>
-            Recherches toutes les planches des chapitres fournis.
-            </summary>
-            <param name="chapters">Liste des chapitres pour lesquels il faut rechercher les planches.</param>
-            <returns></returns>
-        </member>
-        <member name="T:Megatokyo.Server.Models.Syndication.FeedParser">
-            <summary>
-            Un simple analyseur de flux RSS, RDF et ATOM.
-            </summary>
-        </member>
-        <member name="M:Megatokyo.Server.Models.Syndication.FeedParser.Parse(System.Uri,Megatokyo.Server.Models.Syndication.FeedType)">
-            <summary>
-            Analyse le <see cref="T:Megatokyo.Server.Models.Syndication.FeedType"/> donné et retourne un <see cref="T:System.Collections.Generic.IList`1"/>.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Megatokyo.Server.Models.Syndication.FeedParser.ParseAtom(System.Uri)">
-            <summary>
-            Analyse un flux Atom et retourne un <see cref="T:System.Collections.Generic.IList`1"/>.
-            </summary>
-        </member>
-        <member name="M:Megatokyo.Server.Models.Syndication.FeedParser.ParseRss(System.Uri)">
-            <summary>
-            Analyse un flux RSS et retourne un <see cref="T:System.Collections.Generic.IList`1"/>.
-            </summary>
-        </member>
-        <member name="M:Megatokyo.Server.Models.Syndication.FeedParser.ParseRdf(System.Uri)">
-            <summary>
-            Analyse un flux RDF et retourne un <see cref="T:System.Collections.Generic.IList`1"/>.
-            </summary>
-        </member>
-        <member name="T:Megatokyo.Server.Models.Syndication.FeedType">
-            <summary>
-            Représente le format XML d'un flux.
-            </summary>
-        </member>
-        <member name="F:Megatokyo.Server.Models.Syndication.FeedType.RSS">
-            <summary>
-            Format Really Simple Syndication.
-            </summary>
-        </member>
-        <member name="F:Megatokyo.Server.Models.Syndication.FeedType.RDF">
-            <summary>
-            Format de résumé de site RDF.
-            </summary>
-        </member>
-        <member name="F:Megatokyo.Server.Models.Syndication.FeedType.Atom">
-            <summary>
-            Format de syndication Atom.
-            </summary>
-        </member>
-        <member name="T:Megatokyo.Server.Models.Syndication.Item">
-            <summary>
-            Représente un élément de flux.
-            </summary>
-        </member>
-        <member name="M:Megatokyo.Server.Models.Translations.Translator.Translate(System.String,System.String)">
-            <summary>
-            Traduit le texte dans la langue demandée.
-            </summary>
-            <param name="language"></param>
-            <param name="text"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Megatokyo.Server.Models.Translations.Translator.GetLanguages">
-            <summary>
-            Récupère la liste des langues disponibles pour la traduction.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:Megatokyo.Server.Program">
-            <summary>
-            Main program of the webAPI.
-            </summary>
-        </member>
-        <member name="M:Megatokyo.Server.Program.Main(System.String[])">
-            <summary>
-            Main function.
-            </summary>
-            <param name="args"></param>
-        </member>
-        <member name="T:Megatokyo.Models.StringExtractor">
-            <summary>
-            Extrait une chaîne de caractère d'un texte.
-            </summary>
-        </member>
-        <member name="P:Megatokyo.Models.StringExtractor.Offset">
-            <summary>
-            Position à laquelle commencer la recherche de la chaîne à extraire. Evolue automatiquement après chaque extraction.
-            </summary>
-        </member>
-        <member name="M:Megatokyo.Models.StringExtractor.#ctor(System.String)">
-            <summary>
-            Initialise l'extracteur de chaîne avec le texte source.
-            </summary>
-            <param name="text">Texte source dans lequel seront extraites les chaînes.</param>
-        </member>
-        <member name="M:Megatokyo.Models.StringExtractor.Extract(System.String,System.String,System.Boolean)">
-            <summary>
-            Extrait la chaîne de texte comprise entre les deux délimiteurs.
-            </summary>
-            <param name="startDelimiter">Délimiteur de début de la chaîne à extraire.</param>
-            <param name="endDelimiter">Délimiteur de fin de la chaîne à extraire.</param>
-            <param name="includeDelimiters">Indique si la chaîne extraite doit contenir ou non les délimiteurs.</param>
-            <returns>Chaîne extraite contenue entre les deux délimiteurs.</returns>
-        </member>
-        <member name="M:Megatokyo.Models.StringExtractor.Extract(System.String,System.Boolean)">
-            <summary>
-            Extrait la chaîne de texte comprise entre l'offset actuel et le délimiteur.
-            </summary>
-            <param name="endDelimiter">Délimiteur de fin de la chaîne à extraire.</param>
-            <param name="includeDelimiters">Indique si la chaîne extraite doit contenir ou non le délimiteur.</param>
-            <returns>Chaîne extraite contenue entre les deux délimiteurs.</returns>
-        </member>
-        <member name="M:Megatokyo.Models.StringExtractor.Remove(System.String,System.String,System.Boolean,System.String@)">
-            <summary>
-            Retire la chaîne de texte comprise entre les deux délimiteurs.
-            </summary>
-            <param name="startDelimiter">Délimiteur de début de la chaîne à retirer.</param>
-            <param name="endDelimiter">Délimiteur de fin de la chaîne à retirer.</param>
-            <param name="includeDelimiters">Indique si la chaîne retirée doit contenir ou non les délimiteurs.</param>
-            <param name="content">Chaîne de texte résiduelle après le retrait.</param>
-            <returns>Indique si une nouvelle recherche de chaîne à supprimer est possible.</returns>
         </member>
     </members>
 </doc>

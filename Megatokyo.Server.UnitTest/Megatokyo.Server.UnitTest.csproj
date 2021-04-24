@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\Megatokyo.Server\obj\Megatokyo.Server.json" Link="OpenAPI\Megatokyo.Server.json" />
     <Content Include="appsettings.Development.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -32,6 +31,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.3" />
@@ -51,9 +51,22 @@
     <Folder Include="OpenAPI\" />
   </ItemGroup>
 
-
   <ItemGroup>
     <ProjectReference Include="..\Megatokyo.Server\Megatokyo.Server.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <OpenApiReference Include="OpenApi\Megatokyo.Server.json">
+      <CodeGenerator>NSwagCSharp</CodeGenerator>
+      <Namespace>Megatokyo.Server</Namespace>
+      <ClassName>MegatokyoClient</ClassName>
+      <OutputPath>..\Client\Client.g.cs</OutputPath>
+      <Options>/UseBaseUrl:false /GenerateClientInterfaces:true /OperationGenerationMode:SingleClientFromOperationId</Options>
+    </OpenApiReference>
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="copy /y $(SolutionDir)Megatokyo.Server\obj\Megatokyo.Server.json $(SolutionDir)Megatokyo.Server.UnitTest\OpenApi\Megatokyo.Server.json&#xD;&#xA;" />
+  </Target>
+  
 </Project>
