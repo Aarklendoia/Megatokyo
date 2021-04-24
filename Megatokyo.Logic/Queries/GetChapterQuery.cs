@@ -9,11 +9,11 @@ namespace Megatokyo.Logic.Queries
 {
     public class GetChapterQuery : IRequest<ChapterDomain>
     {
-        public int Number { get; set; }
+        public string Category { get; set; }
 
-        public GetChapterQuery(int number)
+        public GetChapterQuery(string category)
         {
-            Number = number;
+            Category = category;
         }
     }
 
@@ -28,7 +28,7 @@ namespace Megatokyo.Logic.Queries
 
         public async Task<ChapterDomain> Handle(GetChapterQuery request, CancellationToken cancellationToken)
         {
-            return await _chapterRepository.GetAsync(request.Number);
+            return await _chapterRepository.GetAsync(request.Category);
         }
     }
 }

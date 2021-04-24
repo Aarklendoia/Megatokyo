@@ -125,8 +125,14 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.12</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.WinUI">
-      <Version>3.0.0-preview4.210210.4</Version>
+    <PackageReference Include="Microsoft.ProjectReunion">
+      <Version>0.5.0-prerelease</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.ProjectReunion.Foundation">
+      <Version>0.5.0-prerelease</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.ProjectReunion.WinUI">
+      <Version>0.5.0-prerelease</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '$(MinimumVisualStudioVersion)' ">

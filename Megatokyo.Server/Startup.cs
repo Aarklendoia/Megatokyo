@@ -1,7 +1,4 @@
-using AutoMapper;
 using Megatokyo.Infrastructure;
-using Megatokyo.Infrastructure.Mapping;
-using Megatokyo.Server.Mapping;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -13,15 +10,8 @@ using TP.Logic;
 
 namespace Megatokyo.Server
 {
-    /// <summary>
-    /// Startup.
-    /// </summary>
     public class Startup
     {
-        /// <summary>
-        /// Create a new Startup instance.
-        /// </summary>
-        /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -29,25 +19,12 @@ namespace Megatokyo.Server
 
         private IConfiguration Configuration { get; }
 
-        /// <summary>
-        /// This method gets called by the runtime. Use this method to add services to the container.
-        /// </summary>
-        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplication();
             services.AddInfrastructure(Configuration);
-
-            //var mapperConfiguration = new MapperConfiguration(mc =>
-            //{
-            //    mc.AddProfile(new DTOMappingProfile());
-            //    mc.AddProfile(new DomainMappingProfile());
-            //});
-            //IMapper mapper = mapperConfiguration.CreateMapper();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
             services.AddControllers();
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = $"{Assembly.GetExecutingAssembly().GetName().Name}", Version = "v1" });
@@ -55,11 +32,7 @@ namespace Megatokyo.Server
             });
         }
 
-        /// <summary>
-        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        /// </summary>
-        /// <param name="app"></param>
-        /// <param name="env"></param>
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -67,19 +40,15 @@ namespace Megatokyo.Server
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
             app.UseSwagger();
-
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{Assembly.GetExecutingAssembly().GetName().Name} v1");
+                c.SwaggerEndpoint("./v1/swagger.json", $"{Assembly.GetExecutingAssembly().GetName().Name} v1");
             });
 
+            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

@@ -25,11 +25,11 @@
             <response code="204">Return in case the list is empty.</response>
             <response code="500">Return in case of internal server error.</response> 
         </member>
-        <member name="M:Megatokyo.Server.Controllers.v1.ChaptersController.GetChapters(System.Int32)">
+        <member name="M:Megatokyo.Server.Controllers.v1.ChaptersController.GetChapters(System.String)">
             <summary>
             Get a chapter by his number.
             </summary>
-            <param name="number">Chapter's number</param>
+            <param name="category">Chapter's category</param>
             <returns>A Chapter</returns>
             <response code="200">Return in case the chapter exists.</response>
             <response code="500">Return in case of internal server error.</response>
@@ -216,30 +216,6 @@
             Main function.
             </summary>
             <param name="args"></param>
-        </member>
-        <member name="T:Megatokyo.Server.Startup">
-            <summary>
-            Startup.
-            </summary>
-        </member>
-        <member name="M:Megatokyo.Server.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
-            <summary>
-            Create a new Startup instance.
-            </summary>
-            <param name="configuration"></param>
-        </member>
-        <member name="M:Megatokyo.Server.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
-            <summary>
-            This method gets called by the runtime. Use this method to add services to the container.
-            </summary>
-            <param name="services"></param>
-        </member>
-        <member name="M:Megatokyo.Server.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
-            <summary>
-            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-            </summary>
-            <param name="app"></param>
-            <param name="env"></param>
         </member>
         <member name="T:Megatokyo.Models.StringExtractor">
             <summary>

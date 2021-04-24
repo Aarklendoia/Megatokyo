@@ -30,9 +30,9 @@ namespace Megatokyo.Infrastructure.Repository.EF
             return Mapper.Map<IEnumerable<ChapterDomain>>(chapters);
         }
 
-        public async Task<ChapterDomain> GetAsync(int number)
+        public async Task<ChapterDomain> GetAsync(string category)
         {
-            ChapterEntity chapter = await DbSet.SingleOrDefaultAsync(strip => strip.Number == number);
+            ChapterEntity chapter = await DbSet.SingleOrDefaultAsync(strip => strip.Category == category);
 
             return Mapper.Map<ChapterDomain>(chapter);
         }

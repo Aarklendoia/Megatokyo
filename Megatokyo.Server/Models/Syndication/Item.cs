@@ -2,9 +2,6 @@
 
 namespace Megatokyo.Server.Models.Syndication
 {
-    /// <summary>
-    /// Représente un élément de flux.
-    /// </summary>
     internal class Item
     {
         public string Link { get; set; }

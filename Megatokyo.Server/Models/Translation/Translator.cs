@@ -13,12 +13,6 @@ namespace Megatokyo.Server.Models.Translations
 
         public string ClientKey { get; set; }
 
-        /// <summary>
-        /// Traduit le texte dans la langue demandée.
-        /// </summary>
-        /// <param name="language"></param>
-        /// <param name="text"></param>
-        /// <returns></returns>
         public async Task<string> Translate(string language, string text)
         {
             string uri = host + path + "&to=" + language;
@@ -40,10 +34,6 @@ namespace Megatokyo.Server.Models.Translations
             return responseBody;
         }
 
-        /// <summary>
-        /// Récupère la liste des langues disponibles pour la traduction.
-        /// </summary>
-        /// <returns></returns>
         public async Task<string> GetLanguages()
         {
             using HttpClient client = new();

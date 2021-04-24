@@ -7,7 +7,7 @@ namespace Megatokyo.Logic.Interfaces
     public interface IChapterRepository
     {
         Task<IEnumerable<ChapterDomain>> GetAllAsync();
-        Task<ChapterDomain> GetAsync(int number);
+        Task<ChapterDomain> GetAsync(string category);
         Task<ChapterDomain> CreateAsync(ChapterDomain chapterDomain);
         Task<int> SaveAsync();
     }

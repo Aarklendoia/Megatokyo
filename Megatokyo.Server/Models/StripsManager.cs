@@ -16,20 +16,12 @@ namespace Megatokyo.Server.Models
 
         public Uri Url { get; set; }
 
-        /// <summary>
-        /// Extrait du site de Megatokyo les chapitres et les planches puis les stocke en base de données.
-        /// </summary>
-        /// <param name="url">URL de la page d'archives de Megatokyo.</param>
-        /// <param name="mediator"></param>
         public StripsManager(Uri url, IMediator mediator)
         {
             Url = url;
             _mediator = mediator;
         }
 
-        /// <summary>
-        /// Extrait les chapitres puis les stocke en base de données.
-        /// </summary>
         public async Task<ChaptersDomain> ParseChaptersAsync()
         {
             ChaptersDomain chapters = ChaptersParser.Parse(Url);
@@ -48,11 +40,6 @@ namespace Megatokyo.Server.Models
             return chapters;
         }
 
-        /// <summary>
-        /// Recherches toutes les planches des chapitres fournis.
-        /// </summary>
-        /// <param name="chapters">Liste des chapitres pour lesquels il faut rechercher les planches.</param>
-        /// <returns></returns>
         public async Task<bool> ParseStripsAsync(ChaptersDomain chapters)
         {
             IEnumerable<StripDomain> stripsInDatabase = await _mediator.Send(new GetAllStripsQuery());

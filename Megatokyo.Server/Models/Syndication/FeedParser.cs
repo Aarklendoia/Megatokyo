@@ -8,15 +8,8 @@ using System.Xml.Linq;
 
 namespace Megatokyo.Server.Models.Syndication
 {
-    /// <summary>
-    /// Un simple analyseur de flux RSS, RDF et ATOM.
-    /// </summary>
     internal class FeedParser
     {
-        /// <summary>
-        /// Analyse le <see cref="FeedType"/> donné et retourne un <see cref="IList&lt;Item&gt;"/>.
-        /// </summary>
-        /// <returns></returns>
         public IList<Item> Parse(Uri url, FeedType feedType)
         {
             return feedType switch
@@ -28,9 +21,6 @@ namespace Megatokyo.Server.Models.Syndication
             };
         }
 
-        /// <summary>
-        /// Analyse un flux Atom et retourne un <see cref="IList&lt;Item&gt;"/>.
-        /// </summary>
         public virtual IList<Item> ParseAtom(Uri url)
         {
             if (url == null)
@@ -65,9 +55,6 @@ namespace Megatokyo.Server.Models.Syndication
             }
         }
 
-        /// <summary>
-        /// Analyse un flux RSS et retourne un <see cref="IList&lt;Item&gt;"/>.
-        /// </summary>
         public virtual IList<Item> ParseRss(Uri url)
         {
             if (url == null)
@@ -102,9 +89,6 @@ namespace Megatokyo.Server.Models.Syndication
             }
         }
 
-        /// <summary>
-        /// Analyse un flux RDF et retourne un <see cref="IList&lt;Item&gt;"/>.
-        /// </summary>
         public virtual IList<Item> ParseRdf(Uri url)
         {
             if (url == null)
@@ -151,22 +135,11 @@ namespace Megatokyo.Server.Models.Syndication
             }
         }
     }
-    /// <summary>
-    /// Représente le format XML d'un flux.
-    /// </summary>
+
     public enum FeedType
     {
-        /// <summary>
-        /// Format Really Simple Syndication.
-        /// </summary>
         RSS,
-        /// <summary>
-        /// Format de résumé de site RDF.
-        /// </summary>
         RDF,
-        /// <summary>
-        /// Format de syndication Atom.
-        /// </summary>
         Atom
     }
 }

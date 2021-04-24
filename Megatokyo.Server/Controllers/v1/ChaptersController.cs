@@ -68,19 +68,19 @@ namespace Megatokyo.Server.Controllers.v1
         /// <summary>
         /// Get a chapter by his number.
         /// </summary>
-        /// <param name="number">Chapter's number</param>
+        /// <param name="category">Chapter's category</param>
         /// <returns>A Chapter</returns>
         /// <response code="200">Return in case the chapter exists.</response>
         /// <response code="500">Return in case of internal server error.</response>
         [ProducesResponseType(typeof(ChapterOutputDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpGet("{number?}", Name = nameof(GetChapters))]
-        public async Task<IActionResult> GetChapters(int number)
+        [HttpGet("{category?}", Name = nameof(GetChapters))]
+        public async Task<IActionResult> GetChapters(string category)
         {
             try
             {
-                ChapterDomain Chapter = await _mediator.Send(new GetChapterQuery(number));
+                ChapterDomain Chapter = await _mediator.Send(new GetChapterQuery(category));
                 return Ok(Chapter);
             }
             catch (ArgumentException ex)

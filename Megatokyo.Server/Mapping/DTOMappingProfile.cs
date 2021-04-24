@@ -4,14 +4,8 @@ using Megatokyo.Server.DTO.v1;
 
 namespace Megatokyo.Server.Mapping
 {
-    /// <summary>
-    /// MApping for the DTO.
-    /// </summary>
     public class DTOMappingProfile : Profile
     {
-        /// <summary>
-        /// Create a new instance of the mapping profile.
-        /// </summary>
         public DTOMappingProfile()
         {
             CreateMap<StripOutputDTO, StripDomain>()

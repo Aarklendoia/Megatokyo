@@ -5,15 +5,8 @@ using Microsoft.Extensions.Hosting;
 
 namespace Megatokyo.Server
 {
-    /// <summary>
-    /// Main program of the webAPI.
-    /// </summary>
     public class Program
     {
-        /// <summary>
-        /// Main function.
-        /// </summary>
-        /// <param name="args"></param>
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();

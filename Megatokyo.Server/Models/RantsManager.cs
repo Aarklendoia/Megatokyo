@@ -13,28 +13,16 @@ namespace Megatokyo.Server.Models
     {
         private readonly IMediator _mediator;
 
-        /// <summary>
-        /// Extrait du site de Megatokyo les diatribes puis les stocke en base de données.
-        /// </summary>
         public RantsManager(IMediator mediator)
         {
             _mediator = mediator;
         }
 
-        /// <summary>
-        /// Extrait les diatribes puis les stocke en base de données.
-        /// </summary>
-        /// <returns></returns>
         public async Task<bool> ParseRantsAsync()
         {
             return await ParseRantsAsync(1);
         }
 
-        /// <summary>
-        /// Extrait les diatribes puis les stocke en base de données.
-        /// </summary>
-        /// <param name="stripNumber">Dernière planche extraite à partir de laquelle chercher une nouvelle diatribe.</param>
-        /// <returns></returns>
         public async Task<bool> ParseRantsAsync(int stripNumber)
         {
             IEnumerable<StripDomain> StripsInDatabase = await _mediator.Send(new GetAllStripsQuery());

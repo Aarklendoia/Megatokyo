@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="..\Megatokyo.Server\obj\Megatokyo.Server.json" Link="OpenAPI\Megatokyo.Server.json" />
     <Content Include="appsettings.Development.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -46,18 +47,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Client\" />
     <Folder Include="OpenAPI\" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <OpenApiReference Include="OpenApi\Megatokyo.Server.json">
-      <CodeGenerator>NSwagCSharp</CodeGenerator>
-      <Namespace>Megatokyo.Server</Namespace>
-      <ClassName>MegatokyoServer</ClassName>
-      <OutputPath>..\Client\Client.g.cs</OutputPath>
-      <Options>/UseBaseUrl:false /GenerateClientInterfaces:true /OperationGenerationMode:SingleClientFromOperationId</Options>
-    </OpenApiReference>
   </ItemGroup>
 
 

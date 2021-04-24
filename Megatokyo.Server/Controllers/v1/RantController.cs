@@ -12,9 +12,6 @@ using System.Threading.Tasks;
 
 namespace Megatokyo.Server.Controllers.v1
 {
-    /// <summary>
-    /// API for rants.
-    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class RantsController : ControllerBase
