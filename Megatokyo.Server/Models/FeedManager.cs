@@ -36,9 +36,9 @@ namespace Megatokyo.Server.Models
             IList<Item> items = feedParser.ParseRss(new Uri("https://megatokyo.com/rss/megatokyo.xml"));
 
             CheckingDomain checking = await _mediator.Send(new GetCheckingQuery(1));
-            if (checking.Id < 0)
+            if (checking == null)
             {
-                checking = new(DateTime.MinValue, 0, 0);
+                checking = new(DateTimeOffset.MinValue, 0, 0);
                 await _mediator.Send(new CreateCheckingCommand(checking));
             }
 

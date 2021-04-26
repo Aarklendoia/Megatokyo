@@ -25,9 +25,7 @@ namespace Megatokyo.Infrastructure.Repository.EF
 
         public async Task<CheckingDomain> GetAsync(int number)
         {
-            IEnumerable<CheckingEntity> cheking =
-                await DbSet.Where(checking => checking.Id == number).ToListAsync();
-
+            CheckingEntity cheking = await DbSet.SingleOrDefaultAsync(checking => checking.Id == number);
             return Mapper.Map<CheckingDomain>(cheking);
         }
 
