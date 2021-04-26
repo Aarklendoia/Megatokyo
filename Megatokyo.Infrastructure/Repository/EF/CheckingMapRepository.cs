@@ -39,10 +39,10 @@ namespace Megatokyo.Infrastructure.Repository.EF
 
         public async Task<CheckingDomain> UpdateAsync(CheckingDomain checkingDomain)
         {
-            CheckingEntity checkingEntity = Mapper.Map<CheckingEntity>(checkingDomain);
-            EntityEntry<CheckingEntity> entity = DbSet.Update(checkingEntity);
+            CheckingEntity checking = DbSet.Find(checkingDomain.Id);
+            CheckingEntity updatedChecking = Mapper.Map(checkingDomain, checking);
             await Context.SaveChangesAsync();
-            return Mapper.Map<CheckingDomain>(entity.Entity);
+            return Mapper.Map<CheckingDomain>(updatedChecking);
         }
     }
 }
