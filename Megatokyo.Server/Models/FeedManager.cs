@@ -43,7 +43,7 @@ namespace Megatokyo.Server.Models
             }
 
 #if DEBUG
-            DateTimeOffset lastCheck = DateTime.Now.AddDays(-60);
+            DateTimeOffset lastCheck = DateTime.Now.AddDays(-30);
 #else
             DateTimeOffset lastCheck = checking.LastCheck;
 #endif

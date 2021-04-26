@@ -4,9 +4,7 @@ using Megatokyo.Infrastructure.Repository.EF.Entity;
 using Megatokyo.Logic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Megatokyo.Infrastructure.Repository.EF
@@ -38,9 +36,9 @@ namespace Megatokyo.Infrastructure.Repository.EF
 
         public async Task<StripDomain> CreateAsync(StripDomain stripDomain)
         {
-                StripEntity stripEntity = Mapper.Map<StripEntity>(stripDomain);
-                EntityEntry<StripEntity> entity = await DbSet.AddAsync(stripEntity);
-                return Mapper.Map<StripDomain>(entity.Entity);
+            StripEntity stripEntity = Mapper.Map<StripEntity>(stripDomain);
+            EntityEntry<StripEntity> entity = await DbSet.AddAsync(stripEntity);
+            return Mapper.Map<StripDomain>(entity.Entity);
         }
 
         public async Task<int> SaveAsync()
