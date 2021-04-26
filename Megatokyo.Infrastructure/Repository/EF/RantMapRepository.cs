@@ -26,16 +26,13 @@ namespace Megatokyo.Infrastructure.Repository.EF
         public async Task<IEnumerable<RantDomain>> GetAllAsync()
         {
             IEnumerable<RantEntity> rants = await DbSet.ToListAsync();
-
             return Mapper.Map<IEnumerable<RantDomain>>(rants);
         }
 
         public async Task<RantDomain> GetAsync(int number)
-        {
-            IEnumerable<RantEntity> rants =
-                await DbSet.Where(rant => rant.Number == number).ToListAsync();
-
-            return Mapper.Map<RantDomain>(rants);
+        {            
+            RantEntity rant = await DbSet.SingleOrDefaultAsync(rant => rant.Number == number);
+            return Mapper.Map<RantDomain>(rant);
         }
 
         public async Task<RantDomain> CreateAsync(RantDomain rantDomain)

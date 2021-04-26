@@ -25,18 +25,14 @@ namespace Megatokyo.Infrastructure.Repository.EF
 
         public async Task<IEnumerable<StripDomain>> GetAllAsync()
         {
-            IEnumerable<StripEntity> strips =
-                await DbSet.ToListAsync();
-
+            IEnumerable<StripEntity> strips = await DbSet.ToListAsync();
             return Mapper.Map<IEnumerable<StripDomain>>(strips);
         }
 
         public async Task<StripDomain> GetAsync(int number)
         {
-            IEnumerable<StripEntity> strips =
-                await DbSet.Where(strip => strip.Number == number).ToListAsync();
-
-            return Mapper.Map<StripDomain>(strips);
+            StripEntity strip = await DbSet.SingleOrDefaultAsync(strip => strip.Number == number);
+            return Mapper.Map<StripDomain>(strip);
         }
 
         public async Task<StripDomain> CreateAsync(StripDomain stripDomain)
