@@ -81,13 +81,24 @@
             <response code="204">Return in case the list is empty.</response>
             <response code="500">Return in case of internal server error.</response> 
         </member>
-        <member name="M:Megatokyo.Server.Controllers.v1.StripsController.GetStrips(System.Int32)">
+        <member name="M:Megatokyo.Server.Controllers.v1.StripsController.GetCategoryStrips(System.String)">
+            <summary>
+            Get this strip of a category.
+            </summary>
+            <param name="category">Strip's category</param>
+            <returns>A strip</returns>
+            <response code="200">Return in case the strip exists.</response>
+            <response code="400">Return in case the parameters are incorect.</response>
+            <response code="500">Return in case of internal server error.</response>
+        </member>
+        <member name="M:Megatokyo.Server.Controllers.v1.StripsController.GetStrip(System.Int32)">
             <summary>
             Get a strip by his number.
             </summary>
             <param name="number">Strip's number</param>
             <returns>A strip</returns>
             <response code="200">Return in case the strip exists.</response>
+            <response code="400">Return in case the parameters are incorect.</response>
             <response code="500">Return in case of internal server error.</response>
         </member>
     </members>

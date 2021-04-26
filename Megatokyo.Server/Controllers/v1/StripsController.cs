@@ -66,17 +66,55 @@ namespace Megatokyo.Server.Controllers.v1
         }
 
         /// <summary>
+        /// Get this strip of a category.
+        /// </summary>
+        /// <param name="category">Strip's category</param>
+        /// <returns>A strip</returns>
+        /// <response code="200">Return in case the strip exists.</response>
+        /// <response code="400">Return in case the parameters are incorect.</response>
+        /// <response code="500">Return in case of internal server error.</response>
+        [ProducesResponseType(typeof(List<StripOutputDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpGet("category/{category}", Name = nameof(GetCategoryStrips))]
+        public async Task<IActionResult> GetCategoryStrips(string category)
+        {
+            try
+            {
+                List<StripOutputDTO> stripsData = new();
+                IEnumerable<StripDomain> strips = await _mediator.Send(new GetCategoryStripsQuery(category));
+                if (!strips.Any())
+                    return NoContent();
+                foreach (StripDomain strip in strips)
+                {
+                    StripOutputDTO stripOutputDTO = _mapper.Map<StripOutputDTO>(strip);
+                    stripsData.Add(stripOutputDTO);
+                }
+                return Ok(stripsData);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Get a strip by his number.
         /// </summary>
         /// <param name="number">Strip's number</param>
         /// <returns>A strip</returns>
         /// <response code="200">Return in case the strip exists.</response>
+        /// <response code="400">Return in case the parameters are incorect.</response>
         /// <response code="500">Return in case of internal server error.</response>
         [ProducesResponseType(typeof(StripOutputDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpGet("{number?}", Name = nameof(GetStrips))]
-        public async Task<IActionResult> GetStrips(int number)
+        [HttpGet("{number}", Name = nameof(GetStrip))]
+        public async Task<IActionResult> GetStrip(int number)
         {
             try
             {

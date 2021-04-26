@@ -5,6 +5,7 @@ using Megatokyo.Logic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Megatokyo.Infrastructure.Repository.EF
@@ -44,6 +45,12 @@ namespace Megatokyo.Infrastructure.Repository.EF
         public async Task<int> SaveAsync()
         {
             return await Context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<StripDomain>> GetCategoryAsync(string category)
+        {
+            IEnumerable<StripEntity> strips = await DbSet.Where(strip => strip.Category == category).ToListAsync();
+            return Mapper.Map<IEnumerable<StripDomain>>(strips);
         }
     }
 }
