@@ -5,43 +5,38 @@ using System.Resources;
 
 namespace Megatokyo.Models
 {
-    internal class ExtractorException : Exception
+    public class ExtractorException : Exception
     {
-        public ExtractorException()
-        {
-
-        }
-
-        public ExtractorException(string message)
-            : base(message)
-        {
-
-        }
-
-        public ExtractorException(string message, Exception innerException)
-    : base(message, innerException)
-        {
-
-        }
     }
 
+    /// <summary>
+    /// Extracts a string from a text.
+    /// </summary>
     public class StringExtractor
     {
-        private readonly ResourceManager stringManager;
         private string _text;
         private int _length;
         private string _startDelimiter;
 
+        /// <summary>
+        /// Position at which to start the search for the channel to be extracted. Automatically changes after each extraction.
+        /// </summary>
         public int Offset { get; set; }
 
         public StringExtractor(string text)
         {
-            stringManager = new ResourceManager("StringExtractorStrings", typeof(StringExtractor).Assembly);
             _text = text;
             Offset = 0;
             _length = 0;
         }
 
+        /// <summary>
+        /// Extracts the text string between the two delimiters.
+        /// </summary>
+        /// <param name="startDelimiter">Start delimiter of the chain to be extracted.</param>
+        /// <param name="endDelimiter">Delimiter of the end of the chain to be extracted.</param>
+        /// <param name="includeDelimiters">Indicates whether the extracted string should contain delimiters or not.</param>
+        /// <returns>Extracted string contained between the two delimiters.</returns>
         public string Extract(string startDelimiter, string endDelimiter, bool includeDelimiters)
         {
             if (endDelimiter == null)
@@ -52,15 +47,15 @@ namespace Megatokyo.Models
             _startDelimiter = startDelimiter ?? throw new ArgumentNullException(nameof(startDelimiter));
             if (Offset > _text.Length)
             {
-                throw new ExtractorException(stringManager.GetString("firstDelimiterPositionAfterEndText", CultureInfo.CurrentUICulture));
+                throw new ExtractorException();
             }
             if (string.IsNullOrEmpty(startDelimiter))
             {
-                throw new ExtractorException(stringManager.GetString("unableExtractStringSourceTextEmpty", CultureInfo.CurrentUICulture));
+                throw new ExtractorException();
             }
             if (_text.IndexOf(startDelimiter, Offset, StringComparison.InvariantCultureIgnoreCase) == -1)
             {
-                throw new ExtractorException(string.Format(CultureInfo.CurrentCulture, stringManager.GetString("unableExtractStringStartDelimiterHasNotBeenFound", CultureInfo.CurrentUICulture), startDelimiter, _text));
+                throw new ExtractorException();
             }
 
             int startPosition;
@@ -74,11 +69,11 @@ namespace Megatokyo.Models
             }
             if (startPosition > _text.Length)
             {
-                throw new ExtractorException(stringManager.GetString("unableExtractStringStartPositionAfterEndText", CultureInfo.CurrentUICulture));
+                throw new ExtractorException();
             }
             if (_text.IndexOf(endDelimiter, startPosition, StringComparison.InvariantCultureIgnoreCase) == -1)
             {
-                throw new ExtractorException(string.Format(CultureInfo.CurrentCulture, stringManager.GetString("unableExtractStringEndDelimiterHasNotBeenFound", CultureInfo.CurrentUICulture), endDelimiter, _text));
+                throw new ExtractorException();
             }
 
             int endPosition;
@@ -98,6 +93,12 @@ namespace Megatokyo.Models
             return extractedValue;
         }
 
+        /// <summary>
+        /// Extracts the text string between the current offset and the delimiter.
+        /// </summary>
+        /// <param name="endDelimiter">Delimiter of the end of the chain to be extracted.</param>
+        /// <param name="includeDelimiters">Indicates whether the extracted string should contain the delimiter or not.</param>
+        /// <returns>Extracted string contained between the two delimiters.</returns>
         public string Extract(string endDelimiter, bool includeDelimiters)
         {
             if (endDelimiter == null)
@@ -108,11 +109,11 @@ namespace Megatokyo.Models
             int startPosition = Offset;
             if (startPosition > _text.Length)
             {
-                throw new ExtractorException(stringManager.GetString("unableExtractStringStartPositionAfterEndText", CultureInfo.CurrentUICulture));
+                throw new ExtractorException();
             }
             if (_text.IndexOf(endDelimiter, startPosition, StringComparison.InvariantCultureIgnoreCase) == -1)
             {
-                throw new ExtractorException(string.Format(CultureInfo.CurrentCulture, stringManager.GetString("unableExtractStringEndDelimiterHasNotBeenFound", CultureInfo.CurrentUICulture), endDelimiter, _text));
+                throw new ExtractorException();
             }
 
             int endPosition;
@@ -133,6 +134,14 @@ namespace Megatokyo.Models
             return extractedValue;
         }
 
+        /// <summary>
+        /// Removes the text string between the two delimiters.
+        /// </summary>
+        /// <param name="startDelimiter">Start delimiter of the chain to be removed.</param>
+        /// <param name="endDelimiter">Delimiter at the end of the chain to be removed.</param>
+        /// <param name="includeDelimiters">Indicates whether the removed string should contain delimiters or not.</param>
+        /// <param name="content">Remaining text string after removal.</param>
+        /// <returns>Indicates whether a new search for a channel to be deleted is possible.</returns>
         public bool Remove(string startDelimiter, string endDelimiter, bool includeDelimiters, out string content)
         {
             if (endDelimiter == null)
@@ -144,11 +153,11 @@ namespace Megatokyo.Models
             _startDelimiter = startDelimiter ?? throw new ArgumentNullException(nameof(startDelimiter));
             if (Offset > _text.Length)
             {
-                throw new ExtractorException(stringManager.GetString("firstDelimiterPositionAfterEndText", CultureInfo.CurrentUICulture));
+                throw new ExtractorException();
             }
-            if (string.IsNullOrEmpty(startDelimiter)) 
+            if (string.IsNullOrEmpty(startDelimiter))
             {
-                throw new ExtractorException(stringManager.GetString("unableExtractStringSourceTextEmpty", CultureInfo.CurrentUICulture));
+                throw new ExtractorException();
             }
             if (_text.IndexOf(startDelimiter, Offset, StringComparison.InvariantCultureIgnoreCase) == -1)
             {
@@ -170,12 +179,12 @@ namespace Megatokyo.Models
 
                 if (startPosition > _text.Length)
                 {
-                    throw new ExtractorException(stringManager.GetString("unableExtractStringStartPositionAfterEndText", CultureInfo.CurrentUICulture));
+                    throw new ExtractorException();
                 }
 
                 if (_text.IndexOf(endDelimiter, startPosition, StringComparison.InvariantCultureIgnoreCase) == -1)
                 {
-                    throw new ExtractorException(string.Format(CultureInfo.CurrentCulture, stringManager.GetString("unableExtractStringEndDelimiterHasNotBeenFound", CultureInfo.CurrentUICulture), endDelimiter, _text));
+                    throw new ExtractorException();
                 }
 
                 if (includeDelimiters)

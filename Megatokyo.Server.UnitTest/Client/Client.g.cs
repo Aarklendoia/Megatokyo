@@ -57,14 +57,14 @@ namespace Megatokyo.Server
         /// <param name="number">Rant's number</param>
         /// <returns>Return in case the rant exists.</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<RantOutputDTO> GetRantsAsync(int number);
+        System.Threading.Tasks.Task<RantOutputDTO> GetRantAsync(int number);
     
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>Get a rant by his number.</summary>
         /// <param name="number">Rant's number</param>
         /// <returns>Return in case the rant exists.</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<RantOutputDTO> GetRantsAsync(int number, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<RantOutputDTO> GetRantAsync(int number, System.Threading.CancellationToken cancellationToken);
     
         /// <summary>Get all strips.</summary>
         /// <returns>Return in case the list have some strips.</returns>
@@ -410,9 +410,9 @@ namespace Megatokyo.Server
         /// <param name="number">Rant's number</param>
         /// <returns>Return in case the rant exists.</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<RantOutputDTO> GetRantsAsync(int number)
+        public System.Threading.Tasks.Task<RantOutputDTO> GetRantAsync(int number)
         {
-            return GetRantsAsync(number, System.Threading.CancellationToken.None);
+            return GetRantAsync(number, System.Threading.CancellationToken.None);
         }
     
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -420,7 +420,7 @@ namespace Megatokyo.Server
         /// <param name="number">Rant's number</param>
         /// <returns>Return in case the rant exists.</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<RantOutputDTO> GetRantsAsync(int number, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task<RantOutputDTO> GetRantAsync(int number, System.Threading.CancellationToken cancellationToken)
         {
             if (number == null)
                 throw new System.ArgumentNullException("number");
