@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Megatokyo.Domain;
+using Megatokyo.Logic.Queries;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -20,6 +21,7 @@ namespace Megatokyo.Server.Models
         private readonly StripsManager _stripManager;
         private readonly RantsManager _rantManager;
         private readonly FeedManager _feedManager;
+        private readonly IMediator _mediator;
 
         public WebSiteParser(IMediator mediator)
         {
@@ -28,6 +30,7 @@ namespace Megatokyo.Server.Models
             _stripManager = new StripsManager(new Uri(_megatokyoArchiveUrl), mediator);
             _rantManager = new RantsManager(mediator);
             _feedManager = new FeedManager(mediator);
+            _mediator = mediator;
         }
 
         public async Task ParseAsync()
@@ -95,11 +98,12 @@ namespace Megatokyo.Server.Models
         private async Task SendLocalisedStripNotificationsAsync(StripDomain strip)
         {
             StripDomain stripToNotify = await _stripManager.GetStripByNumberAsync(strip.Number);
+            ChapterDomain chapter = await _mediator.Send(new GetChapterQuery(stripToNotify.Category));
             Dictionary<string, string> templateParams = new()
             {
                 ["title"] = stripToNotify.Title,
-                ["uri"] = stripToNotify.Url.OriginalString,
-                ["chapter"] = stripToNotify.Chapter.Number.ToString(CultureInfo.InvariantCulture) + " - " + stripToNotify.Chapter.Title
+                ["uri"] = stripToNotify.Url.OriginalString,                
+                ["chapter"] = chapter.Number.ToString(CultureInfo.InvariantCulture) + " - " + chapter.Title
             };
             await SendTemplateNotificationAsync(templateParams);
         }

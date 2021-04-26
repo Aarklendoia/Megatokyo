@@ -1,24 +1,22 @@
 ﻿using System;
-using System.Linq;
 
 namespace Megatokyo.Domain
 {
     public class StripDomain
     {
-        public ChapterDomain Chapter { get; set; }
         public int Number { get; set; }
         public string Title { get; set; }
         public Uri Url { get; set; }
-        public DateTime Timestamp { get; set; }
+        public DateTimeOffset PublishDate { get; set; }
         public string Category { get; set; }
 
-        public StripDomain(ChapterDomain chapter, int number, string title, Uri url, DateTime timestamp)
+        public StripDomain(string category, int number, string title, Uri url, DateTimeOffset publishDate)
         {
-            Chapter = chapter;
             Number = number;
             Title = title;
             Url = url;
-            Timestamp = timestamp;
+            PublishDate = publishDate;
+            Category = category;
         }
 
         public StripDomain(int number)

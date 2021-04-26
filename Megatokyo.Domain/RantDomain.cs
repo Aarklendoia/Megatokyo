@@ -8,16 +8,16 @@ namespace Megatokyo.Domain
         public int Number { get; set; }
         public string Author { get; set; }
         public Uri Url { get; set; }
-        public DateTime Timestamp { get; set; }
+        public DateTimeOffset PublishDate { get; set; }
         public string Content { get; set; }
 
-        public RantDomain(string title, int number, string author, Uri url, DateTime timestamp, string content)
+        public RantDomain(string title, int number, string author, Uri url, DateTimeOffset publishDate, string content)
         {
             Title = title;
             Number = number;
             Author = author;
             Url = url;
-            Timestamp = timestamp;
+            PublishDate = publishDate;
             Content = content;
         }
 

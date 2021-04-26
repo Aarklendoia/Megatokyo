@@ -8,7 +8,7 @@ namespace Megatokyo.Infrastructure.Repository.EF.Entity
         [Key]
         public int Id { get; set; }
         [Required]
-        public DateTime LastCheck { get; set; }
+        public DateTimeOffset LastCheck { get; set; }
         [Required]
         public int LastStripNumber { get; set; }
         [Required]

@@ -4,6 +4,7 @@ using Megatokyo.Infrastructure.Repository.EF.Entity;
 using Megatokyo.Logic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,25 +26,21 @@ namespace Megatokyo.Infrastructure.Repository.EF
 
         public async Task<IEnumerable<StripDomain>> GetAllAsync()
         {
-            IEnumerable<StripEntity> strips =
-                await DbSet.ToListAsync();
-
+            IEnumerable<StripEntity> strips = await DbSet.ToListAsync();
             return Mapper.Map<IEnumerable<StripDomain>>(strips);
         }
 
         public async Task<StripDomain> GetAsync(int number)
         {
-            IEnumerable<StripEntity> strips =
-                await DbSet.Where(strip => strip.Number == number).ToListAsync();
-
-            return Mapper.Map<StripDomain>(strips);
+            StripEntity strip = await DbSet.SingleOrDefaultAsync(strip => strip.Number == number);
+            return Mapper.Map<StripDomain>(strip);
         }
 
         public async Task<StripDomain> CreateAsync(StripDomain stripDomain)
         {
-            StripEntity stripEntity = Mapper.Map<StripEntity>(stripDomain);
-            EntityEntry<StripEntity> entity = await DbSet.AddAsync(stripEntity);
-            return Mapper.Map<StripDomain>(entity.Entity);
+                StripEntity stripEntity = Mapper.Map<StripEntity>(stripDomain);
+                EntityEntry<StripEntity> entity = await DbSet.AddAsync(stripEntity);
+                return Mapper.Map<StripDomain>(entity.Entity);
         }
 
         public async Task<int> SaveAsync()

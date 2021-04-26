@@ -50,10 +50,10 @@ namespace Megatokyo.Server.Models.Parsers
             string author = node.SelectSingleNode(".//h3").InnerHtml.Replace("&gt;", "", StringComparison.InvariantCultureIgnoreCase).Replace("&lt;", "", StringComparison.InvariantCultureIgnoreCase).Trim();
             StringExtractor titleExtractor = new(WebUtility.HtmlDecode(node.SelectSingleNode(".//h4/a").InnerHtml));
             string title = titleExtractor.Extract("\"", "\"", false).Trim();
-            DateTime timestamp = DateTime.ParseExact(node.SelectSingleNode(".//p[contains(@class,'date')]").InnerHtml, "dddd - MMMM d, yyyy", new CultureInfo("en-US"));
+            DateTimeOffset publishDate = DateTime.ParseExact(node.SelectSingleNode(".//p[contains(@class,'date')]").InnerHtml, "dddd - MMMM d, yyyy", new CultureInfo("en-US"));
             Uri url = new("https://megatokyo.com/" + node.SelectSingleNode(".//img").Attributes["src"].Value);
             string content = node.SelectSingleNode(".//div[contains(@class,'rantbody')]").InnerHtml;
-            return new RantDomain(title, number, author, url, timestamp, content);
+            return new RantDomain(title, number, author, url, publishDate, content);
         }
     }
 }

@@ -80,7 +80,8 @@ namespace Megatokyo.Server.Controllers.v1
         {
             try
             {
-                StripDomain strip = await _mediator.Send(new GetStripQuery(number));
+                StripDomain stripData = await _mediator.Send(new GetStripQuery(number));
+                StripOutputDTO strip = _mapper.Map<StripOutputDTO>(stripData);
                 return Ok(strip);
             }
             catch (ArgumentException ex)

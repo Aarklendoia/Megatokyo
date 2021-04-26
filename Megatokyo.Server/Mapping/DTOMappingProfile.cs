@@ -9,7 +9,7 @@ namespace Megatokyo.Server.Mapping
         public DTOMappingProfile()
         {
             CreateMap<StripOutputDTO, StripDomain>()
-                    .ConstructUsing((stripEntity, ctx) => new StripDomain(ctx.Mapper.Map<ChapterDomain>(stripEntity), stripEntity.Number, stripEntity.Title, stripEntity.Url, stripEntity.Timestamp))
+                    .ConstructUsing(stripEntity => new StripDomain(stripEntity.Category, stripEntity.Number, stripEntity.Title, stripEntity.Url, stripEntity.PublishDate))
                     .ReverseMap();
 
             CreateMap<ChapterOutputDTO, ChapterDomain>()
@@ -17,7 +17,7 @@ namespace Megatokyo.Server.Mapping
                     .ReverseMap();
 
             CreateMap<RantOutputDTO, RantDomain>()
-                .ConstructUsing(rantEntity => new RantDomain(rantEntity.Title, rantEntity.Number, rantEntity.Author, rantEntity.Url, rantEntity.Timestamp, rantEntity.Content))
+                .ConstructUsing(rantEntity => new RantDomain(rantEntity.Title, rantEntity.Number, rantEntity.Author, rantEntity.Url, rantEntity.PublishDate, rantEntity.Content))
                 .ReverseMap();
         }
     }

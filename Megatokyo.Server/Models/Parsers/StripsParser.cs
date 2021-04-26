@@ -39,13 +39,13 @@ namespace Megatokyo.Server.Models.Parsers
         private static async Task<StripDomain> ExtractStripAsync(HtmlNode node, ChapterDomain chapter, IEnumerable<StripDomain> stripsInDatabase)
         {
             StringExtractor stringExtractor = new(node.OuterHtml);
-            DateTime timestamp = DateTime.ParseExact(stringExtractor.Extract("title=\"", "\" name=\"", false).Replace("th,", "", StringComparison.InvariantCultureIgnoreCase).Replace("rd,", "", StringComparison.InvariantCultureIgnoreCase).Replace("nd,", "", StringComparison.InvariantCultureIgnoreCase).Replace("st,", "", StringComparison.InvariantCultureIgnoreCase), "MMMM d yyyy", new CultureInfo("en-US"));
+            DateTimeOffset publishDate = DateTime.ParseExact(stringExtractor.Extract("title=\"", "\" name=\"", false).Replace("th,", "", StringComparison.InvariantCultureIgnoreCase).Replace("rd,", "", StringComparison.InvariantCultureIgnoreCase).Replace("nd,", "", StringComparison.InvariantCultureIgnoreCase).Replace("st,", "", StringComparison.InvariantCultureIgnoreCase), "MMMM d yyyy", new CultureInfo("en-US"));
             int number = int.Parse(node.Attributes["name"].Value, CultureInfo.InvariantCulture);
             string title = WebUtility.HtmlDecode(stringExtractor.Extract(" - ", "<", false));
             Uri url = new("https://megatokyo.com/strips/" + number.ToString("D4", CultureInfo.InvariantCulture));
             if (!stripsInDatabase.Where(s => s.Number == number).Any())
             {
-                StripDomain strip = new(chapter, number, title, url, timestamp);
+                StripDomain strip = new(chapter.Category, number, title, url, publishDate);
                 if (await GetFileTypeAsync(strip))
                 {
                     return strip;

@@ -5,7 +5,6 @@ using Megatokyo.Logic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Megatokyo.Infrastructure.Repository.EF
@@ -26,14 +25,12 @@ namespace Megatokyo.Infrastructure.Repository.EF
         public async Task<IEnumerable<ChapterDomain>> GetAllAsync()
         {
             IEnumerable<ChapterEntity> chapters = await DbSet.ToListAsync();
-
             return Mapper.Map<IEnumerable<ChapterDomain>>(chapters);
         }
 
         public async Task<ChapterDomain> GetAsync(string category)
         {
-            ChapterEntity chapter = await DbSet.SingleOrDefaultAsync(strip => strip.Category == category);
-
+            ChapterEntity chapter = await DbSet.SingleOrDefaultAsync(chapter => chapter.Category == category);
             return Mapper.Map<ChapterDomain>(chapter);
         }
 

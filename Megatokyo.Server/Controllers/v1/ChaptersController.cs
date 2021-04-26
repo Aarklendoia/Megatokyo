@@ -48,16 +48,16 @@ namespace Megatokyo.Server.Controllers.v1
         {
             try
             {
-                List<ChapterOutputDTO> ChaptersData = new();
+                List<ChapterOutputDTO> chaptersData = new();
                 IEnumerable<ChapterDomain> chapters = await _mediator.Send(new GetAllChaptersQuery());
                 if (!chapters.Any())
                     return NoContent();
                 foreach (ChapterDomain chapter in chapters)
                 {
-                    ChapterOutputDTO ChapterOutputDTO = _mapper.Map<ChapterOutputDTO>(chapter);
-                    ChaptersData.Add(ChapterOutputDTO);
+                    ChapterOutputDTO chapterOutputDTO = _mapper.Map<ChapterOutputDTO>(chapter);
+                    chaptersData.Add(chapterOutputDTO);
                 }
-                return Ok(ChaptersData);
+                return Ok(chaptersData);
             }
             catch
             {
@@ -81,8 +81,9 @@ namespace Megatokyo.Server.Controllers.v1
         {
             try
             {
-                ChapterDomain Chapter = await _mediator.Send(new GetChapterQuery(category));
-                return Ok(Chapter);
+                ChapterDomain ChapterData = await _mediator.Send(new GetChapterQuery(category));
+                ChapterOutputDTO chapter = _mapper.Map<ChapterOutputDTO>(ChapterData);
+                return Ok(chapter);
             }
             catch (ArgumentException ex)
             {
