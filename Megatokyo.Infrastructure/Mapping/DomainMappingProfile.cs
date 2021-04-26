@@ -9,7 +9,7 @@ namespace Megatokyo.Infrastructure.Mapping
         public DomainMappingProfile()
         {
             CreateMap<StripEntity, StripDomain>()
-                .ConstructUsing((stripEntity, ctx) => new StripDomain(ctx.Mapper.Map<ChapterDomain>(stripEntity), stripEntity.Number, stripEntity.Title, stripEntity.Url, stripEntity.DateTime))
+                .ConstructUsing(stripEntity => new StripDomain(stripEntity.Category, stripEntity.Number, stripEntity.Title, stripEntity.Url, stripEntity.PublishDate))
                 .ReverseMap();
 
             CreateMap<ChapterEntity, ChapterDomain>()
@@ -17,7 +17,7 @@ namespace Megatokyo.Infrastructure.Mapping
                 .ReverseMap();
 
             CreateMap<RantEntity, RantDomain>()
-                .ConstructUsing(rantEntity => new RantDomain(rantEntity.Title, rantEntity.Number, rantEntity.Author, rantEntity.Url, rantEntity.TimeStamp, rantEntity.Content))
+                .ConstructUsing(rantEntity => new RantDomain(rantEntity.Title, rantEntity.Number, rantEntity.Author, rantEntity.Url, rantEntity.PublishDate, rantEntity.Content))
                 .ReverseMap();
 
             CreateMap<CheckingEntity, CheckingDomain>()

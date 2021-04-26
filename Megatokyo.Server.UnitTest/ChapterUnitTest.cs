@@ -9,8 +9,7 @@ namespace Megatokyo.Server.UnitTest
     [TestClass]
     public class ChapterUnitTest
     {
-        [TestMethod]
-        
+        [TestMethod]        
         public void ChaptersAllAsyncTestMethod()
         {
             HttpClient client = TestServer.GetClient();

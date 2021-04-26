@@ -25,9 +25,7 @@ namespace Megatokyo.Server.Models
         public async Task<ChaptersDomain> ParseChaptersAsync()
         {
             ChaptersDomain chapters = ChaptersParser.Parse(Url);
-
             IEnumerable<ChapterDomain> chaptersInDatabase = await _mediator.Send(new GetAllChaptersQuery());
-
             foreach (ChapterDomain chapter in chapters)
             {
                 if (!chaptersInDatabase.Where(c => c.Number == chapter.Number).Any())
@@ -43,16 +41,13 @@ namespace Megatokyo.Server.Models
         public async Task<bool> ParseStripsAsync(ChaptersDomain chapters)
         {
             IEnumerable<StripDomain> stripsInDatabase = await _mediator.Send(new GetAllStripsQuery());
-
             List<StripDomain> strips = await StripsParser.ParseAsync(Url, chapters, stripsInDatabase);
-
-            IEnumerable<ChapterDomain> chaptersInDatabase = await _mediator.Send(new GetAllChaptersQuery());
             foreach (StripDomain strip in strips)
             {
                 if (!stripsInDatabase.Where(s => s.Number == strip.Number).Any())
                 {
-                    ChapterDomain currentChapter = chaptersInDatabase.Where(c => c.Category == strip.Category).First();
-                    StripDomain newStrip = new(currentChapter, strip.Number, strip.Title, strip.Url, strip.Timestamp);
+                    ChapterDomain currentChapter = await _mediator.Send(new GetChapterQuery(strip.Category));
+                    StripDomain newStrip = new(currentChapter.Category, strip.Number, strip.Title, strip.Url, strip.PublishDate);
                     await _mediator.Send(new CreateStripCommand(newStrip));
                 }
             }

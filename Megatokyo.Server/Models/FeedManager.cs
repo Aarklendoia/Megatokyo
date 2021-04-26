@@ -43,9 +43,9 @@ namespace Megatokyo.Server.Models
             }
 
 #if DEBUG
-            DateTime lastCheck = DateTime.Now.AddDays(-30);
+            DateTimeOffset lastCheck = DateTime.Now.AddDays(-30);
 #else
-            DateTime lastCheck = checking.LastCheck;
+            DateTimeOffset lastCheck = checking.LastCheck;
 #endif
             LastStripNumber = checking.LastStripNumber;
             LastRantNumber = checking.LastRantNumber;
