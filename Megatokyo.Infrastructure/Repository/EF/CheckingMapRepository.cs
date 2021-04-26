@@ -4,8 +4,6 @@ using Megatokyo.Infrastructure.Repository.EF.Entity;
 using Megatokyo.Logic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Megatokyo.Infrastructure.Repository.EF
@@ -25,9 +23,7 @@ namespace Megatokyo.Infrastructure.Repository.EF
 
         public async Task<CheckingDomain> GetAsync(int number)
         {
-            IEnumerable<CheckingEntity> cheking =
-                await DbSet.Where(checking => checking.Id == number).ToListAsync();
-
+            CheckingEntity cheking = await DbSet.SingleOrDefaultAsync(checking => checking.Id == number);
             return Mapper.Map<CheckingDomain>(cheking);
         }
 
@@ -41,10 +37,10 @@ namespace Megatokyo.Infrastructure.Repository.EF
 
         public async Task<CheckingDomain> UpdateAsync(CheckingDomain checkingDomain)
         {
-            CheckingEntity checkingEntity = Mapper.Map<CheckingEntity>(checkingDomain);
-            EntityEntry<CheckingEntity> entity = DbSet.Update(checkingEntity);
+            CheckingEntity checking = DbSet.Find(checkingDomain.Id);
+            CheckingEntity updatedChecking = Mapper.Map(checkingDomain, checking);
             await Context.SaveChangesAsync();
-            return Mapper.Map<CheckingDomain>(entity.Entity);
+            return Mapper.Map<CheckingDomain>(updatedChecking);
         }
     }
 }

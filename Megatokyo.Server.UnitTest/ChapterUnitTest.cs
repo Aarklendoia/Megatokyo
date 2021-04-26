@@ -2,14 +2,13 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Net.Http;
-using Megatokyo.Server;
 
 namespace Megatokyo.Server.UnitTest
 {
     [TestClass]
     public class ChapterUnitTest
     {
-        [TestMethod]        
+        [TestMethod]
         public void ChaptersAllAsyncTestMethod()
         {
             HttpClient client = TestServer.GetClient();

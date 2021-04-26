@@ -51,7 +51,7 @@
             <response code="204">Return in case the list is empty.</response>
             <response code="500">Return in case of internal server error.</response> 
         </member>
-        <member name="M:Megatokyo.Server.Controllers.v1.RantsController.GetRants(System.Int32)">
+        <member name="M:Megatokyo.Server.Controllers.v1.RantsController.GetRant(System.Int32)">
             <summary>
             Get a rant by his number.
             </summary>
@@ -81,14 +81,62 @@
             <response code="204">Return in case the list is empty.</response>
             <response code="500">Return in case of internal server error.</response> 
         </member>
-        <member name="M:Megatokyo.Server.Controllers.v1.StripsController.GetStrips(System.Int32)">
+        <member name="M:Megatokyo.Server.Controllers.v1.StripsController.GetCategoryStrips(System.String)">
+            <summary>
+            Get this strip of a category.
+            </summary>
+            <param name="category">Strip's category</param>
+            <returns>A strip</returns>
+            <response code="200">Return in case the strip exists.</response>
+            <response code="400">Return in case the parameters are incorect.</response>
+            <response code="500">Return in case of internal server error.</response>
+        </member>
+        <member name="M:Megatokyo.Server.Controllers.v1.StripsController.GetStrip(System.Int32)">
             <summary>
             Get a strip by his number.
             </summary>
             <param name="number">Strip's number</param>
             <returns>A strip</returns>
             <response code="200">Return in case the strip exists.</response>
+            <response code="400">Return in case the parameters are incorect.</response>
             <response code="500">Return in case of internal server error.</response>
+        </member>
+        <member name="T:Megatokyo.Models.StringExtractor">
+            <summary>
+            Extracts a string from a text.
+            </summary>
+        </member>
+        <member name="P:Megatokyo.Models.StringExtractor.Offset">
+            <summary>
+            Position at which to start the search for the channel to be extracted. Automatically changes after each extraction.
+            </summary>
+        </member>
+        <member name="M:Megatokyo.Models.StringExtractor.Extract(System.String,System.String,System.Boolean)">
+            <summary>
+            Extracts the text string between the two delimiters.
+            </summary>
+            <param name="startDelimiter">Start delimiter of the chain to be extracted.</param>
+            <param name="endDelimiter">Delimiter of the end of the chain to be extracted.</param>
+            <param name="includeDelimiters">Indicates whether the extracted string should contain delimiters or not.</param>
+            <returns>Extracted string contained between the two delimiters.</returns>
+        </member>
+        <member name="M:Megatokyo.Models.StringExtractor.Extract(System.String,System.Boolean)">
+            <summary>
+            Extracts the text string between the current offset and the delimiter.
+            </summary>
+            <param name="endDelimiter">Delimiter of the end of the chain to be extracted.</param>
+            <param name="includeDelimiters">Indicates whether the extracted string should contain the delimiter or not.</param>
+            <returns>Extracted string contained between the two delimiters.</returns>
+        </member>
+        <member name="M:Megatokyo.Models.StringExtractor.Remove(System.String,System.String,System.Boolean,System.String@)">
+            <summary>
+            Removes the text string between the two delimiters.
+            </summary>
+            <param name="startDelimiter">Start delimiter of the chain to be removed.</param>
+            <param name="endDelimiter">Delimiter at the end of the chain to be removed.</param>
+            <param name="includeDelimiters">Indicates whether the removed string should contain delimiters or not.</param>
+            <param name="content">Remaining text string after removal.</param>
+            <returns>Indicates whether a new search for a channel to be deleted is possible.</returns>
         </member>
     </members>
 </doc>

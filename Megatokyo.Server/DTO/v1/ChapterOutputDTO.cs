@@ -8,6 +8,5 @@ namespace Megatokyo.Server.DTO.v1
         public int Number { get; set; }
         public string Title { get; set; }
         public string Category { get; set; }
-        public List<StripOutputDTO> Strips { get; set; }
     }
 }

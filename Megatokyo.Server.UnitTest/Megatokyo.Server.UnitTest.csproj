@@ -47,10 +47,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Client\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Megatokyo.Server\Megatokyo.Server.csproj" />
   </ItemGroup>
 

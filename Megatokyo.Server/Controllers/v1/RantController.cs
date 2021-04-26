@@ -72,8 +72,8 @@ namespace Megatokyo.Server.Controllers.v1
         [ProducesResponseType(typeof(RantOutputDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpGet("{number?}", Name = nameof(GetRants))]
-        public async Task<IActionResult> GetRants(int number)
+        [HttpGet("{number?}", Name = nameof(GetRant))]
+        public async Task<IActionResult> GetRant(int number)
         {
             try
             {

@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Megatokyo.Infrastructure.Mapping;
-using Megatokyo.Infrastructure.Repository.EF;
+﻿using Megatokyo.Infrastructure.Repository.EF;
 using Megatokyo.Logic.Interfaces;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -31,12 +29,6 @@ namespace Megatokyo.Infrastructure
 
             services.AddScoped<ICheckingRepository, CheckingMapRepository>();
             services.AddScoped<CheckingMapRepository>();
-
-            //var mapperConfig = new MapperConfiguration(mc =>
-            //{
-            //    mc.AddProfile(new DomainMappingProfile());
-            //});
-            //IMapper mapper = mapperConfig.CreateMapper();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Megatokyo.Domain
 {
     public class CheckingDomain
-    { 
+    {
         public int Id { get; set; }
         public DateTimeOffset LastCheck { get; set; }
         public int LastStripNumber { get; set; }
