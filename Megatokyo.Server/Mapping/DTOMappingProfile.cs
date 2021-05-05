@@ -9,15 +9,15 @@ namespace Megatokyo.Server.Mapping
         public DTOMappingProfile()
         {
             CreateMap<StripOutputDTO, StripDomain>()
-                    .ConstructUsing(stripEntity => new StripDomain(stripEntity.Category, stripEntity.Number, stripEntity.Title, stripEntity.Url, stripEntity.PublishDate))
+                    .ConstructUsing(stripOutputDTO => new StripDomain(stripOutputDTO.Category, stripOutputDTO.Number, stripOutputDTO.Title, stripOutputDTO.Url, stripOutputDTO.PublishDate))
                     .ReverseMap();
 
             CreateMap<ChapterOutputDTO, ChapterDomain>()
-                    .ConstructUsing(chapterEntity => new ChapterDomain(chapterEntity.Number, chapterEntity.Title, chapterEntity.Category))
+                    .ConstructUsing(chapterOutputDTO => new ChapterDomain(chapterOutputDTO.Number, chapterOutputDTO.Title, chapterOutputDTO.Category))
                     .ReverseMap();
 
             CreateMap<RantOutputDTO, RantDomain>()
-                .ConstructUsing(rantEntity => new RantDomain(rantEntity.Title, rantEntity.Number, rantEntity.Author, rantEntity.Url, rantEntity.PublishDate, rantEntity.Content))
+                .ConstructUsing(rantOutputDTO => new RantDomain(rantOutputDTO.Title, rantOutputDTO.Number, rantOutputDTO.Author, rantOutputDTO.Url, rantOutputDTO.PublishDate, rantOutputDTO.Content))
                 .ReverseMap();
         }
     }
