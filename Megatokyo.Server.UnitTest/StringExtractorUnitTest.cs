@@ -181,7 +181,7 @@ namespace Megatokyo.Server.UnitTest
             Assert.AreEqual(true, rest);
             Assert.AreEqual(expected1, actual);
             string expected2 = "Chaîne de #& pour les #& de chaîne";
-            rest = stringExtractor.Remove("#", "&", false, out _);
+            rest = stringExtractor.Remove("#", "&", false, out actual);
             Assert.AreEqual(true, rest);
             Assert.AreEqual(expected2, actual);
             rest = stringExtractor.Remove("#", "&", false, out _);
@@ -198,7 +198,7 @@ namespace Megatokyo.Server.UnitTest
             Assert.AreEqual(true, rest);
             Assert.AreEqual(expected1, actual);
             string expected2 = "Chaîne de  pour les  de chaîne";
-            rest = stringExtractor.Remove("#", "&", true, out _);
+            rest = stringExtractor.Remove("#", "&", true, out actual);
             Assert.AreEqual(true, rest);
             Assert.AreEqual(expected2, actual);
             rest = stringExtractor.Remove("#", "&", true, out _);
