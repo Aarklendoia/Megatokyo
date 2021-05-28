@@ -2,9 +2,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Megatokyo.Server.UnitTest
 {
@@ -187,7 +184,7 @@ namespace Megatokyo.Server.UnitTest
             rest = stringExtractor.Remove("#", "&", false, out actual);
             Assert.AreEqual(true, rest);
             Assert.AreEqual(expected2, actual);
-            rest = stringExtractor.Remove("#", "&", false, out actual);
+            rest = stringExtractor.Remove("#", "&", false, out _);
             Assert.AreEqual(false, rest);
         }
 
@@ -204,7 +201,7 @@ namespace Megatokyo.Server.UnitTest
             rest = stringExtractor.Remove("#", "&", true, out actual);
             Assert.AreEqual(true, rest);
             Assert.AreEqual(expected2, actual);
-            rest = stringExtractor.Remove("#", "&", true, out actual);
+            rest = stringExtractor.Remove("#", "&", true, out _);
             Assert.AreEqual(false, rest);
         }
     }

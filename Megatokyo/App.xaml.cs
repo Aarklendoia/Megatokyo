@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.ApplicationModel;
-using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -15,15 +12,19 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 
+using Windows.ApplicationModel;
+using Windows.ApplicationModel.Activation;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
+
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace Megatokyo
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    sealed partial class App : Application
+    public sealed partial class App : Application
     {
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -31,8 +32,8 @@ namespace Megatokyo
         /// </summary>
         public App()
         {
-            this.InitializeComponent();
-            this.Suspending += OnSuspending;
+            InitializeComponent();
+            Suspending += OnSuspending;
         }
 
         /// <summary>
@@ -42,9 +43,11 @@ namespace Megatokyo
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs e)
         {
+            Frame rootFrame = Window.Current.Content as Frame;
+
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
-            if (!(Window.Current.Content is Frame rootFrame))
+            if (rootFrame == null)
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
@@ -53,7 +56,7 @@ namespace Megatokyo
 
                 if (e.UWPLaunchActivatedEventArgs.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
-                    //TODO: Load state from previously suspended application
+                    // TODO: Load state from previously suspended application
                 }
 
                 // Place the frame in the current Window
@@ -69,6 +72,7 @@ namespace Megatokyo
                     // parameter
                     rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
+
                 // Ensure the current window is active
                 Window.Current.Activate();
             }
@@ -79,7 +83,7 @@ namespace Megatokyo
         /// </summary>
         /// <param name="sender">The Frame which failed navigation</param>
         /// <param name="e">Details about the navigation failure</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
@@ -94,7 +98,8 @@ namespace Megatokyo
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-            //TODO: Save application state and stop any background activity
+
+            // TODO: Save application state and stop any background activity
             deferral.Complete();
         }
     }
