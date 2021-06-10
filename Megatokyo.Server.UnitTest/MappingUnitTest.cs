@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Megatokyo.Client;
 using Megatokyo.Domain;
 using Megatokyo.Infrastructure.Repository.EF.Entity;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

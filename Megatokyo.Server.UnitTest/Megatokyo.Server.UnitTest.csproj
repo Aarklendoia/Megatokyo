@@ -26,8 +26,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="5.0.6" />
-    <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="5.0.6">
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="5.0.7" />
+    <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="5.0.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -40,7 +40,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NSwag.ApiDescription.Client" Version="13.11.1">
+    <PackageReference Include="NSwag.ApiDescription.Client" Version="13.11.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -53,9 +53,9 @@
   <ItemGroup>
     <OpenApiReference Include="..\Megatokyo.Server\obj\Megatokyo.Server.json">
       <CodeGenerator>NSwagCSharp</CodeGenerator>
-      <Namespace>Megatokyo.Server</Namespace>
+      <Namespace>Megatokyo.Client</Namespace>
       <ClassName>MegatokyoClient</ClassName>
-      <OutputPath>..\Client\Client.g.cs</OutputPath>
+      <OutputPath>..\Client\MegatokyoClient.g.cs</OutputPath>
       <Options>/UseBaseUrl:false /GenerateClientInterfaces:true /OperationGenerationMode:SingleClientFromOperationId</Options>
     </OpenApiReference>
   </ItemGroup>
