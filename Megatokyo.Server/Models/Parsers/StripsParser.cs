@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Megatokyo.Server.Models.Parsers
@@ -99,14 +100,17 @@ namespace Megatokyo.Server.Models.Parsers
 
         private static async Task<bool> CheckFileFormatAsync(Uri filePath)
         {
-            WebRequest webRequest = WebRequest.Create(filePath);
-            webRequest.Method = "HEAD";
+            HttpClient httpClient = new();
             try
             {
-                WebResponse response = await webRequest.GetResponseAsync();
-                response.Dispose();
-                Debug.WriteLine("File found : " + filePath);
-                return true;
+                HttpRequestMessage message = new(HttpMethod.Head, filePath);
+                HttpResponseMessage response = await httpClient.SendAsync(message);
+                bool result = response.StatusCode == HttpStatusCode.OK;
+                if (result)
+                    Debug.WriteLine("File found : " + filePath);
+                else
+                    Debug.WriteLine("ERROR : file note found " + filePath);
+                return result;
             }
             catch (WebException e)
             {
