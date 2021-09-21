@@ -109,12 +109,12 @@ namespace Megatokyo.Server.Models.Parsers
                 if (result)
                     Debug.WriteLine("File found : " + filePath);
                 else
-                    Debug.WriteLine("ERROR : file note found " + filePath);
+                    Debug.WriteLine("ERROR : file not found " + filePath);
                 return result;
             }
             catch (WebException e)
             {
-                Debug.WriteLine("ERROR : file note found " + filePath + " (" + e.Message + ")");
+                Debug.WriteLine("ERROR : file not found " + filePath + " (" + e.Message + ")");
                 return false;
             }
         }
