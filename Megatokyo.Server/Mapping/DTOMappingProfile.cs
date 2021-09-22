@@ -8,16 +8,16 @@ namespace Megatokyo.Server.Mapping
     {
         public DTOMappingProfile()
         {
-            CreateMap<StripOutputDTO, StripDomain>()
-                    .ConstructUsing(stripOutputDTO => new StripDomain(stripOutputDTO.Category, stripOutputDTO.Number, stripOutputDTO.Title, stripOutputDTO.Url, stripOutputDTO.PublishDate))
+            CreateMap<StripOutputDTO, Strip>()
+                    .ConstructUsing(stripOutputDTO => new Strip(stripOutputDTO.Category, stripOutputDTO.Number, stripOutputDTO.Title, stripOutputDTO.Url, stripOutputDTO.PublishDate))
                     .ReverseMap();
 
-            CreateMap<ChapterOutputDTO, ChapterDomain>()
-                    .ConstructUsing(chapterOutputDTO => new ChapterDomain(chapterOutputDTO.Number, chapterOutputDTO.Title, chapterOutputDTO.Category))
+            CreateMap<ChapterOutputDTO, Chapter>()
+                    .ConstructUsing(chapterOutputDTO => new Chapter(chapterOutputDTO.Number, chapterOutputDTO.Title, chapterOutputDTO.Category))
                     .ReverseMap();
 
-            CreateMap<RantOutputDTO, RantDomain>()
-                .ConstructUsing(rantOutputDTO => new RantDomain(rantOutputDTO.Title, rantOutputDTO.Number, rantOutputDTO.Author, rantOutputDTO.Url, rantOutputDTO.PublishDate, rantOutputDTO.Content))
+            CreateMap<RantOutputDTO, Rant>()
+                .ConstructUsing(rantOutputDTO => new Rant(rantOutputDTO.Title, rantOutputDTO.Number, rantOutputDTO.Author, rantOutputDTO.Url, rantOutputDTO.PublishDate, rantOutputDTO.Content))
                 .ReverseMap();
         }
     }

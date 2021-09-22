@@ -41,7 +41,7 @@ namespace Megatokyo.Server.Models
             if (!haveStrips)
             {
                 _workInProgress = true;
-                ChaptersDomain chapters = await _stripManager.ParseChaptersAsync();
+                IEnumerable<Chapter> chapters = await _stripManager.ParseChaptersAsync();
                 _workInProgress = !await _stripManager.ParseStripsAsync(chapters);
             }
 
@@ -57,10 +57,10 @@ namespace Megatokyo.Server.Models
             await _feedManager.LoadAsync();
             if (_feedManager.Strips.Count > 0)
             {
-                ChaptersDomain chapters = await _stripManager.ParseChaptersAsync();
+                IEnumerable<Chapter> chapters = await _stripManager.ParseChaptersAsync();
                 await _stripManager.ParseStripsAsync(chapters);
             }
-            foreach (StripDomain strip in _feedManager.Strips)
+            foreach (Strip strip in _feedManager.Strips)
             {
                 await SendLocalisedStripNotificationsAsync(strip);
             }
@@ -69,7 +69,7 @@ namespace Megatokyo.Server.Models
             {
                 await _rantManager.ParseRantsAsync(_feedManager.LastRantNumber);
             }
-            foreach (RantDomain rant in _feedManager.Rants)
+            foreach (Rant rant in _feedManager.Rants)
             {
                 await SendLocalisedRantNotifications(rant);
             }
@@ -88,21 +88,21 @@ namespace Megatokyo.Server.Models
             await _hub.SendTemplateNotificationAsync(data);
         }
 
-        private async Task SendLocalisedRantNotifications(RantDomain rant)
+        private async Task SendLocalisedRantNotifications(Rant rant)
         {
-            RantDomain rantToNotify = await _rantManager.GetRantByNumber(rant.Number);
+            Rant rantToNotify = await _rantManager.GetRantByNumber(rant.Number);
             //NewRantToast newrantToast = new NewRantToast(rantToNotify.Title, rantToNotify.Url, rantToNotify.Author, locale);
             //await SendTemplateNotificationAsync(newrantToast.Toast, locale);
         }
 
-        private async Task SendLocalisedStripNotificationsAsync(StripDomain strip)
+        private async Task SendLocalisedStripNotificationsAsync(Strip strip)
         {
-            StripDomain stripToNotify = await _stripManager.GetStripByNumberAsync(strip.Number);
-            ChapterDomain chapter = await _mediator.Send(new GetChapterQuery(stripToNotify.Category));
+            Strip stripToNotify = await _stripManager.GetStripByNumberAsync(strip.Number);
+            Chapter chapter = await _mediator.Send(new GetChapterQuery(stripToNotify.Category));
             Dictionary<string, string> templateParams = new()
             {
                 ["title"] = stripToNotify.Title,
-                ["uri"] = stripToNotify.Url.OriginalString,                
+                ["uri"] = stripToNotify.Url.OriginalString,
                 ["chapter"] = chapter.Number.ToString(CultureInfo.InvariantCulture) + " - " + chapter.Title
             };
             await SendTemplateNotificationAsync(templateParams);

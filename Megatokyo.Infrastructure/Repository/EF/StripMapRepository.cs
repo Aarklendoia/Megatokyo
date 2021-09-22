@@ -23,23 +23,23 @@ namespace Megatokyo.Infrastructure.Repository.EF
             Mapper = mapper;
         }
 
-        public async Task<IEnumerable<StripDomain>> GetAllAsync()
+        public async Task<IEnumerable<Strip>> GetAllAsync()
         {
             IEnumerable<StripEntity> strips = await DbSet.ToListAsync();
-            return Mapper.Map<IEnumerable<StripDomain>>(strips);
+            return Mapper.Map<IEnumerable<Strip>>(strips);
         }
 
-        public async Task<StripDomain> GetAsync(int number)
+        public async Task<Strip> GetAsync(int number)
         {
             StripEntity strip = await DbSet.SingleOrDefaultAsync(strip => strip.Number == number);
-            return Mapper.Map<StripDomain>(strip);
+            return Mapper.Map<Strip>(strip);
         }
 
-        public async Task<StripDomain> CreateAsync(StripDomain stripDomain)
+        public async Task<Strip> CreateAsync(Strip stripDomain)
         {
             StripEntity stripEntity = Mapper.Map<StripEntity>(stripDomain);
             EntityEntry<StripEntity> entity = await DbSet.AddAsync(stripEntity);
-            return Mapper.Map<StripDomain>(entity.Entity);
+            return Mapper.Map<Strip>(entity.Entity);
         }
 
         public async Task<int> SaveAsync()
@@ -47,10 +47,10 @@ namespace Megatokyo.Infrastructure.Repository.EF
             return await Context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<StripDomain>> GetCategoryAsync(string category)
+        public async Task<IEnumerable<Strip>> GetCategoryAsync(string category)
         {
             IEnumerable<StripEntity> strips = await DbSet.Where(strip => strip.Category == category).ToListAsync();
-            return Mapper.Map<IEnumerable<StripDomain>>(strips);
+            return Mapper.Map<IEnumerable<Strip>>(strips);
         }
     }
 }

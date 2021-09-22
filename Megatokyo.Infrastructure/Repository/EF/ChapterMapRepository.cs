@@ -22,23 +22,23 @@ namespace Megatokyo.Infrastructure.Repository.EF
             Mapper = mapper;
         }
 
-        public async Task<IEnumerable<ChapterDomain>> GetAllAsync()
+        public async Task<IEnumerable<Chapter>> GetAllAsync()
         {
             IEnumerable<ChapterEntity> chapters = await DbSet.ToListAsync();
-            return Mapper.Map<IEnumerable<ChapterDomain>>(chapters);
+            return Mapper.Map<IEnumerable<Chapter>>(chapters);
         }
 
-        public async Task<ChapterDomain> GetAsync(string category)
+        public async Task<Chapter> GetAsync(string category)
         {
             ChapterEntity chapter = await DbSet.SingleOrDefaultAsync(chapter => chapter.Category == category);
-            return Mapper.Map<ChapterDomain>(chapter);
+            return Mapper.Map<Chapter>(chapter);
         }
 
-        public async Task<ChapterDomain> CreateAsync(ChapterDomain chapterDomain)
+        public async Task<Chapter> CreateAsync(Chapter chapterDomain)
         {
             ChapterEntity chapterEntity = Mapper.Map<ChapterEntity>(chapterDomain);
             EntityEntry<ChapterEntity> entity = await DbSet.AddAsync(chapterEntity);
-            return Mapper.Map<ChapterDomain>(entity.Entity);
+            return Mapper.Map<Chapter>(entity.Entity);
         }
 
         public async Task<int> SaveAsync()

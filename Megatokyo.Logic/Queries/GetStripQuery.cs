@@ -1,13 +1,12 @@
 ﻿using MediatR;
 using Megatokyo.Domain;
 using Megatokyo.Logic.Interfaces;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Megatokyo.Logic.Queries
 {
-    public class GetStripQuery : IRequest<StripDomain>
+    public class GetStripQuery : IRequest<Strip>
     {
         public int Number { get; set; }
 
@@ -17,7 +16,7 @@ namespace Megatokyo.Logic.Queries
         }
     }
 
-    public class GetStripQueryHandler : IRequestHandler<GetStripQuery, StripDomain>
+    public class GetStripQueryHandler : IRequestHandler<GetStripQuery, Strip>
     {
         private readonly IStripRepository _stripRepository;
 
@@ -26,7 +25,7 @@ namespace Megatokyo.Logic.Queries
             _stripRepository = entityRepository;
         }
 
-        public async Task<StripDomain> Handle(GetStripQuery request, CancellationToken cancellationToken)
+        public async Task<Strip> Handle(GetStripQuery request, CancellationToken cancellationToken)
         {
             return await _stripRepository.GetAsync(request.Number);
         }

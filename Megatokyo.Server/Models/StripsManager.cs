@@ -22,15 +22,15 @@ namespace Megatokyo.Server.Models
             _mediator = mediator;
         }
 
-        public async Task<ChaptersDomain> ParseChaptersAsync()
+        public async Task<IEnumerable<Chapter>> ParseChaptersAsync()
         {
-            ChaptersDomain chapters = ChaptersParser.Parse(Url);
-            IEnumerable<ChapterDomain> chaptersInDatabase = await _mediator.Send(new GetAllChaptersQuery());
-            foreach (ChapterDomain chapter in chapters)
+            IEnumerable<Chapter> chapters = ChaptersParser.Parse(Url);
+            IEnumerable<Chapter> chaptersInDatabase = await _mediator.Send(new GetAllChaptersQuery());
+            foreach (Chapter chapter in chapters)
             {
-                if (!chaptersInDatabase.Where(c => c.Number == chapter.Number).Any())
+                if (!chaptersInDatabase.Where(c => c.Category == chapter.Category).Any())
                 {
-                    ChapterDomain newChapter = new(chapter.Number, chapter.Title, chapter.Category);
+                    Chapter newChapter = new(chapter.Number, chapter.Title, chapter.Category);
                     await _mediator.Send(new CreateChapterCommand(newChapter));
                 }
             }
@@ -38,16 +38,16 @@ namespace Megatokyo.Server.Models
             return chapters;
         }
 
-        public async Task<bool> ParseStripsAsync(ChaptersDomain chapters)
+        public async Task<bool> ParseStripsAsync(IEnumerable<Chapter> chapters)
         {
-            IEnumerable<StripDomain> stripsInDatabase = await _mediator.Send(new GetAllStripsQuery());
-            List<StripDomain> strips = await StripsParser.ParseAsync(Url, chapters, stripsInDatabase);
-            foreach (StripDomain strip in strips)
+            IEnumerable<Strip> stripsInDatabase = await _mediator.Send(new GetAllStripsQuery());
+            List<Strip> strips = await StripsParser.ParseAsync(Url, chapters, stripsInDatabase);
+            foreach (Strip strip in strips)
             {
                 if (!stripsInDatabase.Where(s => s.Number == strip.Number).Any())
                 {
-                    ChapterDomain currentChapter = await _mediator.Send(new GetChapterQuery(strip.Category));
-                    StripDomain newStrip = new(currentChapter.Category, strip.Number, strip.Title, strip.Url, strip.PublishDate);
+                    Chapter currentChapter = await _mediator.Send(new GetChapterQuery(strip.Category));
+                    Strip newStrip = new(currentChapter.Category, strip.Number, strip.Title, strip.Url, strip.PublishDate);
                     await _mediator.Send(new CreateStripCommand(newStrip));
                 }
             }
@@ -55,14 +55,14 @@ namespace Megatokyo.Server.Models
             return true;
         }
 
-        public async Task<StripDomain> GetStripByNumberAsync(int number)
+        public async Task<Strip> GetStripByNumberAsync(int number)
         {
             return await _mediator.Send(new GetStripQuery(number));
         }
 
         public async Task<bool> CheckIfDataExistsAsync()
         {
-            IEnumerable<StripDomain> strips = await _mediator.Send(new GetAllStripsQuery());
+            IEnumerable<Strip> strips = await _mediator.Send(new GetAllStripsQuery());
             return strips.Any();
         }
     }

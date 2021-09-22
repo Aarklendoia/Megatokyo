@@ -1,7 +1,5 @@
-﻿using System;
-
-using Megatokyo.Services;
-
+﻿using Megatokyo.Services;
+using System;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 

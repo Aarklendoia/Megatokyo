@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Windows.Input;
-
-using Megatokyo.Core.Models;
+﻿using Megatokyo.Core.Models;
 using Megatokyo.Core.Services;
 using Megatokyo.Helpers;
 using Megatokyo.Services;
 using Megatokyo.Views;
-
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Toolkit.Uwp.UI.Animations;
-
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
 
 namespace Megatokyo.ViewModels

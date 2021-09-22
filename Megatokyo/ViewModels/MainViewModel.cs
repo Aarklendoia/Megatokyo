@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace Megatokyo.ViewModels

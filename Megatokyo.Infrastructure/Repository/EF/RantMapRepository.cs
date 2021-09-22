@@ -5,7 +5,6 @@ using Megatokyo.Logic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Megatokyo.Infrastructure.Repository.EF
@@ -23,23 +22,23 @@ namespace Megatokyo.Infrastructure.Repository.EF
             Mapper = mapper;
         }
 
-        public async Task<IEnumerable<RantDomain>> GetAllAsync()
+        public async Task<IEnumerable<Rant>> GetAllAsync()
         {
             IEnumerable<RantEntity> rants = await DbSet.ToListAsync();
-            return Mapper.Map<IEnumerable<RantDomain>>(rants);
+            return Mapper.Map<IEnumerable<Rant>>(rants);
         }
 
-        public async Task<RantDomain> GetAsync(int number)
-        {            
+        public async Task<Rant> GetAsync(int number)
+        {
             RantEntity rant = await DbSet.SingleOrDefaultAsync(rant => rant.Number == number);
-            return Mapper.Map<RantDomain>(rant);
+            return Mapper.Map<Rant>(rant);
         }
 
-        public async Task<RantDomain> CreateAsync(RantDomain rantDomain)
+        public async Task<Rant> CreateAsync(Rant rantDomain)
         {
             RantEntity rantEntity = Mapper.Map<RantEntity>(rantDomain);
             EntityEntry<RantEntity> entity = await DbSet.AddAsync(rantEntity);
-            return Mapper.Map<RantDomain>(entity.Entity);
+            return Mapper.Map<Rant>(entity.Entity);
         }
 
         public async Task<int> SaveAsync()

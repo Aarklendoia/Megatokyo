@@ -1,14 +1,10 @@
-﻿using System;
+﻿using Megatokyo.Core.Models;
+using Megatokyo.Core.Services;
+using Megatokyo.Helpers;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-
-using Megatokyo.Core.Models;
-using Megatokyo.Core.Services;
-using Megatokyo.Helpers;
-
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-
 using Windows.UI.Xaml.Navigation;
 
 namespace Megatokyo.ViewModels

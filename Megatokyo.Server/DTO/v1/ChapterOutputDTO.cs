@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Megatokyo.Server.DTO.v1
+﻿namespace Megatokyo.Server.DTO.v1
 {
     internal class ChapterOutputDTO
     {

@@ -6,9 +6,9 @@ namespace Megatokyo.Logic.Interfaces
 {
     public interface IRantRepository
     {
-        Task<IEnumerable<RantDomain>> GetAllAsync();
-        Task<RantDomain> GetAsync(int number);
-        Task<RantDomain> CreateAsync(RantDomain rantDomain);
+        Task<IEnumerable<Rant>> GetAllAsync();
+        Task<Rant> GetAsync(int number);
+        Task<Rant> CreateAsync(Rant rantDomain);
         Task<int> SaveAsync();
     }
 }

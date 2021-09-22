@@ -15,16 +15,16 @@ namespace Megatokyo.Server.Models
     {
         private readonly IMediator _mediator;
 
-        public List<StripDomain> Strips { get; }
-        public List<RantDomain> Rants { get; }
+        public List<Strip> Strips { get; }
+        public List<Rant> Rants { get; }
         public int LastStripNumber { get; private set; }
         public int LastRantNumber { get; private set; }
 
         public FeedManager(IMediator mediator)
         {
             _mediator = mediator;
-            Strips = new List<StripDomain>();
-            Rants = new List<RantDomain>();
+            Strips = new List<Strip>();
+            Rants = new List<Rant>();
         }
 
         public async Task LoadAsync()
@@ -35,7 +35,7 @@ namespace Megatokyo.Server.Models
             FeedParser feedParser = new();
             IList<Item> items = feedParser.ParseRss(new Uri("https://megatokyo.com/rss/megatokyo.xml"));
 
-            CheckingDomain checking = await _mediator.Send(new GetCheckingQuery(1));
+            Checking checking = await _mediator.Send(new GetCheckingQuery(1));
             if (checking == null)
             {
                 checking = new(DateTimeOffset.MinValue, 0, 0);
@@ -57,14 +57,14 @@ namespace Megatokyo.Server.Models
                     if (item.Title.StartsWith("Comic", StringComparison.InvariantCulture))
                     {
                         StringExtractor stringExtractor = new(item.Title);
-                        StripDomain strip = new(int.Parse(stringExtractor.Extract("[", "]", false), NumberStyles.Integer, CultureInfo.InvariantCulture));
+                        Strip strip = new(int.Parse(stringExtractor.Extract("[", "]", false), NumberStyles.Integer, CultureInfo.InvariantCulture));
                         Strips.Add(strip);
                         checking.LastStripNumber = strip.Number;
                     }
                     if (item.Title.StartsWith("Rant", StringComparison.InvariantCulture))
                     {
                         StringExtractor stringExtractor = new(item.Title);
-                        RantDomain rant = new(int.Parse(stringExtractor.Extract("[", "]", false), NumberStyles.Integer, CultureInfo.InvariantCulture));
+                        Rant rant = new(int.Parse(stringExtractor.Extract("[", "]", false), NumberStyles.Integer, CultureInfo.InvariantCulture));
                         Rants.Add(rant);
                         checking.LastRantNumber = rant.Number;
                     }

@@ -9,9 +9,9 @@ namespace Megatokyo.Server.Models.Parsers
 {
     internal class ChaptersParser
     {
-        public static ChaptersDomain Parse(Uri url)
+        public static IEnumerable<Chapter> Parse(Uri url)
         {
-            ChaptersDomain chapters = new();
+            List<Chapter> chapters = new();
             HtmlWeb web = new();
             HtmlDocument htmlDoc = web.Load(url);
             HtmlNodeCollection nodes = htmlDoc.DocumentNode.SelectNodes("//body/div[@id='typelinks']/div/ul/li/a");
@@ -38,7 +38,7 @@ namespace Megatokyo.Server.Models.Parsers
                     title = stringExtractor.Extract(">", "<", false);
                 }
                 categoryExtractor.Remove("ar", "#", true, out string category);
-                chapters.Add(new ChapterDomain(number, title, category));
+                chapters.Add(new Chapter(number, title, category));
             }
             return chapters;
         }

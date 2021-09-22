@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace Megatokyo.Logic.Commands
 {
-    public class UpdateCheckingCommand : IRequest<CheckingDomain>
+    public class UpdateCheckingCommand : IRequest<Checking>
     {
-        public CheckingDomain CheckingToUpdate { get; }
+        public Checking CheckingToUpdate { get; }
 
-        public UpdateCheckingCommand(CheckingDomain checkingToUpdate)
+        public UpdateCheckingCommand(Checking checkingToUpdate)
         {
             CheckingToUpdate = checkingToUpdate;
         }
     }
 
-    public class UpdateCheckingCommandHandler : IRequestHandler<UpdateCheckingCommand, CheckingDomain>
+    public class UpdateCheckingCommandHandler : IRequestHandler<UpdateCheckingCommand, Checking>
     {
         private readonly ICheckingRepository _checkingRepository;
 
@@ -25,7 +25,7 @@ namespace Megatokyo.Logic.Commands
             _checkingRepository = checkingRepository;
         }
 
-        public async Task<CheckingDomain> Handle(UpdateCheckingCommand request, CancellationToken cancellationToken)
+        public async Task<Checking> Handle(UpdateCheckingCommand request, CancellationToken cancellationToken)
         {
             return await _checkingRepository.UpdateAsync(request.CheckingToUpdate);
         }

@@ -13,7 +13,7 @@ namespace Megatokyo.Server.UnitTest
         public void ChapterOutputDTODomainTestMethod()
         {
             var configuration = new MapperConfiguration(cfg =>
-              cfg.CreateMap<ChapterOutputDTO, ChapterDomain>());
+              cfg.CreateMap<ChapterOutputDTO, Chapter>());
 
             configuration.AssertConfigurationIsValid();
         }
@@ -22,7 +22,7 @@ namespace Megatokyo.Server.UnitTest
         public void ChapterEntityDomainTestMethod()
         {
             var configuration = new MapperConfiguration(cfg =>
-              cfg.CreateMap<ChapterEntity, ChapterDomain>());
+              cfg.CreateMap<ChapterEntity, Chapter>());
 
             configuration.AssertConfigurationIsValid();
         }
@@ -31,7 +31,7 @@ namespace Megatokyo.Server.UnitTest
         public void StripOutputDTODomainTestMethod()
         {
             var configuration = new MapperConfiguration(cfg =>
-              cfg.CreateMap<StripOutputDTO, StripDomain>());
+              cfg.CreateMap<StripOutputDTO, Strip>());
 
             configuration.AssertConfigurationIsValid();
         }
@@ -40,7 +40,7 @@ namespace Megatokyo.Server.UnitTest
         public void StripEntityDomainTestMethod()
         {
             var configuration = new MapperConfiguration(cfg =>
-              cfg.CreateMap<StripEntity, StripDomain>());
+              cfg.CreateMap<StripEntity, Strip>());
 
             configuration.AssertConfigurationIsValid();
         }
@@ -49,7 +49,7 @@ namespace Megatokyo.Server.UnitTest
         public void RantOutputDTODomainTestMethod()
         {
             var configuration = new MapperConfiguration(cfg =>
-              cfg.CreateMap<RantOutputDTO, RantDomain>());
+              cfg.CreateMap<RantOutputDTO, Rant>());
 
             configuration.AssertConfigurationIsValid();
         }
@@ -58,7 +58,7 @@ namespace Megatokyo.Server.UnitTest
         public void RantEntityDomainTestMethod()
         {
             var configuration = new MapperConfiguration(cfg =>
-              cfg.CreateMap<RantEntity, RantDomain>());
+              cfg.CreateMap<RantEntity, Rant>());
 
             configuration.AssertConfigurationIsValid();
         }
@@ -67,7 +67,7 @@ namespace Megatokyo.Server.UnitTest
         public void CheckingEntityDomainTestMethod()
         {
             var configuration = new MapperConfiguration(cfg =>
-              cfg.CreateMap<CheckingEntity, CheckingDomain>());
+              cfg.CreateMap<CheckingEntity, Checking>());
 
             configuration.AssertConfigurationIsValid();
         }

@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Megatokyo.Helpers;
+using System;
 using System.Threading.Tasks;
-
-using Megatokyo.Helpers;
-
 using Windows.ApplicationModel.Core;
 using Windows.Storage;
 using Windows.UI.Core;

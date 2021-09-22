@@ -1,16 +1,12 @@
 ﻿using MediatR;
 using Megatokyo.Domain;
 using Megatokyo.Logic.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Megatokyo.Logic.Queries
 {
-    public class GetCheckingQuery : IRequest<CheckingDomain>
+    public class GetCheckingQuery : IRequest<Checking>
     {
         public int Number { get; set; }
 
@@ -20,7 +16,7 @@ namespace Megatokyo.Logic.Queries
         }
     }
 
-    public class GetCheckingQueryHandler : IRequestHandler<GetCheckingQuery, CheckingDomain>
+    public class GetCheckingQueryHandler : IRequestHandler<GetCheckingQuery, Checking>
     {
         private readonly ICheckingRepository _checkingRepository;
 
@@ -29,7 +25,7 @@ namespace Megatokyo.Logic.Queries
             _checkingRepository = entityRepository;
         }
 
-        public async Task<CheckingDomain> Handle(GetCheckingQuery request, CancellationToken cancellationToken)
+        public async Task<Checking> Handle(GetCheckingQuery request, CancellationToken cancellationToken)
         {
             return await _checkingRepository.GetAsync(request.Number);
         }

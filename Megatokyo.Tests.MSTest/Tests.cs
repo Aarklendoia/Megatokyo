@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 using Megatokyo.ViewModels;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -10,11 +9,6 @@ namespace Megatokyo.Tests.MSTest
     [TestClass]
     public class Tests
     {
-        [TestMethod]
-        public void TestMethod1()
-        {
-        }
-
         // TODO WTS: Add tests for functionality you add to MainViewModel.
         [TestMethod]
         public void TestMainViewModelCreation()

@@ -1,13 +1,12 @@
 ﻿using MediatR;
 using Megatokyo.Domain;
 using Megatokyo.Logic.Interfaces;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Megatokyo.Logic.Queries
 {
-    public class GetChapterQuery : IRequest<ChapterDomain>
+    public class GetChapterQuery : IRequest<Chapter>
     {
         public string Category { get; set; }
 
@@ -17,7 +16,7 @@ namespace Megatokyo.Logic.Queries
         }
     }
 
-    public class GetChapterQueryHandler : IRequestHandler<GetChapterQuery, ChapterDomain>
+    public class GetChapterQueryHandler : IRequestHandler<GetChapterQuery, Chapter>
     {
         private readonly IChapterRepository _chapterRepository;
 
@@ -26,7 +25,7 @@ namespace Megatokyo.Logic.Queries
             _chapterRepository = entityRepository;
         }
 
-        public async Task<ChapterDomain> Handle(GetChapterQuery request, CancellationToken cancellationToken)
+        public async Task<Chapter> Handle(GetChapterQuery request, CancellationToken cancellationToken)
         {
             return await _chapterRepository.GetAsync(request.Category);
         }

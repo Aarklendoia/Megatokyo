@@ -36,7 +36,7 @@ namespace Megatokyo.Server.UnitTest
 
         [TestMethod]
         [DynamicData(nameof(StripNumberData), DynamicDataSourceType.Method)]
-        public void GetByCategoryTestmethod(int  number)
+        public void GetByCategoryTestmethod(int number)
         {
             HttpClient client = TestServer.GetClient();
             IMegatokyoClient service = new MegatokyoClient(client);
