@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Megatokyo.Services;
+using System;
 using System.Threading.Tasks;
-
-using Megatokyo.Services;
-
 using Windows.ApplicationModel.Activation;
 
 namespace Megatokyo.Activation

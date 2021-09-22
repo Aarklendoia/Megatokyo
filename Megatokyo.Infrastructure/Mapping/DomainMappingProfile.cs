@@ -8,20 +8,20 @@ namespace Megatokyo.Infrastructure.Mapping
     {
         public DomainMappingProfile()
         {
-            CreateMap<StripEntity, StripDomain>()
-                .ConstructUsing(stripEntity => new StripDomain(stripEntity.Category, stripEntity.Number, stripEntity.Title, stripEntity.Url, stripEntity.PublishDate))
+            CreateMap<StripEntity, Strip>()
+                .ConstructUsing(stripEntity => new Strip(stripEntity.Category, stripEntity.Number, stripEntity.Title, stripEntity.Url, stripEntity.PublishDate))
                 .ReverseMap();
 
-            CreateMap<ChapterEntity, ChapterDomain>()
-                .ConstructUsing(chapterEntity => new ChapterDomain(chapterEntity.Number, chapterEntity.Title, chapterEntity.Category))
+            CreateMap<ChapterEntity, Chapter>()
+                .ConstructUsing(chapterEntity => new Chapter(chapterEntity.Number, chapterEntity.Title, chapterEntity.Category))
                 .ReverseMap();
 
-            CreateMap<RantEntity, RantDomain>()
-                .ConstructUsing(rantEntity => new RantDomain(rantEntity.Title, rantEntity.Number, rantEntity.Author, rantEntity.Url, rantEntity.PublishDate, rantEntity.Content))
+            CreateMap<RantEntity, Rant>()
+                .ConstructUsing(rantEntity => new Rant(rantEntity.Title, rantEntity.Number, rantEntity.Author, rantEntity.Url, rantEntity.PublishDate, rantEntity.Content))
                 .ReverseMap();
 
-            CreateMap<CheckingEntity, CheckingDomain>()
-                .ConstructUsing(checkingEntity => new CheckingDomain(checkingEntity.LastCheck, checkingEntity.LastRantNumber, checkingEntity.LastStripNumber))
+            CreateMap<CheckingEntity, Checking>()
+                .ConstructUsing(checkingEntity => new Checking(checkingEntity.LastCheck, checkingEntity.LastRantNumber, checkingEntity.LastStripNumber))
                 .ReverseMap();
         }
     }

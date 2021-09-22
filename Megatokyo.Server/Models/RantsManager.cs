@@ -25,17 +25,17 @@ namespace Megatokyo.Server.Models
 
         public async Task<bool> ParseRantsAsync(int stripNumber)
         {
-            IEnumerable<StripDomain> StripsInDatabase = await _mediator.Send(new GetAllStripsQuery());
+            IEnumerable<Strip> StripsInDatabase = await _mediator.Send(new GetAllStripsQuery());
 
-            List<RantDomain> rants = RantsParser.Parse(stripNumber, StripsInDatabase.Max(s => s.Number));
+            List<Rant> rants = RantsParser.Parse(stripNumber, StripsInDatabase.Max(s => s.Number));
 
-            IEnumerable<RantDomain> rantsInDatabase = await _mediator.Send(new GetAllRantsQuery());
+            IEnumerable<Rant> rantsInDatabase = await _mediator.Send(new GetAllRantsQuery());
 
-            foreach (RantDomain rant in rants)
+            foreach (Rant rant in rants)
             {
                 if (!rantsInDatabase.Where(c => c.Number == rant.Number).Any())
                 {
-                    RantDomain newRant = new(rant.Title, rant.Number, rant.Author, rant.Url, rant.PublishDate, rant.Content);
+                    Rant newRant = new(rant.Title, rant.Number, rant.Author, rant.Url, rant.PublishDate, rant.Content);
                     await _mediator.Send(new CreateRantCommand(newRant));
                 }
             }
@@ -61,14 +61,14 @@ namespace Megatokyo.Server.Models
             return true;
         }
 
-        public async Task<RantDomain> GetRantByNumber(int number)
+        public async Task<Rant> GetRantByNumber(int number)
         {
             return await _mediator.Send(new GetRantQuery(number));
         }
 
         public async Task<bool> CheckIfDataExistsAsync()
         {
-            IEnumerable<RantDomain> rants = await _mediator.Send(new GetAllRantsQuery());
+            IEnumerable<Rant> rants = await _mediator.Send(new GetAllRantsQuery());
             return rants.Any();
         }
     }

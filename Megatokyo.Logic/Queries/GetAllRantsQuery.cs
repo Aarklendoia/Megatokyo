@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Megatokyo.Logic.Queries
 {
-    public class GetAllRantsQuery : IRequest<IEnumerable<RantDomain>>
+    public class GetAllRantsQuery : IRequest<IEnumerable<Rant>>
     {
         public GetAllRantsQuery()
         {
         }
     }
 
-    public class GetAllRantsQueryHandler : IRequestHandler<GetAllRantsQuery, IEnumerable<RantDomain>>
+    public class GetAllRantsQueryHandler : IRequestHandler<GetAllRantsQuery, IEnumerable<Rant>>
     {
         private readonly IRantRepository _rantRepository;
 
@@ -23,7 +23,7 @@ namespace Megatokyo.Logic.Queries
             _rantRepository = entityRepository;
         }
 
-        public async Task<IEnumerable<RantDomain>> Handle(GetAllRantsQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Rant>> Handle(GetAllRantsQuery request, CancellationToken cancellationToken)
         {
             return await _rantRepository.GetAllAsync();
         }

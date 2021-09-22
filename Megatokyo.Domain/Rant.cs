@@ -2,7 +2,7 @@
 
 namespace Megatokyo.Domain
 {
-    public class RantDomain
+    public class Rant
     {
         public string Title { get; set; }
         public int Number { get; set; }
@@ -11,7 +11,7 @@ namespace Megatokyo.Domain
         public DateTimeOffset PublishDate { get; set; }
         public string Content { get; set; }
 
-        public RantDomain(string title, int number, string author, Uri url, DateTimeOffset publishDate, string content)
+        public Rant(string title, int number, string author, Uri url, DateTimeOffset publishDate, string content)
         {
             Title = title;
             Number = number;
@@ -21,7 +21,7 @@ namespace Megatokyo.Domain
             Content = content;
         }
 
-        public RantDomain(int number)
+        public Rant(int number)
         {
             Number = number;
         }

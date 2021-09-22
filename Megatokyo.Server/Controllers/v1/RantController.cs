@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
 using Megatokyo.Domain;
-using Megatokyo.Server.DTO.v1;
 using Megatokyo.Logic.Queries;
+using Megatokyo.Server.DTO.v1;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -46,10 +46,10 @@ namespace Megatokyo.Server.Controllers.v1
             try
             {
                 List<RantOutputDTO> rantsData = new();
-                IEnumerable<RantDomain> rants = await _mediator.Send(new GetAllRantsQuery());
+                IEnumerable<Rant> rants = await _mediator.Send(new GetAllRantsQuery());
                 if (!rants.Any())
                     return NoContent();
-                foreach (RantDomain rant in rants)
+                foreach (Rant rant in rants)
                 {
                     RantOutputDTO rantOutputDTO = _mapper.Map<RantOutputDTO>(rant);
                     rantsData.Add(rantOutputDTO);
@@ -77,7 +77,7 @@ namespace Megatokyo.Server.Controllers.v1
         {
             try
             {
-                RantDomain rant = await _mediator.Send(new GetRantQuery(number));
+                Rant rant = await _mediator.Send(new GetRantQuery(number));
                 return Ok(rant);
             }
             catch (ArgumentException ex)

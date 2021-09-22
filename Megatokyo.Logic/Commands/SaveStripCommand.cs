@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Megatokyo.Domain;
 using Megatokyo.Logic.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;

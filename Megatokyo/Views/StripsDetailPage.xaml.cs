@@ -1,7 +1,4 @@
-﻿using System;
-
-using Megatokyo.Core.Models;
-using Megatokyo.Helpers;
+﻿using Megatokyo.Helpers;
 using Megatokyo.Services;
 using Megatokyo.ViewModels;
 

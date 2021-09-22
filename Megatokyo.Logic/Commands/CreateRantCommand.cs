@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace Megatokyo.Logic.Commands
 {
-    public class CreateRantCommand : IRequest<RantDomain>
+    public class CreateRantCommand : IRequest<Rant>
     {
-        public RantDomain RantToCreate { get; }
+        public Rant RantToCreate { get; }
 
-        public CreateRantCommand(RantDomain rantToCreate)
+        public CreateRantCommand(Rant rantToCreate)
         {
             RantToCreate = rantToCreate;
         }
     }
 
-    public class CreateRantCommandHandler : IRequestHandler<CreateRantCommand, RantDomain>
+    public class CreateRantCommandHandler : IRequestHandler<CreateRantCommand, Rant>
     {
         private readonly IRantRepository _rantRepository;
 
@@ -25,7 +25,7 @@ namespace Megatokyo.Logic.Commands
             _rantRepository = rantRepository;
         }
 
-        public async Task<RantDomain> Handle(CreateRantCommand request, CancellationToken cancellationToken)
+        public async Task<Rant> Handle(CreateRantCommand request, CancellationToken cancellationToken)
         {
             return await _rantRepository.CreateAsync(request.RantToCreate);
         }

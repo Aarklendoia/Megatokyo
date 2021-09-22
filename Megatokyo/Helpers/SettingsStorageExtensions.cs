@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Megatokyo.Core.Helpers;
+using System;
 using System.IO;
 using System.Threading.Tasks;
-
-using Megatokyo.Core.Helpers;
-
 using Windows.Storage;
 using Windows.Storage.Streams;
 

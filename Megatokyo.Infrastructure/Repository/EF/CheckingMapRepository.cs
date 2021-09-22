@@ -21,26 +21,26 @@ namespace Megatokyo.Infrastructure.Repository.EF
             Mapper = mapper;
         }
 
-        public async Task<CheckingDomain> GetAsync(int number)
+        public async Task<Checking> GetAsync(int number)
         {
             CheckingEntity cheking = await DbSet.SingleOrDefaultAsync(checking => checking.Id == number);
-            return Mapper.Map<CheckingDomain>(cheking);
+            return Mapper.Map<Checking>(cheking);
         }
 
-        public async Task<CheckingDomain> CreateAsync(CheckingDomain checkingDomain)
+        public async Task<Checking> CreateAsync(Checking checkingDomain)
         {
             CheckingEntity checkingEntity = Mapper.Map<CheckingEntity>(checkingDomain);
             EntityEntry<CheckingEntity> entity = await DbSet.AddAsync(checkingEntity);
             await Context.SaveChangesAsync();
-            return Mapper.Map<CheckingDomain>(entity.Entity);
+            return Mapper.Map<Checking>(entity.Entity);
         }
 
-        public async Task<CheckingDomain> UpdateAsync(CheckingDomain checkingDomain)
+        public async Task<Checking> UpdateAsync(Checking checkingDomain)
         {
             CheckingEntity checking = DbSet.Find(checkingDomain.Id);
             CheckingEntity updatedChecking = Mapper.Map(checkingDomain, checking);
             await Context.SaveChangesAsync();
-            return Mapper.Map<CheckingDomain>(updatedChecking);
+            return Mapper.Map<Checking>(updatedChecking);
         }
     }
 }

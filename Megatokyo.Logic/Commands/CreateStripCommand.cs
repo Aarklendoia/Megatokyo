@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace Megatokyo.Logic.Commands
 {
-    public class CreateStripCommand : IRequest<StripDomain>
+    public class CreateStripCommand : IRequest<Strip>
     {
-        public StripDomain StripToCreate { get; }
+        public Strip StripToCreate { get; }
 
-        public CreateStripCommand(StripDomain stripToCreate)
+        public CreateStripCommand(Strip stripToCreate)
         {
             StripToCreate = stripToCreate;
         }
     }
 
-    public class CreateStripCommandHandler : IRequestHandler<CreateStripCommand, StripDomain>
+    public class CreateStripCommandHandler : IRequestHandler<CreateStripCommand, Strip>
     {
         private readonly IStripRepository _stripRepository;
 
@@ -25,7 +25,7 @@ namespace Megatokyo.Logic.Commands
             _stripRepository = stripRepository;
         }
 
-        public async Task<StripDomain> Handle(CreateStripCommand request, CancellationToken cancellationToken)
+        public async Task<Strip> Handle(CreateStripCommand request, CancellationToken cancellationToken)
         {
             return await _stripRepository.CreateAsync(request.StripToCreate);
         }

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
 using Megatokyo.Domain;
-using Megatokyo.Server.DTO.v1;
 using Megatokyo.Logic.Queries;
+using Megatokyo.Server.DTO.v1;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -49,10 +49,10 @@ namespace Megatokyo.Server.Controllers.v1
             try
             {
                 List<ChapterOutputDTO> chaptersData = new();
-                IEnumerable<ChapterDomain> chapters = await _mediator.Send(new GetAllChaptersQuery());
+                IEnumerable<Chapter> chapters = await _mediator.Send(new GetAllChaptersQuery());
                 if (!chapters.Any())
                     return NoContent();
-                foreach (ChapterDomain chapter in chapters)
+                foreach (Chapter chapter in chapters)
                 {
                     ChapterOutputDTO chapterOutputDTO = _mapper.Map<ChapterOutputDTO>(chapter);
                     chaptersData.Add(chapterOutputDTO);
@@ -81,7 +81,7 @@ namespace Megatokyo.Server.Controllers.v1
         {
             try
             {
-                ChapterDomain ChapterData = await _mediator.Send(new GetChapterQuery(category));
+                Chapter ChapterData = await _mediator.Send(new GetChapterQuery(category));
                 ChapterOutputDTO chapter = _mapper.Map<ChapterOutputDTO>(ChapterData);
                 return Ok(chapter);
             }

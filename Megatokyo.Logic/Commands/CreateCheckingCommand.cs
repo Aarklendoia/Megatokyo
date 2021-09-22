@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace Megatokyo.Logic.Commands
 {
-    public class CreateChapterCommand : IRequest<ChapterDomain>
+    public class CreateChapterCommand : IRequest<Chapter>
     {
-        public ChapterDomain ChapterToCreate { get; }
+        public Chapter ChapterToCreate { get; }
 
-        public CreateChapterCommand(ChapterDomain chapterToCreate)
+        public CreateChapterCommand(Chapter chapterToCreate)
         {
             ChapterToCreate = chapterToCreate;
         }
     }
 
-    public class CreateChapterCommandHandler : IRequestHandler<CreateChapterCommand, ChapterDomain>
+    public class CreateChapterCommandHandler : IRequestHandler<CreateChapterCommand, Chapter>
     {
         private readonly IChapterRepository _chapterRepository;
 
@@ -25,7 +25,7 @@ namespace Megatokyo.Logic.Commands
             _chapterRepository = chapterRepository;
         }
 
-        public async Task<ChapterDomain> Handle(CreateChapterCommand request, CancellationToken cancellationToken)
+        public async Task<Chapter> Handle(CreateChapterCommand request, CancellationToken cancellationToken)
         {
             return await _chapterRepository.CreateAsync(request.ChapterToCreate);
         }

@@ -6,10 +6,10 @@ namespace Megatokyo.Logic.Interfaces
 {
     public interface IStripRepository
     {
-        Task<IEnumerable<StripDomain>> GetAllAsync();
-        Task<IEnumerable<StripDomain>> GetCategoryAsync(string category);
-        Task<StripDomain> GetAsync(int number);
-        Task<StripDomain> CreateAsync(StripDomain rantDomain);
+        Task<IEnumerable<Strip>> GetAllAsync();
+        Task<IEnumerable<Strip>> GetCategoryAsync(string category);
+        Task<Strip> GetAsync(int number);
+        Task<Strip> CreateAsync(Strip rantDomain);
         Task<int> SaveAsync();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Megatokyo.Domain
 {
-    public class StripDomain
+    public class Strip
     {
         public int Number { get; set; }
         public string Title { get; set; }
@@ -10,7 +10,7 @@ namespace Megatokyo.Domain
         public DateTimeOffset PublishDate { get; set; }
         public string Category { get; set; }
 
-        public StripDomain(string category, int number, string title, Uri url, DateTimeOffset publishDate)
+        public Strip(string category, int number, string title, Uri url, DateTimeOffset publishDate)
         {
             Number = number;
             Title = title;
@@ -19,7 +19,7 @@ namespace Megatokyo.Domain
             Category = category;
         }
 
-        public StripDomain(int number)
+        public Strip(int number)
         {
             Number = number;
         }

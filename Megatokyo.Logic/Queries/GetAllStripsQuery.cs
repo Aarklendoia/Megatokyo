@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Megatokyo.Logic.Queries
 {
-    public class GetAllStripsQuery : IRequest<IEnumerable<StripDomain>>
+    public class GetAllStripsQuery : IRequest<IEnumerable<Strip>>
     {
         public GetAllStripsQuery()
         {
         }
     }
 
-    public class GetAllStripsQueryHandler : IRequestHandler<GetAllStripsQuery, IEnumerable<StripDomain>>
+    public class GetAllStripsQueryHandler : IRequestHandler<GetAllStripsQuery, IEnumerable<Strip>>
     {
         private readonly IStripRepository _stripRepository;
 
@@ -23,7 +23,7 @@ namespace Megatokyo.Logic.Queries
             _stripRepository = entityRepository;
         }
 
-        public async Task<IEnumerable<StripDomain>> Handle(GetAllStripsQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Strip>> Handle(GetAllStripsQuery request, CancellationToken cancellationToken)
         {
             return await _stripRepository.GetAllAsync();
         }

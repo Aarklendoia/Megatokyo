@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
 using Megatokyo.Domain;
-using Megatokyo.Server.DTO.v1;
 using Megatokyo.Logic.Queries;
+using Megatokyo.Server.DTO.v1;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -49,10 +49,10 @@ namespace Megatokyo.Server.Controllers.v1
             try
             {
                 List<StripOutputDTO> stripsData = new();
-                IEnumerable<StripDomain> strips = await _mediator.Send(new GetAllStripsQuery());
+                IEnumerable<Strip> strips = await _mediator.Send(new GetAllStripsQuery());
                 if (!strips.Any())
                     return NoContent();
-                foreach (StripDomain strip in strips)
+                foreach (Strip strip in strips)
                 {
                     StripOutputDTO stripOutputDTO = _mapper.Map<StripOutputDTO>(strip);
                     stripsData.Add(stripOutputDTO);
@@ -82,10 +82,10 @@ namespace Megatokyo.Server.Controllers.v1
             try
             {
                 List<StripOutputDTO> stripsData = new();
-                IEnumerable<StripDomain> strips = await _mediator.Send(new GetCategoryStripsQuery(category));
+                IEnumerable<Strip> strips = await _mediator.Send(new GetCategoryStripsQuery(category));
                 if (!strips.Any())
                     return NoContent();
-                foreach (StripDomain strip in strips)
+                foreach (Strip strip in strips)
                 {
                     StripOutputDTO stripOutputDTO = _mapper.Map<StripOutputDTO>(strip);
                     stripsData.Add(stripOutputDTO);
@@ -118,7 +118,7 @@ namespace Megatokyo.Server.Controllers.v1
         {
             try
             {
-                StripDomain stripData = await _mediator.Send(new GetStripQuery(number));
+                Strip stripData = await _mediator.Send(new GetStripQuery(number));
                 StripOutputDTO strip = _mapper.Map<StripOutputDTO>(stripData);
                 return Ok(strip);
             }

@@ -2,14 +2,14 @@
 
 namespace Megatokyo.Domain
 {
-    public class CheckingDomain
+    public class Checking
     {
         public int Id { get; set; }
         public DateTimeOffset LastCheck { get; set; }
         public int LastStripNumber { get; set; }
         public int LastRantNumber { get; set; }
 
-        public CheckingDomain(DateTimeOffset lastCheck, int lastRantNumber, int lastStripNumber)
+        public Checking(DateTimeOffset lastCheck, int lastRantNumber, int lastStripNumber)
         {
             LastCheck = lastCheck;
             LastRantNumber = lastRantNumber;

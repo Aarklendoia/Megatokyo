@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Megatokyo.Helpers;
-
 using Windows.Storage;
 
 namespace Megatokyo.Models
