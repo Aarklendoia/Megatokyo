@@ -10,7 +10,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-To compile the application, you need Visual Studio 2019 16.9 at least updated with the latest SDK for Windows 10 and .NET 5.0.
+To compile the application, you need Visual Studio 2022 at least updated with the latest SDK for Windows 11 and .NET 6.0.
 You must install the [WinUI 3 Project Templates](https://marketplace.visualstudio.com/items?itemName=Microsoft-WinUI.WinUIProjectTemplates).
 
 ### Installing
