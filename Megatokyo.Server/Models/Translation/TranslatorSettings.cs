@@ -2,6 +2,6 @@
 {
     internal class TranslatorSettings
     {
-        public string ClientKey { get; set; }
+        public string ClientKey { get; set; } = string.Empty;
     }
 }

@@ -1,7 +1,4 @@
 ﻿using MediatR;
-using Microsoft.Extensions.Logging;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Megatokyo.Server.Models.Services
 {

@@ -1,5 +1,4 @@
 ﻿using Megatokyo.Domain;
-using System.Threading.Tasks;
 
 namespace Megatokyo.Logic.Interfaces
 {

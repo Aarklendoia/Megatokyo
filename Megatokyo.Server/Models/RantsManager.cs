@@ -3,9 +3,6 @@ using Megatokyo.Domain;
 using Megatokyo.Logic.Commands;
 using Megatokyo.Logic.Queries;
 using Megatokyo.Server.Models.Parsers;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Megatokyo.Server.Models
 {

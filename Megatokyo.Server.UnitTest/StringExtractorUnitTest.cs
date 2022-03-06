@@ -1,7 +1,5 @@
 ﻿using Megatokyo.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 
 namespace Megatokyo.Server.UnitTest
 {

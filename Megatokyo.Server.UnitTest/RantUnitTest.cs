@@ -1,8 +1,6 @@
-﻿using EIG.Formation.ClientAPI.UnitTest;
+﻿using IG.MaRH.ClientAPI.UnitTest.Server;
 using Megatokyo.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.Net.Http;
 
 namespace Megatokyo.Server.UnitTest
 {

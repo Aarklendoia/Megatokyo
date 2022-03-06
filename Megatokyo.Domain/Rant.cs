@@ -1,17 +1,15 @@
-﻿using System;
-
-namespace Megatokyo.Domain
+﻿namespace Megatokyo.Domain
 {
     public class Rant
     {
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
         public int Number { get; set; }
-        public string Author { get; set; }
-        public Uri Url { get; set; }
+        public string Author { get; set; } = string.Empty;
+        public Uri? Url { get; set; }
         public DateTimeOffset PublishDate { get; set; }
-        public string Content { get; set; }
+        public string Content { get; set; } = string.Empty;
 
-        public Rant(string title, int number, string author, Uri url, DateTimeOffset publishDate, string content)
+        public Rant(string title, int number, string author, Uri? url, DateTimeOffset publishDate, string content)
         {
             Title = title;
             Number = number;

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Megatokyo.Domain
+﻿namespace Megatokyo.Domain
 {
     public class Checking
     {

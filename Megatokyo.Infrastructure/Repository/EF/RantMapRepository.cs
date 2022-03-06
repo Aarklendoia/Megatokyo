@@ -4,8 +4,6 @@ using Megatokyo.Infrastructure.Repository.EF.Entity;
 using Megatokyo.Logic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Megatokyo.Infrastructure.Repository.EF
 {
@@ -30,13 +28,13 @@ namespace Megatokyo.Infrastructure.Repository.EF
 
         public async Task<Rant> GetAsync(int number)
         {
-            RantEntity rant = await DbSet.SingleOrDefaultAsync(rant => rant.Number == number);
+            RantEntity? rant = await DbSet.SingleOrDefaultAsync(rant => rant.Number == number);
             return Mapper.Map<Rant>(rant);
         }
 
         public async Task<Rant> CreateAsync(Rant rantDomain)
         {
-            RantEntity rantEntity = Mapper.Map<RantEntity>(rantDomain);
+            RantEntity? rantEntity = Mapper.Map<RantEntity>(rantDomain);
             EntityEntry<RantEntity> entity = await DbSet.AddAsync(rantEntity);
             return Mapper.Map<Rant>(entity.Entity);
         }

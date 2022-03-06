@@ -1,14 +1,9 @@
 ﻿using HtmlAgilityPack;
 using Megatokyo.Domain;
 using Megatokyo.Models;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Megatokyo.Server.Models.Parsers
 {
@@ -27,7 +22,7 @@ namespace Megatokyo.Server.Models.Parsers
                 IEnumerable<HtmlNode> nodes = htmlDoc.DocumentNode.SelectNodes("//li/a").Where(w => w.ParentNode.ParentNode.ParentNode.ParentNode.SelectSingleNode(".//a").Id == chapter.Category);
                 foreach (HtmlNode node in nodes)
                 {
-                    Strip strip = await ExtractStripAsync(node, chapter, stripsInDatabase);
+                    Strip? strip = await ExtractStripAsync(node, chapter, stripsInDatabase);
                     if (strip != null)
                     {
                         strips.Add(strip);
@@ -37,7 +32,7 @@ namespace Megatokyo.Server.Models.Parsers
             return strips;
         }
 
-        private static async Task<Strip> ExtractStripAsync(HtmlNode node, Chapter chapter, IEnumerable<Strip> stripsInDatabase)
+        private static async Task<Strip?> ExtractStripAsync(HtmlNode node, Chapter chapter, IEnumerable<Strip> stripsInDatabase)
         {
             StringExtractor stringExtractor = new(node.OuterHtml);
             DateTimeOffset publishDate = DateTime.ParseExact(stringExtractor.Extract("title=\"", "\" name=\"", false).Replace("th,", "", StringComparison.InvariantCultureIgnoreCase).Replace("rd,", "", StringComparison.InvariantCultureIgnoreCase).Replace("nd,", "", StringComparison.InvariantCultureIgnoreCase).Replace("st,", "", StringComparison.InvariantCultureIgnoreCase), "MMMM d yyyy", new CultureInfo("en-US"));

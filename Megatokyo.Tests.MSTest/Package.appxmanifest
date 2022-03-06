@@ -6,7 +6,7 @@
   IgnorableNamespaces="uap mp">
 
   <Identity Name="a5eacb7d-2beb-431f-ad49-da9e2722c05c"
-            Publisher="CN=edoua"
+            Publisher="CN=Aarklendoïa"
             Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="a5eacb7d-2beb-431f-ad49-da9e2722c05c" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>

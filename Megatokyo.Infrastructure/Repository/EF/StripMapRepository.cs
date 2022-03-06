@@ -4,9 +4,6 @@ using Megatokyo.Infrastructure.Repository.EF.Entity;
 using Megatokyo.Logic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Megatokyo.Infrastructure.Repository.EF
 {
@@ -31,7 +28,7 @@ namespace Megatokyo.Infrastructure.Repository.EF
 
         public async Task<Strip> GetAsync(int number)
         {
-            StripEntity strip = await DbSet.SingleOrDefaultAsync(strip => strip.Number == number);
+            StripEntity? strip = await DbSet.SingleOrDefaultAsync(strip => strip.Number == number);
             return Mapper.Map<Strip>(strip);
         }
 

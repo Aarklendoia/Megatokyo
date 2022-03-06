@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Megatokyo.Server.Models.Translations
+﻿namespace Megatokyo.Server.Models.Translations
 {
     internal interface ITranslator
     {

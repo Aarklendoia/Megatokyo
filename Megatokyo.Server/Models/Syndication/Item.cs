@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Megatokyo.Server.Models.Syndication
+﻿namespace Megatokyo.Server.Models.Syndication
 {
     internal class Item
     {
