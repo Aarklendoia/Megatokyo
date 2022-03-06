@@ -8,21 +8,21 @@ namespace Megatokyo.Server.UnitTest
     public class StripUnitTest
     {
         [TestMethod]
-        public void StripsAllAsyncTestMethod()
+        public async Task StripsAllAsyncTestMethod()
         {
             HttpClient client = TestServer.GetClient();
             IMegatokyoClient service = new MegatokyoClient(client);
-            ICollection<StripOutputDTO> result = service.GetAllStripsAsync().GetAwaiter().GetResult();
+            ICollection<StripOutputDTO> result = await service.GetAllStripsAsync();
             Assert.IsTrue(result.Count > 0);
         }
 
         [TestMethod]
         [DynamicData(nameof(StripCategoryData), DynamicDataSourceType.Method)]
-        public void GetByCategoryTestmethod(string category, int count)
+        public async Task GetByCategoryTestmethod(string category, int count)
         {
             HttpClient client = TestServer.GetClient();
             IMegatokyoClient service = new MegatokyoClient(client);
-            ICollection<StripOutputDTO> result = service.GetCategoryStripsAsync(category).GetAwaiter().GetResult();
+            ICollection<StripOutputDTO> result = await service.GetCategoryStripsAsync(category);
             Assert.IsTrue(result.Count == count);
         }
 
@@ -34,11 +34,11 @@ namespace Megatokyo.Server.UnitTest
 
         [TestMethod]
         [DynamicData(nameof(StripNumberData), DynamicDataSourceType.Method)]
-        public void GetByCategoryTestmethod(int number)
+        public async Task GetByCategoryTestmethod(int number)
         {
             HttpClient client = TestServer.GetClient();
             IMegatokyoClient service = new MegatokyoClient(client);
-            StripOutputDTO result = service.GetStripAsync(number).GetAwaiter().GetResult();
+            StripOutputDTO result = await service.GetStripAsync(number);
             Assert.IsTrue(result.Number == number);
         }
 

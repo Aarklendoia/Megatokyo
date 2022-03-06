@@ -8,17 +8,34 @@ namespace Megatokyo.Server.Mapping
     {
         public DTOMappingProfile()
         {
-            CreateMap<StripOutputDTO, Strip>()
-                    .ConstructUsing(stripOutputDTO => new Strip(stripOutputDTO.Category, stripOutputDTO.Number, stripOutputDTO.Title, stripOutputDTO.Url, stripOutputDTO.PublishDate))
-                    .ReverseMap();
+            CreateMap<Strip, StripOutputDTO>()
+                    .ConstructUsing(dest => new StripOutputDTO()
+                    {
+                        Category = dest.Category,
+                        Number = dest.Number,
+                        PublishDate = dest.PublishDate,
+                        Title = dest.Title,
+                        Url = dest.Url
+                    });
 
-            CreateMap<ChapterOutputDTO, Chapter>()
-                    .ConstructUsing(chapterOutputDTO => new Chapter(chapterOutputDTO.Number, chapterOutputDTO.Title, chapterOutputDTO.Category))
-                    .ReverseMap();
+            CreateMap<Chapter, ChapterOutputDTO>()
+                    .ConstructUsing(dest => new ChapterOutputDTO()
+                    {
+                        Category = dest.Category,
+                        Number = dest.Number,
+                        Title = dest.Title
+                    });
 
-            CreateMap<RantOutputDTO, Rant>()
-                .ConstructUsing(rantOutputDTO => new Rant(rantOutputDTO.Title, rantOutputDTO.Number, rantOutputDTO.Author, rantOutputDTO.Url, rantOutputDTO.PublishDate, rantOutputDTO.Content))
-                .ReverseMap();
+            CreateMap<Rant, RantOutputDTO>()
+                .ConstructUsing(dest => new RantOutputDTO()
+                {
+                    Author = dest.Author,
+                    Content = dest.Content,
+                    Number = dest.Number,
+                    PublishDate = dest.PublishDate,
+                    Title = dest.Title,
+                    Url = dest.Url
+                });
         }
     }
 }

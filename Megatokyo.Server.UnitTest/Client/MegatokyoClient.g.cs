@@ -148,7 +148,7 @@ namespace Megatokyo.Client
         public async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ChapterOutputDTO>> GetAllChaptersAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append("api/Chapters");
+            urlBuilder_.Append("api/1.0/Chapters");
     
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -241,7 +241,7 @@ namespace Megatokyo.Client
                 throw new System.ArgumentNullException("category");
     
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append("api/Chapters/{category}");
+            urlBuilder_.Append("api/1.0/Chapters/{category}");
             urlBuilder_.Replace("{category}", System.Uri.EscapeDataString(ConvertToString(category, System.Globalization.CultureInfo.InvariantCulture)));
     
             var client_ = _httpClient;
@@ -294,6 +294,16 @@ namespace Megatokyo.Client
                             throw new ApiException<ProblemDetails>("Return in case the parameters are incorect.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("Returned in case the chapter is not found.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
                         if (status_ == 500)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -334,7 +344,7 @@ namespace Megatokyo.Client
         public async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RantOutputDTO>> GetAllRantsAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append("api/Rants");
+            urlBuilder_.Append("api/1.0/Rants");
     
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -427,7 +437,7 @@ namespace Megatokyo.Client
                 throw new System.ArgumentNullException("number");
     
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append("api/Rants/{number}");
+            urlBuilder_.Append("api/1.0/Rants/{number}");
             urlBuilder_.Replace("{number}", System.Uri.EscapeDataString(ConvertToString(number, System.Globalization.CultureInfo.InvariantCulture)));
     
             var client_ = _httpClient;
@@ -480,6 +490,16 @@ namespace Megatokyo.Client
                             throw new ApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("Returned in case the rant is not found.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
                         if (status_ == 500)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -520,7 +540,7 @@ namespace Megatokyo.Client
         public async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<StripOutputDTO>> GetAllStripsAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append("api/Strips");
+            urlBuilder_.Append("api/1.0/Strips");
     
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -613,7 +633,7 @@ namespace Megatokyo.Client
                 throw new System.ArgumentNullException("category");
     
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append("api/Strips/category/{category}");
+            urlBuilder_.Append("api/1.0/Strips/category/{category}");
             urlBuilder_.Replace("{category}", System.Uri.EscapeDataString(ConvertToString(category, System.Globalization.CultureInfo.InvariantCulture)));
     
             var client_ = _httpClient;
@@ -711,7 +731,7 @@ namespace Megatokyo.Client
                 throw new System.ArgumentNullException("number");
     
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append("api/Strips/{number}");
+            urlBuilder_.Append("api/1.0/Strips/{number}");
             urlBuilder_.Replace("{number}", System.Uri.EscapeDataString(ConvertToString(number, System.Globalization.CultureInfo.InvariantCulture)));
     
             var client_ = _httpClient;
@@ -762,6 +782,16 @@ namespace Megatokyo.Client
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             throw new ApiException<ProblemDetails>("Return in case the parameters are incorect.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("Returned in case the strip is not found.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
                         if (status_ == 500)

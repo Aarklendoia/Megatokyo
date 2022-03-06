@@ -7,7 +7,7 @@ namespace Megatokyo.Server.Models.Services
         Task DoWork(CancellationToken stoppingToken);
     }
 
-    internal class ScopedProcessingService : IScopedProcessingService
+    public class ScopedProcessingService : IScopedProcessingService
     {
         private readonly ILogger _logger;
         private readonly IMediator _mediator;

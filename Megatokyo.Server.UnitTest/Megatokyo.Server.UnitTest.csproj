@@ -51,7 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <OpenApiReference Include="..\Megatokyo.Server\obj\Megatokyo.Server.json">
+    <OpenApiReference Include="swagger.json">
       <CodeGenerator>NSwagCSharp</CodeGenerator>
       <Namespace>Megatokyo.Client</Namespace>
       <ClassName>MegatokyoClient</ClassName>

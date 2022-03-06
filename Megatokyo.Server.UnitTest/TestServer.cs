@@ -2,6 +2,7 @@
 using Hellang.Middleware.ProblemDetails.Mvc;
 using Megatokyo.Infrastructure;
 using Megatokyo.Infrastructure.Repository.EF;
+using Megatokyo.Server.Models.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -47,9 +48,7 @@ namespace IG.MaRH.ClientAPI.UnitTest.Server
             HostTest.Start();
         }
 
-#pragma warning disable IDE0060 // Supprimer le paramètre inutilisé
         private static void Configure(IApplicationBuilder app, IWebHostEnvironment hostingEnvironment)
-#pragma warning restore IDE0060 // Supprimer le paramètre inutilisé
         {
             app.UseProblemDetails();
             app.UseRouting();
@@ -64,7 +63,7 @@ namespace IG.MaRH.ClientAPI.UnitTest.Server
         public static void ConfigureServices(IServiceCollection services)
         {
             // Utilisation d'une base en mémoire
-            _keepAliveConnection = new("DataSource=:memory:");
+            _keepAliveConnection = new("Filename=../../../../Megatokyo.Server/Megatokyo.db");
             _keepAliveConnection.Open();
 
             services.AddDbContext<APIContext>(options =>
@@ -112,7 +111,7 @@ namespace IG.MaRH.ClientAPI.UnitTest.Server
                 options.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
             });
 
-            //services.AddControllers().AddApplicationPart(typeof(UserService).Assembly);
+            services.AddControllers().AddApplicationPart(typeof(ScopedProcessingService).Assembly);
         }
 
         internal class ApiExplorerGroupPerVersionConvention : IControllerModelConvention
