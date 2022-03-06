@@ -3,7 +3,6 @@ using Hellang.Middleware.ProblemDetails.Mvc;
 using Megatokyo.Domain.Exceptions;
 using Megatokyo.Infrastructure;
 using Megatokyo.Server.Models.Services;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -35,8 +34,6 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
-builder.Services.AddCors();
 
 // Map controller exception to Http status code
 builder.Services.AddProblemDetails(options =>
@@ -152,34 +149,10 @@ app.Use((context, next) =>
 app.UseHttpsRedirection();
 app.UseRouting();
 
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.UseHealthChecks(builder.Configuration["HealthCheck:Startup:Path"], new HealthCheckOptions
-{
-    Predicate = check => check.Tags.Contains(builder.Configuration["HealthCheck:Startup:Tag"])
-});
-
-app.UseHealthChecks(builder.Configuration["HealthCheck:Liveness:Path"], new HealthCheckOptions
-{
-    Predicate = check => check.Tags.Contains(builder.Configuration["HealthCheck:Liveness:Tag"])
-});
-
-app.UseHealthChecks(builder.Configuration["HealthCheck:Readiness:Path"], new HealthCheckOptions
-{
-    Predicate = check => check.Tags.Contains(builder.Configuration["HealthCheck:Readiness:Tag"])
-});
-
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller}/{action=Index}/{id?}");
-
-app.MapFallbackToFile("index.html");
 
 // Patch path base with forwarded path
 app.Use(async (context, next) =>

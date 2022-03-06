@@ -39,23 +39,11 @@ namespace Megatokyo.Server.Controllers
         [HttpGet(Name = nameof(GetAllRants))]
         public async Task<IActionResult> GetAllRants()
         {
-            try
-            {
-                List<RantOutputDTO> rantsData = new();
-                IEnumerable<Rant> rants = await _mediator.Send(new GetAllRantsQuery());
-                if (!rants.Any())
-                    return NoContent();
-                foreach (Rant rant in rants)
-                {
-                    RantOutputDTO rantOutputDTO = _mapper.Map<RantOutputDTO>(rant);
-                    rantsData.Add(rantOutputDTO);
-                }
-                return Ok(rantsData);
-            }
-            catch
-            {
-                throw;
-            }
+            IEnumerable<Rant> rants = await _mediator.Send(new GetAllRantsQuery());
+            if (!rants.Any())
+                return NoContent();
+            IEnumerable<RantOutputDTO> rantsOutputDTO = _mapper.Map<IEnumerable<RantOutputDTO>>(rants);
+            return Ok(rantsOutputDTO);
         }
 
         /// <summary>
@@ -64,26 +52,19 @@ namespace Megatokyo.Server.Controllers
         /// <param name="number">Rant's number</param>
         /// <returns>A rant</returns>
         /// <response code="200">Return in case the rant exists.</response>
+        /// <response code="404">Returned in case the rant is not found.</response>*
         /// <response code="500">Return in case of internal server error.</response>
         [ProducesResponseType(typeof(RantOutputDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("{number?}", Name = nameof(GetRant))]
         public async Task<IActionResult> GetRant(int number)
         {
-            try
-            {
-                Rant rant = await _mediator.Send(new GetRantQuery(number));
-                return Ok(rant);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch
-            {
-                throw;
-            }
+            Rant rant = await _mediator.Send(new GetRantQuery(number));
+            if (rant == default)
+                return NotFound();
+            return Ok(rant);
         }
     }
 

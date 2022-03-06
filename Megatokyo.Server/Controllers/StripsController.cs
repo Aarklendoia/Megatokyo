@@ -42,23 +42,11 @@ namespace Megatokyo.Server.Controllers.v1
         [HttpGet(Name = nameof(GetAllStrips))]
         public async Task<IActionResult> GetAllStrips()
         {
-            try
-            {
-                List<StripOutputDTO> stripsData = new();
-                IEnumerable<Strip> strips = await _mediator.Send(new GetAllStripsQuery());
-                if (!strips.Any())
-                    return NoContent();
-                foreach (Strip strip in strips)
-                {
-                    StripOutputDTO stripOutputDTO = _mapper.Map<StripOutputDTO>(strip);
-                    stripsData.Add(stripOutputDTO);
-                }
-                return Ok(stripsData);
-            }
-            catch
-            {
-                throw;
-            }
+            IEnumerable<Strip> strips = await _mediator.Send(new GetAllStripsQuery());
+            if (!strips.Any())
+                return NoContent();
+            IEnumerable<StripOutputDTO> stripsOutputDTO = _mapper.Map<IEnumerable<StripOutputDTO>>(strips);
+            return Ok(stripsOutputDTO);
         }
 
         /// <summary>
@@ -75,27 +63,11 @@ namespace Megatokyo.Server.Controllers.v1
         [HttpGet("category/{category}", Name = nameof(GetCategoryStrips))]
         public async Task<IActionResult> GetCategoryStrips(string category)
         {
-            try
-            {
-                List<StripOutputDTO> stripsData = new();
-                IEnumerable<Strip> strips = await _mediator.Send(new GetCategoryStripsQuery(category));
-                if (!strips.Any())
-                    return NoContent();
-                foreach (Strip strip in strips)
-                {
-                    StripOutputDTO stripOutputDTO = _mapper.Map<StripOutputDTO>(strip);
-                    stripsData.Add(stripOutputDTO);
-                }
-                return Ok(stripsData);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch
-            {
-                throw;
-            }
+            IEnumerable<Strip> strips = await _mediator.Send(new GetCategoryStripsQuery(category));
+            if (!strips.Any())
+                return NoContent();
+            IEnumerable<StripOutputDTO> stripsOutputDTO = _mapper.Map<IEnumerable<StripOutputDTO>>(strips);
+            return Ok(stripsOutputDTO);
         }
 
         /// <summary>
@@ -104,28 +76,21 @@ namespace Megatokyo.Server.Controllers.v1
         /// <param name="number">Strip's number</param>
         /// <returns>A strip</returns>
         /// <response code="200">Return in case the strip exists.</response>
-        /// <response code="400">Return in case the parameters are incorect.</response>
+        /// <response code="400">Return in case the parameters are incorect.</response>*
+        /// <response code="404">Returned in case the strip is not found.</response>*
         /// <response code="500">Return in case of internal server error.</response>
         [ProducesResponseType(typeof(StripOutputDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("{number}", Name = nameof(GetStrip))]
         public async Task<IActionResult> GetStrip(int number)
         {
-            try
-            {
-                Strip stripData = await _mediator.Send(new GetStripQuery(number));
-                StripOutputDTO strip = _mapper.Map<StripOutputDTO>(stripData);
-                return Ok(strip);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch
-            {
-                throw;
-            }
+            Strip strip = await _mediator.Send(new GetStripQuery(number));
+            if (strip == default)
+                return NotFound();
+            StripOutputDTO stripOutputDTO = _mapper.Map<StripOutputDTO>(strip);
+            return Ok(stripOutputDTO);
         }
     }
 }
