@@ -1,0 +1,598 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Megatokyo.Server",
+    "description": "API for the Megatokyo application",
+    "contact": {
+      "name": "Edouard Biton",
+      "url": "https://www.aarklendoia.com"
+    },
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/1.0/Chapters": {
+      "get": {
+        "tags": [
+          "Chapters"
+        ],
+        "summary": "Get all chapters.",
+        "operationId": "GetAllChapters",
+        "responses": {
+          "200": {
+            "description": "Return in case the list have some chapters.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChapterOutputDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChapterOutputDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChapterOutputDTO"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Return in case the list is empty."
+          },
+          "500": {
+            "description": "Return in case of internal server error."
+          }
+        }
+      }
+    },
+    "/api/1.0/Chapters/{category}": {
+      "get": {
+        "tags": [
+          "Chapters"
+        ],
+        "summary": "Get a chapter by his number.",
+        "operationId": "GetChapter",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "path",
+            "description": "Chapter's category",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return in case the chapter exists.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChapterOutputDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChapterOutputDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChapterOutputDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Return in case the parameters are incorect.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returned in case the chapter is not found.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Return in case of internal server error."
+          }
+        }
+      }
+    },
+    "/api/1.0/Rants": {
+      "get": {
+        "tags": [
+          "Rants"
+        ],
+        "summary": "Get all rants.",
+        "operationId": "GetAllRants",
+        "responses": {
+          "200": {
+            "description": "Return in case the list have some rants.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RantOutputDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RantOutputDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RantOutputDTO"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Return in case the list is empty."
+          },
+          "500": {
+            "description": "Return in case of internal server error."
+          }
+        }
+      }
+    },
+    "/api/1.0/Rants/{number}": {
+      "get": {
+        "tags": [
+          "Rants"
+        ],
+        "summary": "Get a rant by his number.",
+        "operationId": "GetRant",
+        "parameters": [
+          {
+            "name": "number",
+            "in": "path",
+            "description": "Rant's number",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return in case the rant exists.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RantOutputDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RantOutputDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RantOutputDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returned in case the rant is not found.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Return in case of internal server error."
+          }
+        }
+      }
+    },
+    "/api/1.0/Strips": {
+      "get": {
+        "tags": [
+          "Strips"
+        ],
+        "summary": "Get all strips.",
+        "operationId": "GetAllStrips",
+        "responses": {
+          "200": {
+            "description": "Return in case the list have some strips.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StripOutputDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StripOutputDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StripOutputDTO"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Return in case the list is empty."
+          },
+          "500": {
+            "description": "Return in case of internal server error."
+          }
+        }
+      }
+    },
+    "/api/1.0/Strips/category/{category}": {
+      "get": {
+        "tags": [
+          "Strips"
+        ],
+        "summary": "Get this strip of a category.",
+        "operationId": "GetCategoryStrips",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "path",
+            "description": "Strip's category",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return in case the strip exists.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StripOutputDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StripOutputDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StripOutputDTO"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Return in case the parameters are incorect.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Return in case of internal server error."
+          }
+        }
+      }
+    },
+    "/api/1.0/Strips/{number}": {
+      "get": {
+        "tags": [
+          "Strips"
+        ],
+        "summary": "Get a strip by his number.",
+        "operationId": "GetStrip",
+        "parameters": [
+          {
+            "name": "number",
+            "in": "path",
+            "description": "Strip's number",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return in case the strip exists.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/StripOutputDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StripOutputDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StripOutputDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Return in case the parameters are incorect.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returned in case the strip is not found.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Return in case of internal server error."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ChapterOutputDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "RantOutputDTO": {
+        "type": "object",
+        "properties": {
+          "rantId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "author": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
+          },
+          "publishDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "content": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "StripOutputDTO": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
+          },
+          "publishDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

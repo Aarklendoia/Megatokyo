@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Megatokyo.Models
+﻿namespace Megatokyo.Models
 {
     public class ExtractorException : Exception
     {
@@ -25,6 +23,7 @@ namespace Megatokyo.Models
             _text = text;
             Offset = 0;
             _length = 0;
+            _startDelimiter = string.Empty;
         }
 
         /// <summary>

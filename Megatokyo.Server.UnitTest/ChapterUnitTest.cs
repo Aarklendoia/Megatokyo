@@ -1,8 +1,6 @@
-﻿using EIG.Formation.ClientAPI.UnitTest;
+﻿using IG.MaRH.ClientAPI.UnitTest.Server;
 using Megatokyo.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.Net.Http;
 
 namespace Megatokyo.Server.UnitTest
 {
@@ -10,21 +8,21 @@ namespace Megatokyo.Server.UnitTest
     public class ChapterUnitTest
     {
         [TestMethod]
-        public void ChaptersAllAsyncTestMethod()
+        public async Task ChaptersAllAsyncTestMethod()
         {
             HttpClient client = TestServer.GetClient();
             IMegatokyoClient service = new MegatokyoClient(client);
-            ICollection<ChapterOutputDTO> result = service.GetAllChaptersAsync().GetAwaiter().GetResult();
+            ICollection<ChapterOutputDTO> result = await service.GetAllChaptersAsync();
             Assert.IsTrue(result.Count > 0);
         }
 
         [TestMethod]
         [DynamicData(nameof(ChaptersData), DynamicDataSourceType.Method)]
-        public void GetByCategoryTestmethod(string category)
+        public async Task GetByCategoryTestmethod(string category)
         {
             HttpClient client = TestServer.GetClient();
             IMegatokyoClient service = new MegatokyoClient(client);
-            ChapterOutputDTO result = service.GetChapterAsync(category).GetAwaiter().GetResult();
+            ChapterOutputDTO result = await service.GetChapterAsync(category);
             Assert.IsTrue(result.Category == category);
         }
 

@@ -1,8 +1,6 @@
-﻿using EIG.Formation.ClientAPI.UnitTest;
+﻿using IG.MaRH.ClientAPI.UnitTest.Server;
 using Megatokyo.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.Net.Http;
 
 namespace Megatokyo.Server.UnitTest
 {
@@ -10,21 +8,21 @@ namespace Megatokyo.Server.UnitTest
     public class RantUnitTest
     {
         [TestMethod]
-        public void RantsAllAsyncTestMethod()
+        public async Task RantsAllAsyncTestMethod()
         {
             HttpClient client = TestServer.GetClient();
             IMegatokyoClient service = new MegatokyoClient(client);
-            ICollection<RantOutputDTO> result = service.GetAllRantsAsync().GetAwaiter().GetResult();
+            ICollection<RantOutputDTO> result = await service.GetAllRantsAsync();
             Assert.IsTrue(result.Count > 0);
         }
 
         [TestMethod]
         [DynamicData(nameof(RantNumberData), DynamicDataSourceType.Method)]
-        public void GetByCategoryTestmethod(int number)
+        public async Task GetByCategoryTestmethod(int number)
         {
             HttpClient client = TestServer.GetClient();
             IMegatokyoClient service = new MegatokyoClient(client);
-            RantOutputDTO result = service.GetRantAsync(number).GetAwaiter().GetResult();
+            RantOutputDTO result = await service.GetRantAsync(number);
             Assert.IsTrue(result.Number == number);
         }
 

@@ -2,20 +2,15 @@
 using Megatokyo.Domain;
 using Megatokyo.Logic.Queries;
 using Microsoft.Azure.NotificationHubs;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace Megatokyo.Server.Models
 {
     internal class WebSiteParser
     {
-        private string _azureConnectionString;
-        private string _megatokyoNotificationHub;
-        private string _megatokyoArchiveUrl;
+        private string _azureConnectionString = string.Empty;
+        private string _megatokyoNotificationHub = string.Empty;
+        private string _megatokyoArchiveUrl = string.Empty;
         private bool _workInProgress;
         private readonly NotificationHubClient _hub;
         private readonly StripsManager _stripManager;
@@ -102,7 +97,7 @@ namespace Megatokyo.Server.Models
             Dictionary<string, string> templateParams = new()
             {
                 ["title"] = stripToNotify.Title,
-                ["uri"] = stripToNotify.Url.OriginalString,
+                ["uri"] = (stripToNotify.Url != null) ? stripToNotify.Url.OriginalString : "",
                 ["chapter"] = chapter.Number.ToString(CultureInfo.InvariantCulture) + " - " + chapter.Title
             };
             await SendTemplateNotificationAsync(templateParams);

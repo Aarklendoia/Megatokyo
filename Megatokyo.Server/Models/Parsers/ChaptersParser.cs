@@ -1,8 +1,6 @@
 ﻿using HtmlAgilityPack;
 using Megatokyo.Domain;
 using Megatokyo.Models;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 
 namespace Megatokyo.Server.Models.Parsers

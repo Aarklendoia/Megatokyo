@@ -1,11 +1,8 @@
 ﻿using HtmlAgilityPack;
 using Megatokyo.Domain;
 using Megatokyo.Models;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 
 namespace Megatokyo.Server.Models.Parsers
@@ -27,7 +24,7 @@ namespace Megatokyo.Server.Models.Parsers
                 HtmlNodeCollection nodes = htmlDoc.DocumentNode.SelectNodes("//div[contains(@id,'rant')]");
                 foreach (HtmlNode node in nodes)
                 {
-                    Rant rant = ExtractRant(node, rants);
+                    Rant? rant = ExtractRant(node, rants);
                     if (rant != null)
                     {
                         rants.Add(rant);
@@ -38,7 +35,7 @@ namespace Megatokyo.Server.Models.Parsers
             return rants;
         }
 
-        private static Rant ExtractRant(HtmlNode node, List<Rant> rants)
+        private static Rant? ExtractRant(HtmlNode node, List<Rant> rants)
         {
             StringExtractor stringExtractor = new(node.Attributes["id"].Value);
             stringExtractor.Remove("r", "t", true, out string extractednumber);

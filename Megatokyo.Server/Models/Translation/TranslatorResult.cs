@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace Megatokyo.Server.Models.Translations
 {
@@ -7,7 +6,7 @@ namespace Megatokyo.Server.Models.Translations
     internal class DetectedLanguage
     {
         [DataMember(Name = "language")]
-        public string Language { get; set; }
+        public string Language { get; set; } = "en";
 
         [DataMember(Name = "score")]
         public double Score { get; set; }
@@ -17,20 +16,20 @@ namespace Megatokyo.Server.Models.Translations
     internal class Translation
     {
         [DataMember(Name = "text")]
-        public string Text { get; set; }
+        public string Text { get; set; } = string.Empty;
 
         [DataMember(Name = "to")]
-        public string To { get; set; }
+        public string To { get; set; } = string.Empty;
     }
 
     [DataContract]
     internal class TranslatorResult
     {
         [DataMember(Name = "detectedLanguage")]
-        public DetectedLanguage DetectedLanguage { get; set; }
+        public DetectedLanguage DetectedLanguage { get; set; } = new DetectedLanguage();
 
         [DataMember(Name = "translations")]
-        public IList<Translation> Translations { get; set; }
+        public IList<Translation> Translations { get; set; } = new List<Translation>();
     }
 
 }

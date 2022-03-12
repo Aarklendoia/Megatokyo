@@ -15,7 +15,7 @@ namespace Megatokyo.Infrastructure.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.0-rc.1.21452.10");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.2");
 
             modelBuilder.Entity("Megatokyo.Infrastructure.Repository.EF.Entity.ChapterEntity", b =>
                 {

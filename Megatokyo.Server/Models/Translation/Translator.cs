@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Megatokyo.Server.Models.Translations
 {
@@ -11,7 +8,7 @@ namespace Megatokyo.Server.Models.Translations
         private const string host = "https://api.cognitive.microsofttranslator.com";
         private const string path = "/translate?api-version=3.0";
 
-        public string ClientKey { get; set; }
+        public string ClientKey { get; set; } = string.Empty;
 
         public async Task<string> Translate(string language, string text)
         {

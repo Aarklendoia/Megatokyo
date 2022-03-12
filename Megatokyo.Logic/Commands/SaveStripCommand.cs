@@ -1,7 +1,5 @@
 ﻿using MediatR;
 using Megatokyo.Logic.Interfaces;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Megatokyo.Logic.Commands
 {

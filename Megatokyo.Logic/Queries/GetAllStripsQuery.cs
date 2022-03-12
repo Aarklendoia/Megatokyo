@@ -1,9 +1,6 @@
 ﻿using MediatR;
 using Megatokyo.Domain;
 using Megatokyo.Logic.Interfaces;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Megatokyo.Logic.Queries
 {

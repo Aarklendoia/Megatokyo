@@ -4,10 +4,7 @@ using Megatokyo.Logic.Commands;
 using Megatokyo.Logic.Queries;
 using Megatokyo.Models;
 using Megatokyo.Server.Models.Syndication;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Threading.Tasks;
 
 namespace Megatokyo.Server.Models
 {
