@@ -2,7 +2,7 @@
 
 namespace Megatokyo.Client.Core.Models
 {
-    internal class Rant
+    public class Rant
     {
         public string Title { get; set; }
         public int Number { get; set; }

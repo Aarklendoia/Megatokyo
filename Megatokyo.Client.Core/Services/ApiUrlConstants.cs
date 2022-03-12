@@ -2,8 +2,10 @@
 {
     internal static class ApiUrlConstants
     {
-        public const string GetAllRants = "/rant";
+        const string ApiUrlPrefix = "/api/1.0/";
 
-        public const string GetRant = "/rant";
+        public const string GetAllRants = ApiUrlPrefix + "rants";
+
+        public const string GetRant = ApiUrlPrefix + "rants";
     }
 }

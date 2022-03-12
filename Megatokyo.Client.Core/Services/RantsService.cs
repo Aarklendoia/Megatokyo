@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Megatokyo.Client.Core.DTO;
+using Megatokyo.Client.Core.Mappings;
 using Megatokyo.Client.Core.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -8,26 +9,40 @@ using System.Threading.Tasks;
 
 namespace Megatokyo.Client.Core.Services
 {
-    internal class RantsService : IRantsService
+    public class RantsService : IRantsService
     {
         private readonly IMapper _mapper;
         private readonly HttpClient _httpClient;
 
-        public RantsService(IMapper mapper, HttpClient httpClient)
+        public RantsService(HttpClient httpClient)
         {
-            this._mapper = mapper;
-            this._httpClient = httpClient;
+            _httpClient = httpClient;
+            MapperConfiguration config = new (cfg => {
+                cfg.AddProfile<RantMappingProfile>();
+            });
+            _mapper = config.CreateMapper();
+
         }
 
         public async Task<IEnumerable<Rant>> GetAllRants()
         {
             IEnumerable<RantDTO> rants = new List<RantDTO>();
-
-            HttpResponseMessage data = await _httpClient.GetAsync(ApiUrlConstants.GetAllRants); // .NET 6 : IEnumerable<RantDTO> rants = await httpClient.GetFromJsonAsync<RantDTO>(ApiUrlConstants.GetAllRants, cancellationToken);
-            string jsonResponse = await data.Content.ReadAsStringAsync();
-            if (jsonResponse != null)
-                rants = JsonConvert.DeserializeObject<IEnumerable<RantDTO>>(jsonResponse);
-            return _mapper.Map<IEnumerable<Rant>>(rants);
+            try
+            {
+                HttpResponseMessage data = await _httpClient.GetAsync(ApiUrlConstants.GetAllRants); // .NET 6 : IEnumerable<RantDTO> rants = await httpClient.GetFromJsonAsync<RantDTO>(ApiUrlConstants.GetAllRants, cancellationToken);
+                if (data.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await data.Content.ReadAsStringAsync();
+                    if (jsonResponse != null)
+                        rants = JsonConvert.DeserializeObject<IEnumerable<RantDTO>>(jsonResponse);
+                    return _mapper.Map<IEnumerable<Rant>>(rants);
+                }
+                return _mapper.Map<IEnumerable<Rant>>(rants);
+            }
+            catch
+            {
+                return _mapper.Map<IEnumerable<Rant>>(rants);
+            }
         }
 
         public async Task<Rant> GetRantById(int id)

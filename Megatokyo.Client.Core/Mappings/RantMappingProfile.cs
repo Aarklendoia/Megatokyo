@@ -7,7 +7,7 @@ namespace Megatokyo.Client.Core.Mappings
 {
     internal class RantMappingProfile : Profile
     {
-        RantMappingProfile()
+        public RantMappingProfile()
         {
             CreateMap<RantDTO, Rant>()
                 .ConvertUsing(dest => new Rant()
