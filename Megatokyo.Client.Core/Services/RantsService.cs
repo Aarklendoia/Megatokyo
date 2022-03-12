@@ -27,7 +27,7 @@ namespace Megatokyo.Client.Core.Services
             string jsonResponse = await data.Content.ReadAsStringAsync();
             if (jsonResponse != null)
                 rants = JsonConvert.DeserializeObject<IEnumerable<RantDTO>>(jsonResponse);
-            return  _mapper.Map<IEnumerable<Rant>>(rants);
+            return _mapper.Map<IEnumerable<Rant>>(rants);
         }
 
         public async Task<Rant> GetRantById(int id)

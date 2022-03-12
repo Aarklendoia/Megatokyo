@@ -5,7 +5,7 @@ using System;
 
 namespace Megatokyo.Client.Core.Mappings
 {
-    internal class RantMappingProfile: Profile
+    internal class RantMappingProfile : Profile
     {
         RantMappingProfile()
         {

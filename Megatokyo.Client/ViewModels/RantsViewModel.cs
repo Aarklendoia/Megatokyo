@@ -1,13 +1,10 @@
-﻿using System;
+﻿using Megatokyo.Client.Core.Models;
+using Megatokyo.Client.Core.Services;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Uwp.UI.Controls;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-
-using Megatokyo.Client.Core.Models;
-using Megatokyo.Client.Core.Services;
-
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Uwp.UI.Controls;
 
 namespace Megatokyo.Client.ViewModels
 {

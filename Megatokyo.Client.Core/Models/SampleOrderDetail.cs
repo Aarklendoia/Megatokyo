@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Megatokyo.Client.Core.Models
+﻿namespace Megatokyo.Client.Core.Models
 {
     // Remove this class once your pages/features are using your data.
     // This is used by the SampleDataService.

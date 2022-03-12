@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Megatokyo.Client.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-using Megatokyo.Client.Core.Models;
 
 namespace Megatokyo.Client.Core.Services
 {

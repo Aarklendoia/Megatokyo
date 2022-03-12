@@ -1,13 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Windows.Input;
-
-using Megatokyo.Client.Helpers;
+﻿using Megatokyo.Client.Helpers;
 using Megatokyo.Client.Services;
-
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
-
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.ApplicationModel;
 using Windows.UI.Xaml;
 
