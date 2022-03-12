@@ -1,5 +1,6 @@
 ﻿using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
+using Megatokyo.Domain.Exceptions;
 using Megatokyo.Infrastructure;
 using Megatokyo.Infrastructure.Repository.EF;
 using Megatokyo.Server.Models.Services;
@@ -85,12 +86,14 @@ namespace IG.MaRH.ClientAPI.UnitTest.Server
             // Add DI for infrastructure layer
             services.AddInfrastructure();
 
+            services.AddAutoMapper(typeof(ScopedProcessingService).Assembly);
+
             // Map controller exception to Http status code
             services.AddProblemDetails(options =>
             {
                 options.MapToStatusCode<ArgumentException>(StatusCodes.Status400BadRequest);
-                //options.MapToStatusCode<NotFoundEntityException>(StatusCodes.Status403Forbidden);
-                //options.MapToStatusCode<NotFoundEntityException>(StatusCodes.Status404NotFound);
+                options.MapToStatusCode<NotFoundEntityException>(StatusCodes.Status403Forbidden);
+                options.MapToStatusCode<NotFoundEntityException>(StatusCodes.Status404NotFound);
                 options.MapToStatusCode<NotImplementedException>(StatusCodes.Status501NotImplemented);
                 options.MapToStatusCode<HttpRequestException>(StatusCodes.Status503ServiceUnavailable);
                 options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
