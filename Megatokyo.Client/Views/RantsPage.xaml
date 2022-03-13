@@ -9,6 +9,7 @@
     xmlns:model="using:Megatokyo.Client.Core.Models"
     xmlns:views="using:Megatokyo.Client.Views"
     xmlns:behaviors="using:Megatokyo.Client.Behaviors"
+    xmlns:local="using:Megatokyo.Client.Helpers"
     behaviors:NavigationViewHeaderBehavior.HeaderMode="Never"
     mc:Ignorable="d">
     <Page.Transitions>
@@ -17,6 +18,7 @@
         </TransitionCollection>
     </Page.Transitions>
     <Page.Resources>
+        <local:UtcToLocalDateTimeConverter x:Key="UtcToLocalDateTimeConverter" />
         <DataTemplate x:Key="ItemTemplate" x:DataType="model:Rant">
             <Grid Height="60">
                 <Grid.ColumnDefinitions>
@@ -33,7 +35,7 @@
                     VerticalAlignment="Center">
                     <TextBlock Style="{ThemeResource ListTitleStyle}" Text="{x:Bind Title}" />
                     <TextBlock Style="{StaticResource ListSubTitleStyle}" Text="{x:Bind Author}" />
-                    <TextBlock Style="{StaticResource ListSubTitleStyle}" Text="{x:Bind PublishDate}" />
+                    <TextBlock Style="{StaticResource ListSubTitleStyle}" Text="{x:Bind PublishDate, Converter={StaticResource UtcToLocalDateTimeConverter}}" />
                 </StackPanel>
             </Grid>
         </DataTemplate>
