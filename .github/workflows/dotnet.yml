@@ -23,5 +23,3 @@ jobs:
         run: dotnet build --no-restore Megatokyo.Server/Megatokyo.Server.csproj
       - name: Test
         run: dotnet test Megatokyo.Server.UnitTest/Megatokyo.Server.UnitTest.csproj /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
-      - name: Coverage check
-        uses: devmasx/coverage-check-action@v1.2.0
