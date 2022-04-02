@@ -8,7 +8,7 @@ using Megatokyo.Infrastructure.Repository.EF;
 
 namespace Megatokyo.Server.UnitTest
 {
-    internal class APIClient : IDisposable
+    public class APIClient : IDisposable
     {
         bool disposed = false;
         readonly SafeHandle handle = new SafeFileHandle(IntPtr.Zero, true);

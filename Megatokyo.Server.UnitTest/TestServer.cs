@@ -3,7 +3,7 @@
 namespace Megatokyo.Server.UnitTest
 {
     [TestClass]
-    internal class TestServer
+    public class TestServer
     {
         private static APIClient? _apiClient;
 
