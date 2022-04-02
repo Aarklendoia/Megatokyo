@@ -12,8 +12,8 @@ namespace Megatokyo.Server.UnitTest
         public async Task GetAllRants()
         {
             DateTimeOffset expectedDate = new(2022, 1, 1, 12, 38, 44, TimeSpan.Zero);
-            using APIClient apiClient = new("/api/1.0");
-            apiClient.InsertData += (APIContext context) =>
+            APIClient apiClient = TestServer.Client();
+            apiClient.InsertData = (APIContext context) =>
             {
                 RantEntity rant1 = new()
                 {
@@ -47,8 +47,8 @@ namespace Megatokyo.Server.UnitTest
         public async Task GetRant()
         {
             DateTimeOffset expectedDate = new(2022, 1, 1, 12, 38, 44, TimeSpan.Zero);
-            using APIClient apiClient = new("/api/1.0");
-            apiClient.InsertData += (APIContext context) =>
+            APIClient apiClient = TestServer.Client();
+            apiClient.InsertData = (APIContext context) =>
             {
                 RantEntity rant1 = new()
                 {

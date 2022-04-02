@@ -11,8 +11,8 @@ namespace Megatokyo.Server.UnitTest
         [TestMethod]
         public async Task GetAllChapters()
         {
-            using APIClient apiClient = new("/api/1.0");
-            apiClient.InsertData += (APIContext context) =>
+            APIClient apiClient = TestServer.Client();
+            apiClient.InsertData = (APIContext context) =>
             {
                 ChapterEntity chapter1 = new()
                 {
@@ -38,8 +38,8 @@ namespace Megatokyo.Server.UnitTest
         [TestMethod]
         public async Task GetChapter()
         {
-            using APIClient apiClient = new("/api/1.0");
-            apiClient.InsertData += (APIContext context) =>
+            APIClient apiClient = TestServer.Client();
+            apiClient.InsertData = (APIContext context) =>
             {
                 ChapterEntity chapter1 = new()
                 {

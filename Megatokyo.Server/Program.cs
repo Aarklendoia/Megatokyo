@@ -24,8 +24,10 @@ builder.Services.AddControllers();
 builder.Services.AddControllersWithViews().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 // Add DI for application builder.Services
+#if !TEST
 builder.Services.AddHostedService<ConsumeScopedServiceHostedService>();
 builder.Services.AddScoped<IScopedProcessingService, ScopedProcessingService>();
+#endif
 
 // Add DI for application layer
 builder.Services.AddApplication();

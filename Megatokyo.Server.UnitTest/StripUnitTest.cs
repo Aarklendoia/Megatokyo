@@ -11,8 +11,8 @@ namespace Megatokyo.Server.UnitTest
         [TestMethod]
         public async Task GetAllStrips()
         {
-            using APIClient apiClient = new("/api/1.0");
-            apiClient.InsertData += (APIContext context) =>
+            APIClient apiClient = TestServer.Client();
+            apiClient.InsertData = (APIContext context) =>
             {
                 StripEntity strip1 = new()
                 {
@@ -42,8 +42,8 @@ namespace Megatokyo.Server.UnitTest
         [TestMethod]
         public async Task GetCategoryStrips()
         {
-            using APIClient apiClient = new("/api/1.0");
-            apiClient.InsertData += (APIContext context) =>
+            APIClient apiClient = TestServer.Client();
+            apiClient.InsertData = (APIContext context) =>
             {
                 StripEntity strip1 = new()
                 {
@@ -74,8 +74,8 @@ namespace Megatokyo.Server.UnitTest
         public async Task GetStrip()
         {
             DateTimeOffset expectedDate = new(2022, 1, 1, 12, 38, 44, TimeSpan.Zero);
-            using APIClient apiClient = new("/api/1.0");
-            apiClient.InsertData += (APIContext context) =>
+            APIClient apiClient = TestServer.Client();
+            apiClient.InsertData = (APIContext context) =>
             {
                 StripEntity strip = new()
                 {
