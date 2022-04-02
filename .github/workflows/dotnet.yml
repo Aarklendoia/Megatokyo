@@ -22,19 +22,6 @@ jobs:
       - name: Build
         run: dotnet build --no-restore Megatokyo.Server/Megatokyo.Server.csproj
       - name: Test
-        run: dotnet test --verbosity normal Megatokyo.Server.UnitTest/Megatokyo.Server.UnitTest.csproj --verbosity normal --collect:"XPlat Code Coverage" --logger trx --results-directory coverage
-      - name: Copy Coverage To Predictable Location
-        run: cp coverage/*/coverage.cobertura.xml coverage/coverage.cobertura.xml
-      - name: Code Coverage Summary Report
-        uses: irongut/CodeCoverageSummary@v1.0.2
-        with:
-          filename: coverage/coverage.cobertura.xml
-          badge: true
-          format: "markdown"
-          output: "both"
-      - name: Add Coverage PR Comment
-        uses: marocchino/sticky-pull-request-comment@v2
-        if: github.event_name == 'pull_request'
-        with:
-          recreate: true
-          path: code-coverage-results.md
+        run: dotnet test Megatokyo.Server.UnitTest/Megatokyo.Server.UnitTest.csproj /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
+      - name: Coverage check
+        uses: devmasx/coverage-check-action@v1.2.0
