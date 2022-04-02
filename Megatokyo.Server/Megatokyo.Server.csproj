@@ -39,4 +39,8 @@
 		<ProjectReference Include="..\Megatokyo.Logic\Megatokyo.Logic.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="Megatokyo.Server.UnitTest" />
+	</ItemGroup>
+
 </Project>

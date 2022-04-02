@@ -58,7 +58,7 @@ namespace Megatokyo.Server.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpGet("{number?}", Name = nameof(GetRant))]
+        [HttpGet("{number}", Name = nameof(GetRant))]
         public async Task<IActionResult> GetRant(int number)
         {
             Rant rant = await _mediator.Send(new GetRantQuery(number));

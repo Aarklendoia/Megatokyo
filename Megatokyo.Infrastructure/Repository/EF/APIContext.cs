@@ -35,12 +35,7 @@ namespace Megatokyo.Infrastructure.Repository.EF
         //public DbSet<RantsTranslations> RantsTranslations { get; set; }
         public DbSet<CheckingEntity> Checking { get; set; } = null!;
 
-        public APIContext(DbContextOptions<APIContext> options) : base(options)
-        {
-#if DEBUG
-            Database.Migrate();
-#endif
-        }
+        public APIContext(DbContextOptions<APIContext> options) : base(options) { }
     }
 }
 

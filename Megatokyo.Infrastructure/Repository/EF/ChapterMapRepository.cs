@@ -9,39 +9,37 @@ namespace Megatokyo.Infrastructure.Repository.EF
 {
     public class ChapterMapRepository : IChapterRepository
     {
-        private APIContext Context { get; }
-        private IMapper Mapper { get; }
-        public DbSet<ChapterEntity> DbSet { get; }
+        private readonly APIContext _context;
+        private readonly IMapper _mapper;
 
         public ChapterMapRepository(APIContext dataContext, IMapper mapper)
         {
-            Context = dataContext;
-            DbSet = Context.Set<ChapterEntity>();
-            Mapper = mapper;
+            _context = dataContext;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<Chapter>> GetAllAsync()
         {
-            IEnumerable<ChapterEntity> chapters = await DbSet.ToListAsync();
-            return Mapper.Map<IEnumerable<Chapter>>(chapters);
+            IEnumerable<ChapterEntity> chapters = await _context.Chapters.ToListAsync();
+            return _mapper.Map<IEnumerable<Chapter>>(chapters);
         }
 
         public async Task<Chapter> GetAsync(string category)
         {
-            ChapterEntity? chapter = await DbSet.SingleOrDefaultAsync(chapter => chapter.Category == category);
-            return Mapper.Map<Chapter>(chapter);
+            ChapterEntity? chapter = await _context.Chapters.SingleOrDefaultAsync(chapter => chapter.Category == category);
+            return _mapper.Map<Chapter>(chapter);
         }
 
         public async Task<Chapter> CreateAsync(Chapter chapterDomain)
         {
-            ChapterEntity? chapterEntity = Mapper.Map<ChapterEntity>(chapterDomain);
-            EntityEntry<ChapterEntity> entity = await DbSet.AddAsync(chapterEntity);
-            return Mapper.Map<Chapter>(entity.Entity);
+            ChapterEntity? chapterEntity = _mapper.Map<ChapterEntity>(chapterDomain);
+            EntityEntry<ChapterEntity> entity = await _context.Chapters.AddAsync(chapterEntity);
+            return _mapper.Map<Chapter>(entity.Entity);
         }
 
         public async Task<int> SaveAsync()
         {
-            return await Context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
         }
     }
 }
