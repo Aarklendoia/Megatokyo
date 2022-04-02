@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:Megatokyo.Client.Helpers"
+    xmlns:helpers="using:Megatokyo.Client.Helpers"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -36,13 +37,12 @@
                     Style="{ThemeResource TitleTextBlockStyle}" />
             </StackPanel>
             <StackPanel Name="block" Padding="0,15,0,0">
-                <!--<TextBlock Style="{StaticResource DetailSubTitleStyle}" Text="Publish date" />-->
                 <TextBlock Style="{StaticResource DetailBodyBaseMediumStyle}" Text="{x:Bind ListMenuItem.PublishDate, Converter={StaticResource UtcToLocalDateTimeConverter}, Mode=OneWay}" />
                 <TextBlock
                     Margin="{StaticResource SmallTopMargin}"
                     Style="{StaticResource DetailSubTitleStyle}"
                     Text="Rant" />
-                <TextBlock Style="{StaticResource DetailBodyBaseMediumStyle}" Text="{x:Bind ListMenuItem.Content, Mode=OneWay}" />
+                <RichTextBlock helpers:RichTextBlockProperties.Html="{x:Bind ListMenuItem.Content, Mode=OneWay}" />
             </StackPanel>
         </StackPanel>
     </ScrollViewer>
