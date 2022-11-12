@@ -55,18 +55,22 @@ namespace Megatokyo.Server.Models
                     {
                         StringExtractor stringExtractor = new(item.Title);
                         Strip strip = new(int.Parse(stringExtractor.Extract("[", "]", false), NumberStyles.Integer, CultureInfo.InvariantCulture));
-                        Strips.Add(strip);
+                        if (await _mediator.Send(new GetStripQuery(strip.Number)) != null)
+                            Strips.Add(strip);
                         checking.LastStripNumber = strip.Number;
                     }
                     if (item.Title.StartsWith("Rant", StringComparison.InvariantCulture))
                     {
                         StringExtractor stringExtractor = new(item.Title);
-                        Rant rant = new(int.Parse(stringExtractor.Extract("[", "]", false), NumberStyles.Integer, CultureInfo.InvariantCulture));
-                        Rants.Add(rant);
+                        string number = stringExtractor.Extract("[", "]", false);
+                        Rant rant = new(int.Parse(number, NumberStyles.Integer, CultureInfo.InvariantCulture));
+                        if (await _mediator.Send(new GetRantQuery(rant.Number)) != null)
+                            Rants.Add(rant);
                         checking.LastRantNumber = rant.Number;
                     }
                 }
             }
+            checking.LastCheck = DateTimeOffset.UtcNow;
             await _mediator.Send(new UpdateCheckingCommand(checking));
         }
     }
