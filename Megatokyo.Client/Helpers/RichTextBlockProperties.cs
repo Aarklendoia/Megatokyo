@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Web;
 using Windows.Data.Xml.Dom;
 using Windows.Data.Xml.Xsl;
 using Windows.UI.Xaml;
@@ -53,7 +54,7 @@ namespace Megatokyo.Client.Helpers
         {
             if (d is not RichTextBlock richText) return;
             string xhtml = string.Format("<div>{0}</div>", e.NewValue as string);
-            xhtml = xhtml.Replace("\r", "").Replace("\n", "<br />");
+            xhtml = xhtml.Replace("\r", "").Replace("\n", "<br />").Replace("&", "&amp;");
             RichTextBlock newRichText;
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
