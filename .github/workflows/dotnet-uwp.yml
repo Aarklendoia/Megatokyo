@@ -2,7 +2,8 @@ name: .NET Core UWP
 
 on:
   push:
-    tags: "v*"
+    tags:
+      - "v*"
 
 jobs:
   build:

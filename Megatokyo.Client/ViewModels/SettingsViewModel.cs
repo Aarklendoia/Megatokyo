@@ -2,6 +2,7 @@
 using Megatokyo.Client.Services;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.ApplicationModel;
@@ -9,7 +10,7 @@ using Windows.UI.Xaml;
 
 namespace Megatokyo.Client.ViewModels
 {
-    // TODO WTS: Add other settings as necessary. For help see https://github.com/Microsoft/WindowsTemplateStudio/blob/release/docs/UWP/pages/settings.md
+    // TODO: Add other settings as necessary. For help see https://github.com/microsoft/TemplateStudio/blob/main/docs/UWP/pages/settings.md
     public class SettingsViewModel : ObservableObject
     {
         private ElementTheme _elementTheme = ThemeSelectorService.Theme;
@@ -47,6 +48,29 @@ namespace Megatokyo.Client.ViewModels
                 }
 
                 return _switchThemeCommand;
+            }
+        }
+
+        public Visibility FeedbackLinkVisibility => Microsoft.Services.Store.Engagement.StoreServicesFeedbackLauncher.IsSupported() ? Visibility.Visible : Visibility.Collapsed;
+
+        private ICommand _launchFeedbackHubCommand;
+
+        public ICommand LaunchFeedbackHubCommand
+        {
+            get
+            {
+                if (_launchFeedbackHubCommand == null)
+                {
+                    _launchFeedbackHubCommand = new RelayCommand(
+                        async () =>
+                        {
+                            // This launcher is part of the Store Services SDK https://docs.microsoft.com/windows/uwp/monetize/microsoft-store-services-sdk
+                            var launcher = Microsoft.Services.Store.Engagement.StoreServicesFeedbackLauncher.GetDefault();
+                            await launcher.LaunchAsync();
+                        });
+                }
+
+                return _launchFeedbackHubCommand;
             }
         }
 

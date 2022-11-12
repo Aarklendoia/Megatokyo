@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Controls;
 namespace Megatokyo.Client.Services
 {
     // For more information on understanding and extending activation flow see
-    // https://github.com/Microsoft/WindowsTemplateStudio/blob/release/docs/UWP/activation.md
+    // https://github.com/microsoft/TemplateStudio/blob/main/docs/UWP/activation.md
     internal class ActivationService
     {
         private readonly App _app;
@@ -86,6 +86,7 @@ namespace Megatokyo.Client.Services
         private async Task StartupAsync()
         {
             await ThemeSelectorService.SetRequestedThemeAsync();
+            await WhatsNewDisplayService.ShowIfAppropriateAsync();
         }
 
         private IEnumerable<ActivationHandler> GetActivationHandlers()

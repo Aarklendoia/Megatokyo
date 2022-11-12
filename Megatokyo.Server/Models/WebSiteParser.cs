@@ -8,9 +8,9 @@ namespace Megatokyo.Server.Models
 {
     internal class WebSiteParser
     {
-        private string _azureConnectionString = string.Empty;
-        private string _megatokyoNotificationHub = string.Empty;
-        private string _megatokyoArchiveUrl = string.Empty;
+        private string? _azureConnectionString = string.Empty;
+        private string? _megatokyoNotificationHub = string.Empty;
+        private string? _megatokyoArchiveUrl = string.Empty;
         private bool _workInProgress;
         private readonly NotificationHubClient _hub;
         private readonly StripsManager _stripManager;

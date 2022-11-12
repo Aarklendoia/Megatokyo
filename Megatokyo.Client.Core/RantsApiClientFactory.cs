@@ -8,8 +8,10 @@ namespace Megatokyo.Client.Core
     {
         public static IRantsApiClient Create(string host, string apiKey)
         {
-            HttpClientHandler clientHandler = new();
-            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+            HttpClientHandler clientHandler = new()
+            {
+                ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
+            };
 
             var httpClient = new HttpClient(clientHandler)
             {

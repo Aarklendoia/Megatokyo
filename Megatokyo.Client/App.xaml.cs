@@ -1,4 +1,7 @@
 ﻿using Megatokyo.Client.Services;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 using System;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
@@ -7,7 +10,7 @@ namespace Megatokyo.Client
 {
     public sealed partial class App : Application
     {
-        private readonly Lazy<ActivationService> _activationService;
+        private Lazy<ActivationService> _activationService;
 
         private ActivationService ActivationService
         {
@@ -17,6 +20,9 @@ namespace Megatokyo.Client
         public App()
         {
             InitializeComponent();
+
+            // TODO: Add your app in the app center and set your secret here. More at https://docs.microsoft.com/appcenter/sdk/getting-started/uwp
+            AppCenter.Start("{Your App Secret}", typeof(Analytics), typeof(Crashes));
             UnhandledException += OnAppUnhandledException;
 
             // Deferred execution until used. Check https://docs.microsoft.com/dotnet/api/system.lazy-1 for further info on Lazy<T> class.
@@ -38,7 +44,7 @@ namespace Megatokyo.Client
 
         private void OnAppUnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
         {
-            // TODO WTS: Please log and handle the exception as appropriate to your scenario
+            // TODO: Please log and handle the exception as appropriate to your scenario
             // For more info see https://docs.microsoft.com/uwp/api/windows.ui.xaml.application.unhandledexception
         }
 

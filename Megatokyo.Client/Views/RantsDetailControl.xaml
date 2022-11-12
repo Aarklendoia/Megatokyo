@@ -3,12 +3,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:local="using:Megatokyo.Client.Helpers"
     xmlns:helpers="using:Megatokyo.Client.Helpers"
-    mc:Ignorable="d"
+    xmlns:local="using:Megatokyo.Client.Helpers"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignWidth="400"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <local:UtcToLocalDateTimeConverter x:Key="UtcToLocalDateTimeConverter" />
     </UserControl.Resources>
@@ -17,24 +17,24 @@
         Padding="{StaticResource DetailPageMargin}"
         HorizontalAlignment="Stretch"
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-        VerticalScrollMode="Enabled"
-        IsTabStop="True">
+        IsTabStop="True"
+        VerticalScrollMode="Enabled">
         <StackPanel HorizontalAlignment="Left">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
                 <Image
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Source="{x:Bind ListMenuItem.Url.AbsoluteUri, Mode=OneWay}"/>
+                    Source="{x:Bind ListMenuItem.Url.AbsoluteUri, Mode=OneWay}" />
                 <TextBlock
                     Margin="{StaticResource SmallLeftMargin}"
                     VerticalAlignment="Center"
-                    Text="{x:Bind ListMenuItem.Number, Mode=OneWay}"
-                    Style="{ThemeResource TitleTextBlockStyle}" />
+                    Style="{ThemeResource TitleTextBlockStyle}"
+                    Text="{x:Bind ListMenuItem.Number, Mode=OneWay}" />
                 <TextBlock
                     Margin="{StaticResource SmallLeftMargin}"
                     VerticalAlignment="Center"
-                    Text="{x:Bind ListMenuItem.Title, Mode=OneWay}"
-                    Style="{ThemeResource TitleTextBlockStyle}" />
+                    Style="{ThemeResource TitleTextBlockStyle}"
+                    Text="{x:Bind ListMenuItem.Title, Mode=OneWay}" />
             </StackPanel>
             <StackPanel Name="block" Padding="0,15,0,0">
                 <TextBlock Style="{StaticResource DetailBodyBaseMediumStyle}" Text="{x:Bind ListMenuItem.PublishDate, Converter={StaticResource UtcToLocalDateTimeConverter}, Mode=OneWay}" />

@@ -1,5 +1,4 @@
-﻿
-using Megatokyo.Client.ViewModels;
+﻿using Megatokyo.Client.ViewModels;
 
 using Windows.UI.Xaml.Controls;
 

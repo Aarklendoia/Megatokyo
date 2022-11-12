@@ -1,10 +1,10 @@
 ﻿using Flurl;
+using Megatokyo.Infrastructure.Repository.EF;
 using Microsoft.Win32.SafeHandles;
 using Newtonsoft.Json;
 using System.Net.Http.Json;
 using System.Runtime.InteropServices;
 using System.Text;
-using Megatokyo.Infrastructure.Repository.EF;
 
 namespace Megatokyo.Server.UnitTest
 {

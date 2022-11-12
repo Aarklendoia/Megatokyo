@@ -4,15 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{3AEB84E5-7B75-43C9-BCDC-DC46515596AA}</ProjectGuid>
+    <ProjectGuid>{05FE492B-09FC-4AA7-B157-FEF0DFB52EAD}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Megatokyo.Client</RootNamespace>
     <AssemblyName>Megatokyo.Client</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.19041.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.22621.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.22621.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -118,22 +118,40 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Flurl">
-      <Version>3.0.4</Version>
+      <Version>3.0.6</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AppCenter.Analytics">
+      <Version>4.5.3</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AppCenter.Crashes">
+      <Version>4.5.3</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Http">
-      <Version>6.0.0</Version>
+      <Version>7.0.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.13</Version>
+      <Version>6.2.14</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Services.Store.Engagement">
+      <Version>10.1901.28001</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Mvvm">
       <Version>7.1.2</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp">
+      <Version>7.1.3</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI">
+      <Version>7.1.3</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Animations">
+      <Version>7.1.3</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
-      <Version>7.1.2</Version>
+      <Version>7.1.3</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">
-      <Version>2.7.1</Version>
+      <Version>2.8.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed">
       <Version>2.0.1</Version>
@@ -146,23 +164,31 @@
     <Compile Include="Activation\ActivationHandler.cs" />
     <Compile Include="Behaviors\NavigationViewHeaderBehavior.cs" />
     <Compile Include="Behaviors\NavigationViewHeaderMode.cs" />
+    <Compile Include="Helpers\DataRequestExtensions.cs" />
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
+    <Compile Include="Helpers\ImagesNavigationHelper.cs" />
     <Compile Include="Helpers\NavHelper.cs" />
     <Compile Include="Helpers\RichTextBlockProperties.cs" />
     <Compile Include="Helpers\SettingsStorageExtensions.cs" />
     <Compile Include="Helpers\UtcToLocalDateTimeConverter.cs" />
-    <Compile Include="Mappings\RantMappingProfile.cs" />
+    <Compile Include="Models\ShareSourceData.cs" />
+    <Compile Include="Models\ShareSourceItem.cs" />
     <Compile Include="Services\ActivationService.cs" />
     <Compile Include="Activation\DefaultActivationHandler.cs" />
     <Compile Include="Services\NavigationService.cs" />
-    <Compile Include="Services\ServiceCollectionExtensions.cs" />
     <Compile Include="Services\ThemeSelectorService.cs" />
+    <Compile Include="Services\WhatsNewDisplayService.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\RantsViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="ViewModels\StripGalleryDetailViewModel.cs" />
+    <Compile Include="ViewModels\StripGalleryViewModel.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PreviewNoticePage.xaml.cs">
       <DependentUpon>PreviewNoticePage.xaml</DependentUpon>
@@ -173,11 +199,17 @@
     <Compile Include="Views\RantsPage.xaml.cs">
       <DependentUpon>RantsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SettingsPage.xaml.cs">
-      <DependentUpon>SettingsPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ShellPage.xaml.cs">
       <DependentUpon>ShellPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StripGalleryDetailPage.xaml.cs">
+      <DependentUpon>StripGalleryDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StripGalleryPage.xaml.cs">
+      <DependentUpon>StripGalleryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WhatsNewDialog.xaml.cs">
+      <DependentUpon>WhatsNewDialog.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +219,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Styles\Image.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\Page.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -231,6 +267,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\StripGalleryDetailPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\StripGalleryPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WhatsNewDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -242,6 +290,17 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Helpers\RichTextBlockHtml2Xaml.xslt" />
+    <Content Include="Assets\PlaceholderImage.png" />
+    <Content Include="Assets\SampleData\SamplePhoto1.png" />
+    <Content Include="Assets\SampleData\SamplePhoto10.png" />
+    <Content Include="Assets\SampleData\SamplePhoto2.png" />
+    <Content Include="Assets\SampleData\SamplePhoto3.png" />
+    <Content Include="Assets\SampleData\SamplePhoto4.png" />
+    <Content Include="Assets\SampleData\SamplePhoto5.png" />
+    <Content Include="Assets\SampleData\SamplePhoto6.png" />
+    <Content Include="Assets\SampleData\SamplePhoto7.png" />
+    <Content Include="Assets\SampleData\SamplePhoto8.png" />
+    <Content Include="Assets\SampleData\SamplePhoto9.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -254,6 +313,8 @@
   <ItemGroup>
     <None Include=".editorconfig" />
     <None Include="Megatokyo.Client_TemporaryKey.pfx" />
+    <None Include="README.md" />
+    <None Include="Settings.XamlStyler" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -262,8 +323,16 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <SDKReference Include="Microsoft.Services.Store.Engagement, Version=10.0">
+      <Name>Microsoft Engagement Framework</Name>
+    </SDKReference>
+    <SDKReference Include="Microsoft.VCLibs, Version=14.0">
+      <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
+    </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Megatokyo.Client.Core\Megatokyo.Client.Core.csproj">
-      <Project>{6AEF066B-15ED-40B7-BDE4-9F0F0BB3E2CB}</Project>
+      <Project>{ee2239c8-1d91-493a-a66d-8e84338fe2b7}</Project>
       <Name>Megatokyo.Client.Core</Name>
     </ProjectReference>
   </ItemGroup>

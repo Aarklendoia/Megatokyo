@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 namespace Megatokyo.Client.Core.Services
 {
     // This class holds sample data used by some generated pages to show how they can be used.
-    // TODO WTS: The following classes have been created to display sample data. Delete these files once your app is using real data.
+    // TODO: The following classes have been created to display sample data. Delete these files once your app is using real data.
     // 1. Services/SampleDataService.cs
     // 2. Models/SampleCompany.cs
     // 3. Models/SampleOrder.cs
     // 4. Models/SampleOrderDetail.cs
     public static class SampleDataService
     {
+        private static ICollection<SampleImage> _gallerySampleData;
+
         private static IEnumerable<SampleOrder> AllOrders()
         {
             // The following is order summary data
@@ -484,11 +486,25 @@ namespace Megatokyo.Client.Core.Services
             };
         }
 
-        // Remove this once your ListDetails pages are displaying real data.
-        public static async Task<IEnumerable<SampleOrder>> GetListDetailsDataAsync()
+        // Remove this once your image gallery page is displaying real data.
+        public static async Task<IEnumerable<SampleImage>> GetImageGalleryDataAsync(string localResourcesPath)
         {
+            if (_gallerySampleData == null)
+            {
+                _gallerySampleData = new List<SampleImage>();
+                for (int i = 1; i <= 10; i++)
+                {
+                    _gallerySampleData.Add(new SampleImage()
+                    {
+                        ID = $"{i}",
+                        Source = $"{localResourcesPath}/SampleData/SamplePhoto{i}.png",
+                        Name = $"Sample picture {i}"
+                    });
+                }
+            }
+
             await Task.CompletedTask;
-            return AllOrders();
+            return _gallerySampleData;
         }
     }
 }

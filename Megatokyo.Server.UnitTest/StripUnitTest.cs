@@ -19,8 +19,8 @@ namespace Megatokyo.Server.UnitTest
                     Category = "C-0",
                     Number = 1,
                     PublishDate = DateTime.Now,
-                    Title ="Test strip 1",
-                    Url= new Uri("https://www.megatokyo.com/strips/1")
+                    Title = "Test strip 1",
+                    Url = new Uri("https://www.megatokyo.com/strips/1")
                 };
                 context.Strips.Add(strip1);
                 StripEntity strip2 = new()

@@ -151,10 +151,7 @@ app.Use((context, next) =>
 app.UseHttpsRedirection();
 app.UseRouting();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
+app.MapControllers();
 
 // Patch path base with forwarded path
 app.Use(async (context, next) =>
