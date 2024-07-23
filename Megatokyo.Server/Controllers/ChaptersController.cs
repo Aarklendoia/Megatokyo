@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Asp.Versioning;
+using AutoMapper;
 using MediatR;
 using Megatokyo.Domain;
 using Megatokyo.Logic.Queries;
@@ -10,24 +11,16 @@ namespace Megatokyo.Server.Controllers
     /// <summary>
     /// API for chapters.
     /// </summary>
+    /// <remarks>
+    /// Create new ChaptersController instance.
+    /// </remarks>
+    /// <param name="mediator"></param>
+    /// <param name="mapper"></param>
     [ApiVersion("1.0")]
     [Route("api/{version:apiVersion}/[controller]")]
     [ApiController]
-    public class ChaptersController : ControllerBase
+    public class ChaptersController(IMediator mediator, IMapper mapper) : ControllerBase
     {
-        private readonly IMediator _mediator;
-        private readonly IMapper _mapper;
-
-        /// <summary>
-        /// Create new ChaptersController instance.
-        /// </summary>
-        /// <param name="mediator"></param>
-        /// <param name="mapper"></param>
-        public ChaptersController(IMediator mediator, IMapper mapper)
-        {
-            _mediator = mediator;
-            _mapper = mapper;
-        }
 
         /// <summary>
         /// Get all chapters.
@@ -42,10 +35,10 @@ namespace Megatokyo.Server.Controllers
         [HttpGet(Name = nameof(GetAllChapters))]
         public async Task<IActionResult> GetAllChapters()
         {
-            IEnumerable<Chapter> chapters = await _mediator.Send(new GetAllChaptersQuery());
+            IEnumerable<Chapter> chapters = await mediator.Send(new GetAllChaptersQuery());
             if (!chapters.Any())
                 return NoContent();
-            IEnumerable<ChapterOutputDTO> chaptersOutputDTO = _mapper.Map<IEnumerable<ChapterOutputDTO>>(chapters);
+            IEnumerable<ChapterOutputDTO> chaptersOutputDTO = mapper.Map<IEnumerable<ChapterOutputDTO>>(chapters);
             return Ok(chaptersOutputDTO);
         }
 
@@ -65,8 +58,8 @@ namespace Megatokyo.Server.Controllers
         [HttpGet("{category}", Name = nameof(GetChapter))]
         public async Task<IActionResult> GetChapter(string category)
         {
-            Chapter ChapterData = await _mediator.Send(new GetChapterQuery(category));
-            ChapterOutputDTO chapter = _mapper.Map<ChapterOutputDTO>(ChapterData);
+            Chapter ChapterData = await mediator.Send(new GetChapterQuery(category));
+            ChapterOutputDTO chapter = mapper.Map<ChapterOutputDTO>(ChapterData);
             if (chapter == default)
                 return NotFound();
             return Ok(chapter);

@@ -1,7 +1,7 @@
-﻿using Megatokyo.Client.Helpers;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Megatokyo.Client.Helpers;
 using Megatokyo.Client.Services;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -37,15 +37,12 @@ namespace Megatokyo.Client.ViewModels
         {
             get
             {
-                if (_switchThemeCommand == null)
-                {
-                    _switchThemeCommand = new RelayCommand<ElementTheme>(
+                _switchThemeCommand ??= new RelayCommand<ElementTheme>(
                         async (param) =>
                         {
                             ElementTheme = param;
                             await ThemeSelectorService.SetThemeAsync(param);
                         });
-                }
 
                 return _switchThemeCommand;
             }
@@ -59,16 +56,13 @@ namespace Megatokyo.Client.ViewModels
         {
             get
             {
-                if (_launchFeedbackHubCommand == null)
-                {
-                    _launchFeedbackHubCommand = new RelayCommand(
+                _launchFeedbackHubCommand ??= new RelayCommand(
                         async () =>
                         {
                             // This launcher is part of the Store Services SDK https://docs.microsoft.com/windows/uwp/monetize/microsoft-store-services-sdk
                             var launcher = Microsoft.Services.Store.Engagement.StoreServicesFeedbackLauncher.GetDefault();
                             await launcher.LaunchAsync();
                         });
-                }
 
                 return _launchFeedbackHubCommand;
             }

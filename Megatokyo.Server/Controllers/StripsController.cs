@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Asp.Versioning;
+using AutoMapper;
 using MediatR;
 using Megatokyo.Domain;
 using Megatokyo.Logic.Queries;
@@ -10,24 +11,16 @@ namespace Megatokyo.Server.Controllers.v1
     /// <summary>
     /// API for strips.
     /// </summary>
+    /// <remarks>
+    /// Create new StripsController instance.
+    /// </remarks>
+    /// <param name="mediator"></param>
+    /// <param name="mapper"></param>
     [ApiVersion("1.0")]
     [Route("api/{version:apiVersion}/[controller]")]
     [ApiController]
-    public class StripsController : ControllerBase
+    public class StripsController(IMediator mediator, IMapper mapper) : ControllerBase
     {
-        private readonly IMediator _mediator;
-        private readonly IMapper _mapper;
-
-        /// <summary>
-        /// Create new StripsController instance.
-        /// </summary>
-        /// <param name="mediator"></param>
-        /// <param name="mapper"></param>
-        public StripsController(IMediator mediator, IMapper mapper)
-        {
-            _mediator = mediator;
-            _mapper = mapper;
-        }
 
         /// <summary>
         /// Get all strips.
@@ -42,10 +35,10 @@ namespace Megatokyo.Server.Controllers.v1
         [HttpGet(Name = nameof(GetAllStrips))]
         public async Task<IActionResult> GetAllStrips()
         {
-            IEnumerable<Strip> strips = await _mediator.Send(new GetAllStripsQuery());
+            IEnumerable<Strip> strips = await mediator.Send(new GetAllStripsQuery());
             if (!strips.Any())
                 return NoContent();
-            IEnumerable<StripOutputDTO> stripsOutputDTO = _mapper.Map<IEnumerable<StripOutputDTO>>(strips);
+            IEnumerable<StripOutputDTO> stripsOutputDTO = mapper.Map<IEnumerable<StripOutputDTO>>(strips);
             return Ok(stripsOutputDTO);
         }
 
@@ -63,10 +56,10 @@ namespace Megatokyo.Server.Controllers.v1
         [HttpGet("category/{category}", Name = nameof(GetCategoryStrips))]
         public async Task<IActionResult> GetCategoryStrips(string category)
         {
-            IEnumerable<Strip> strips = await _mediator.Send(new GetCategoryStripsQuery(category));
+            IEnumerable<Strip> strips = await mediator.Send(new GetCategoryStripsQuery(category));
             if (!strips.Any())
                 return NoContent();
-            IEnumerable<StripOutputDTO> stripsOutputDTO = _mapper.Map<IEnumerable<StripOutputDTO>>(strips);
+            IEnumerable<StripOutputDTO> stripsOutputDTO = mapper.Map<IEnumerable<StripOutputDTO>>(strips);
             return Ok(stripsOutputDTO);
         }
 
@@ -86,10 +79,10 @@ namespace Megatokyo.Server.Controllers.v1
         [HttpGet("{number}", Name = nameof(GetStrip))]
         public async Task<IActionResult> GetStrip(int number)
         {
-            Strip strip = await _mediator.Send(new GetStripQuery(number));
+            Strip strip = await mediator.Send(new GetStripQuery(number));
             if (strip == default)
                 return NotFound();
-            StripOutputDTO stripOutputDTO = _mapper.Map<StripOutputDTO>(strip);
+            StripOutputDTO stripOutputDTO = mapper.Map<StripOutputDTO>(strip);
             return Ok(stripOutputDTO);
         }
     }

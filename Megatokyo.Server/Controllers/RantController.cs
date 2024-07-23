@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Asp.Versioning;
+using AutoMapper;
 using MediatR;
 using Megatokyo.Domain;
 using Megatokyo.Logic.Queries;
@@ -7,24 +8,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Megatokyo.Server.Controllers
 {
+    /// <summary>
+    /// Create new RantsController instance.
+    /// </summary>
+    /// <param name="mediator"></param>
+    /// <param name="mapper"></param>
     [ApiVersion("1.0")]
     [Route("api/{version:apiVersion}/[controller]")]
     [ApiController]
-    public class RantsController : ControllerBase
+    public class RantsController(IMediator mediator, IMapper mapper) : ControllerBase
     {
-        private readonly IMediator _mediator;
-        private readonly IMapper _mapper;
-
-        /// <summary>
-        /// Create new RantsController instance.
-        /// </summary>
-        /// <param name="mediator"></param>
-        /// <param name="mapper"></param>
-        public RantsController(IMediator mediator, IMapper mapper)
-        {
-            _mediator = mediator;
-            _mapper = mapper;
-        }
 
         /// <summary>
         /// Get all rants.
@@ -39,10 +32,10 @@ namespace Megatokyo.Server.Controllers
         [HttpGet(Name = nameof(GetAllRants))]
         public async Task<IActionResult> GetAllRants()
         {
-            IEnumerable<Rant> rants = await _mediator.Send(new GetAllRantsQuery());
+            IEnumerable<Rant> rants = await mediator.Send(new GetAllRantsQuery());
             if (!rants.Any())
                 return NoContent();
-            IEnumerable<RantOutputDTO> rantsOutputDTO = _mapper.Map<IEnumerable<RantOutputDTO>>(rants);
+            IEnumerable<RantOutputDTO> rantsOutputDTO = mapper.Map<IEnumerable<RantOutputDTO>>(rants);
             return Ok(rantsOutputDTO);
         }
 
@@ -61,7 +54,7 @@ namespace Megatokyo.Server.Controllers
         [HttpGet("{number}", Name = nameof(GetRant))]
         public async Task<IActionResult> GetRant(int number)
         {
-            Rant rant = await _mediator.Send(new GetRantQuery(number));
+            Rant rant = await mediator.Send(new GetRantQuery(number));
             if (rant == default)
                 return NotFound();
             return Ok(rant);

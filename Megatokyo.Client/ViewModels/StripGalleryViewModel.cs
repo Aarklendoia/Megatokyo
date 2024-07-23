@@ -1,10 +1,10 @@
-﻿using Megatokyo.Client.Core.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Megatokyo.Client.Core.Models;
 using Megatokyo.Client.Core.Services;
 using Megatokyo.Client.Helpers;
 using Megatokyo.Client.Services;
 using Megatokyo.Client.Views;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Toolkit.Uwp.UI.Animations;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;

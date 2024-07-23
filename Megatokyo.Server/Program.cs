@@ -1,12 +1,11 @@
+using Asp.Versioning;
 using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
 using Megatokyo.Domain.Exceptions;
 using Megatokyo.Infrastructure;
 using Megatokyo.Server.Models.Services;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
@@ -15,7 +14,7 @@ using System.Reflection;
 using System.Text.Json.Serialization;
 using TP.Logic;
 
-IEnumerable<string> Versions = new[] { "1.0" };
+IEnumerable<string> Versions = ["1.0"];
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -116,7 +115,7 @@ builder.Services.AddHealthChecks()
         .AddCheck(
             name: "All probes",
             check: () => HealthCheckResult.Healthy(),
-            tags: new[] { "start", "live", "ready" });
+            tags: ["start", "live", "ready"]);
 
 WebApplication app = builder.Build();
 
@@ -174,7 +173,7 @@ app.UseStaticFiles(new StaticFileOptions
     ServeUnknownFileTypes = true // serve extensionless file
 });
 
-app.Run();
+await app.RunAsync();
 
 internal class ApiExplorerGroupPerVersionConvention : IControllerModelConvention
 {
@@ -197,7 +196,7 @@ internal class RemoveVersionFromParameter : IOperationFilter
             return;
 
         var versionParameter = operation.Parameters
-            .FirstOrDefault(p => p.Name.ToLower() == "version");
+            .FirstOrDefault(p => p.Name.Equals("version", StringComparison.CurrentCultureIgnoreCase));
 
         if (versionParameter != null)
             operation.Parameters.Remove(versionParameter);
@@ -208,8 +207,7 @@ internal class ReplaceVersionWithExactValueInPath : IDocumentFilter
 {
     public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
     {
-        if (swaggerDoc == null)
-            throw new ArgumentNullException(nameof(swaggerDoc));
+        ArgumentNullException.ThrowIfNull(swaggerDoc);
 
         var replacements = new OpenApiPaths();
 

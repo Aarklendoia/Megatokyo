@@ -8,15 +8,15 @@
   IgnorableNamespaces="uap mp genTemplate">
 
   <Identity
-    Name="A0AC9357-BBD3-4371-9B13-39CD6F58A795"
-    Publisher="CN=edoua"
+    Name="37254Aarklendoia.Megatokyo"
+    Publisher="CN=Aarklendoïa"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="A0AC9357-BBD3-4371-9B13-39CD6F58A795" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="0e740f5a-f596-4a84-8a3a-ca039df3c3cc" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Megatokyo.Client</DisplayName>
-    <PublisherDisplayName>edoua</PublisherDisplayName>
+    <DisplayName>Megatokyo</DisplayName>
+    <PublisherDisplayName>Aarklendoïa</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 

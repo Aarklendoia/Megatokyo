@@ -8,11 +8,6 @@ namespace Megatokyo.Client.Tests.MSTest
     [TestClass]
     public class Tests
     {
-        [TestMethod]
-        public void TestMethod1()
-        {
-        }
-
         // TODO: Add tests for functionality you add to MainViewModel.
         [TestMethod]
         public void TestMainViewModelCreation()

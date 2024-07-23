@@ -1,7 +1,7 @@
-﻿using Megatokyo.Client.Core.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Megatokyo.Client.Core.Models;
 using Megatokyo.Client.Core.Services;
 using Megatokyo.Client.Helpers;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;

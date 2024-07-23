@@ -1,7 +1,7 @@
-﻿using Megatokyo.Client.Core;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Megatokyo.Client.Core;
 using Megatokyo.Client.Core.Models;
 using Megatokyo.Client.Core.Services;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
