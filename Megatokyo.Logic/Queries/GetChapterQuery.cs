@@ -4,28 +4,16 @@ using Megatokyo.Logic.Interfaces;
 
 namespace Megatokyo.Logic.Queries
 {
-    public class GetChapterQuery : IRequest<Chapter>
+    public class GetChapterQuery(string category) : IRequest<Chapter>
     {
-        public string Category { get; set; }
-
-        public GetChapterQuery(string category)
-        {
-            Category = category;
-        }
+        public string Category { get; set; } = category;
     }
 
-    public class GetChapterQueryHandler : IRequestHandler<GetChapterQuery, Chapter>
+    public class GetChapterQueryHandler(IChapterRepository entityRepository) : IRequestHandler<GetChapterQuery, Chapter>
     {
-        private readonly IChapterRepository _chapterRepository;
-
-        public GetChapterQueryHandler(IChapterRepository entityRepository)
-        {
-            _chapterRepository = entityRepository;
-        }
-
         public async Task<Chapter> Handle(GetChapterQuery request, CancellationToken cancellationToken)
         {
-            return await _chapterRepository.GetAsync(request.Category);
+            return await entityRepository.GetAsync(request.Category);
         }
     }
 }

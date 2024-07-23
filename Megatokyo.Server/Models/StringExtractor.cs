@@ -7,24 +7,14 @@
     /// <summary>
     /// Extracts a string from a text.
     /// </summary>
-    public class StringExtractor
+    public class StringExtractor(string text)
     {
-        private string _text;
-        private int _length;
-        private string _startDelimiter;
+        private string _startDelimiter = string.Empty;
 
         /// <summary>
         /// Position at which to start the search for the channel to be extracted. Automatically changes after each extraction.
         /// </summary>
-        public int Offset { get; set; }
-
-        public StringExtractor(string text)
-        {
-            _text = text;
-            Offset = 0;
-            _length = 0;
-            _startDelimiter = string.Empty;
-        }
+        public int Offset { get; set; } = 0;
 
         /// <summary>
         /// Extracts the text string between the two delimiters.
@@ -35,13 +25,10 @@
         /// <returns>Extracted string contained between the two delimiters.</returns>
         public string Extract(string startDelimiter, string endDelimiter, bool includeDelimiters)
         {
-            if (endDelimiter == null)
-            {
-                throw new ArgumentNullException(nameof(endDelimiter));
-            }
+            ArgumentNullException.ThrowIfNullOrEmpty(endDelimiter);
 
             _startDelimiter = startDelimiter ?? throw new ArgumentNullException(nameof(startDelimiter));
-            if (Offset > _text.Length)
+            if (Offset > text.Length)
             {
                 throw new ExtractorException();
             }
@@ -49,7 +36,7 @@
             {
                 throw new ExtractorException();
             }
-            if (_text.IndexOf(startDelimiter, Offset, StringComparison.InvariantCultureIgnoreCase) == -1)
+            if (text.IndexOf(startDelimiter, Offset, StringComparison.InvariantCultureIgnoreCase) == -1)
             {
                 throw new ExtractorException();
             }
@@ -57,17 +44,17 @@
             int startPosition;
             if (includeDelimiters)
             {
-                startPosition = _text.IndexOf(startDelimiter, Offset, StringComparison.InvariantCultureIgnoreCase);
+                startPosition = text.IndexOf(startDelimiter, Offset, StringComparison.InvariantCultureIgnoreCase);
             }
             else
             {
-                startPosition = _text.IndexOf(startDelimiter, Offset, StringComparison.InvariantCultureIgnoreCase) + startDelimiter.Length;
+                startPosition = text.IndexOf(startDelimiter, Offset, StringComparison.InvariantCultureIgnoreCase) + startDelimiter.Length;
             }
-            if (startPosition > _text.Length)
+            if (startPosition > text.Length)
             {
                 throw new ExtractorException();
             }
-            if (_text.IndexOf(endDelimiter, startPosition, StringComparison.InvariantCultureIgnoreCase) == -1)
+            if (text.IndexOf(endDelimiter, startPosition, StringComparison.InvariantCultureIgnoreCase) == -1)
             {
                 throw new ExtractorException();
             }
@@ -75,17 +62,17 @@
             int endPosition;
             if (includeDelimiters)
             {
-                endPosition = _text.IndexOf(endDelimiter, startPosition, StringComparison.InvariantCultureIgnoreCase) + endDelimiter.Length;
+                endPosition = text.IndexOf(endDelimiter, startPosition, StringComparison.InvariantCultureIgnoreCase) + endDelimiter.Length;
                 Offset = endPosition;
             }
             else
             {
-                endPosition = _text.IndexOf(endDelimiter, startPosition, StringComparison.InvariantCultureIgnoreCase);
+                endPosition = text.IndexOf(endDelimiter, startPosition, StringComparison.InvariantCultureIgnoreCase);
                 Offset = endPosition + endDelimiter.Length;
             }
 
-            _length = endPosition - startPosition;
-            string extractedValue = _text.Substring(startPosition, _length);
+            var length = endPosition - startPosition;
+            string extractedValue = text.Substring(startPosition, length);
             return extractedValue;
         }
 
@@ -97,17 +84,14 @@
         /// <returns>Extracted string contained between the two delimiters.</returns>
         public string Extract(string endDelimiter, bool includeDelimiters)
         {
-            if (endDelimiter == null)
-            {
-                throw new ArgumentNullException(nameof(endDelimiter));
-            }
+            ArgumentNullException.ThrowIfNullOrEmpty(endDelimiter);
 
             int startPosition = Offset;
-            if (startPosition > _text.Length)
+            if (startPosition > text.Length)
             {
                 throw new ExtractorException();
             }
-            if (_text.IndexOf(endDelimiter, startPosition, StringComparison.InvariantCultureIgnoreCase) == -1)
+            if (text.IndexOf(endDelimiter, startPosition, StringComparison.InvariantCultureIgnoreCase) == -1)
             {
                 throw new ExtractorException();
             }
@@ -116,17 +100,17 @@
             if (includeDelimiters)
             {
                 startPosition -= _startDelimiter.Length;
-                endPosition = _text.IndexOf(endDelimiter, startPosition + _startDelimiter.Length, StringComparison.InvariantCultureIgnoreCase) + endDelimiter.Length;
+                endPosition = text.IndexOf(endDelimiter, startPosition + _startDelimiter.Length, StringComparison.InvariantCultureIgnoreCase) + endDelimiter.Length;
                 Offset = endPosition;
             }
             else
             {
-                endPosition = _text.IndexOf(endDelimiter, startPosition, StringComparison.InvariantCultureIgnoreCase);
+                endPosition = text.IndexOf(endDelimiter, startPosition, StringComparison.InvariantCultureIgnoreCase);
                 Offset = endPosition + endDelimiter.Length;
             }
 
-            _length = endPosition - startPosition;
-            string extractedValue = _text.Substring(startPosition, _length);
+            var length = endPosition - startPosition;
+            string extractedValue = text.Substring(startPosition, length);
             return extractedValue;
         }
 
@@ -140,14 +124,11 @@
         /// <returns>Indicates whether a new search for a channel to be deleted is possible.</returns>
         public bool Remove(string startDelimiter, string endDelimiter, bool includeDelimiters, out string content)
         {
-            if (endDelimiter == null)
-            {
-                throw new ArgumentNullException(nameof(endDelimiter));
-            }
+            ArgumentNullException.ThrowIfNullOrEmpty(endDelimiter);
 
             bool canContinue = true;
             _startDelimiter = startDelimiter ?? throw new ArgumentNullException(nameof(startDelimiter));
-            if (Offset > _text.Length)
+            if (Offset > text.Length)
             {
                 throw new ExtractorException();
             }
@@ -155,7 +136,7 @@
             {
                 throw new ExtractorException();
             }
-            if (_text.IndexOf(startDelimiter, Offset, StringComparison.InvariantCultureIgnoreCase) == -1)
+            if (text.IndexOf(startDelimiter, Offset, StringComparison.InvariantCultureIgnoreCase) == -1)
             {
                 canContinue = false;
             }
@@ -166,36 +147,36 @@
             {
                 if (includeDelimiters)
                 {
-                    startPosition = _text.IndexOf(startDelimiter, Offset, StringComparison.InvariantCultureIgnoreCase);
+                    startPosition = text.IndexOf(startDelimiter, Offset, StringComparison.InvariantCultureIgnoreCase);
                 }
                 else
                 {
-                    startPosition = _text.IndexOf(startDelimiter, Offset, StringComparison.InvariantCultureIgnoreCase) + startDelimiter.Length;
+                    startPosition = text.IndexOf(startDelimiter, Offset, StringComparison.InvariantCultureIgnoreCase) + startDelimiter.Length;
                 }
 
-                if (startPosition > _text.Length)
+                if (startPosition > text.Length)
                 {
                     throw new ExtractorException();
                 }
 
-                if (_text.IndexOf(endDelimiter, startPosition, StringComparison.InvariantCultureIgnoreCase) == -1)
+                if (text.IndexOf(endDelimiter, startPosition, StringComparison.InvariantCultureIgnoreCase) == -1)
                 {
                     throw new ExtractorException();
                 }
 
                 if (includeDelimiters)
                 {
-                    endPosition = _text.IndexOf(endDelimiter, startPosition, StringComparison.InvariantCultureIgnoreCase) + endDelimiter.Length;
+                    endPosition = text.IndexOf(endDelimiter, startPosition, StringComparison.InvariantCultureIgnoreCase) + endDelimiter.Length;
                 }
                 else
                 {
-                    endPosition = _text.IndexOf(endDelimiter, startPosition, StringComparison.InvariantCultureIgnoreCase);
+                    endPosition = text.IndexOf(endDelimiter, startPosition, StringComparison.InvariantCultureIgnoreCase);
                 }
             }
             Offset = startPosition;
-            _length = endPosition - startPosition;
-            _text = _text.Remove(startPosition, _length);
-            content = _text;
+            var length = endPosition - startPosition;
+            text = text.Remove(startPosition, length);
+            content = text;
             return canContinue;
         }
     }

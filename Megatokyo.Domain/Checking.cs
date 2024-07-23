@@ -2,16 +2,9 @@
 {
     public class Checking
     {
-        public int Id { get; set; }
-        public DateTimeOffset LastCheck { get; set; }
-        public int LastStripNumber { get; set; }
-        public int LastRantNumber { get; set; }
-
-        public Checking(DateTimeOffset lastCheck, int lastRantNumber, int lastStripNumber)
-        {
-            LastCheck = lastCheck;
-            LastRantNumber = lastRantNumber;
-            LastStripNumber = lastStripNumber;
-        }
+        public int Id { get; set; } = 0;
+        public DateTimeOffset LastCheck { get; set; } = DateTimeOffset.MinValue;
+        public int LastStripNumber { get; set; } = 0;
+        public int LastRantNumber { get; set; } = 0;
     }
 }

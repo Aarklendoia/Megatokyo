@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Megatokyo.Infrastructure.Migrations
 {
-    [DbContext(typeof(APIContext))]
+    [DbContext(typeof(ApiContext))]
     [Migration("20221112094441_InitialCreate")]
     partial class InitialCreate
     {

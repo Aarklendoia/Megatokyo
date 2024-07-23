@@ -5,11 +5,11 @@ using System.Globalization;
 
 namespace Megatokyo.Server.Models.Parsers
 {
-    internal class ChaptersParser
+    internal static class ChaptersParser
     {
         public static IEnumerable<Chapter> Parse(Uri url)
         {
-            List<Chapter> chapters = new();
+            List<Chapter> chapters = [];
             HtmlWeb web = new();
             HtmlDocument htmlDoc = web.Load(url);
             HtmlNodeCollection nodes = htmlDoc.DocumentNode.SelectNodes("//body/div[@id='typelinks']/div/ul/li/a");
@@ -36,7 +36,12 @@ namespace Megatokyo.Server.Models.Parsers
                     title = stringExtractor.Extract(">", "<", false);
                 }
                 categoryExtractor.Remove("ar", "#", true, out string category);
-                chapters.Add(new Chapter(number, title, category));
+                chapters.Add(new Chapter()
+                {
+                    Number = number,
+                    Category = category,
+                    Title = title
+                });
             }
             return chapters;
         }

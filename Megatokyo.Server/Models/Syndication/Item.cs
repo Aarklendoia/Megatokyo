@@ -2,20 +2,10 @@
 {
     internal class Item
     {
-        public string Link { get; set; }
-        public string Title { get; set; }
-        public string Content { get; set; }
-        public DateTime PublishDate { get; set; }
-        public FeedType FeedType { get; set; }
-
-        public Item()
-
-        {
-            Link = "";
-            Title = "";
-            Content = "";
-            PublishDate = DateTime.Today;
-            FeedType = FeedType.RSS;
-        }
+        public string Link { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
+        public string Content { get; set; } = string.Empty;
+        public DateTime PublishDate { get; set; } = DateTime.Today;
+        public FeedType FeedType { get; set; } = FeedType.RSS;
     }
 }

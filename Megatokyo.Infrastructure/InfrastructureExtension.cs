@@ -11,7 +11,7 @@ namespace Megatokyo.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            services.AddDbContext<APIContext>(options =>
+            services.AddDbContext<ApiContext>(options =>
             {
                 var connectionString = new SqliteConnectionStringBuilder("FileName=Megatokyo.db").ToString();
                 options.UseSqlite(connectionString);

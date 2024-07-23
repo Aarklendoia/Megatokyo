@@ -6,7 +6,7 @@ namespace Megatokyo.Logic.Interfaces
     {
         Task<IEnumerable<Rant>> GetAllAsync();
         Task<Rant> GetAsync(int number);
-        Task<Rant> CreateAsync(Rant rantDomain);
+        Task<Rant> CreateAsync(Rant rant);
         Task<int> SaveAsync();
     }
 }

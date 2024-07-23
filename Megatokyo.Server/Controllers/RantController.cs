@@ -3,7 +3,7 @@ using AutoMapper;
 using MediatR;
 using Megatokyo.Domain;
 using Megatokyo.Logic.Queries;
-using Megatokyo.Server.DTO.v1;
+using Megatokyo.Server.Dto.v1;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Megatokyo.Server.Controllers
@@ -26,7 +26,7 @@ namespace Megatokyo.Server.Controllers
         /// <response code="200">Return in case the list have some rants.</response>
         /// <response code="204">Return in case the list is empty.</response>
         /// <response code="500">Return in case of internal server error.</response> 
-        [ProducesResponseType(typeof(List<RantOutputDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<RantOutputDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet(Name = nameof(GetAllRants))]
@@ -35,7 +35,7 @@ namespace Megatokyo.Server.Controllers
             IEnumerable<Rant> rants = await mediator.Send(new GetAllRantsQuery());
             if (!rants.Any())
                 return NoContent();
-            IEnumerable<RantOutputDTO> rantsOutputDTO = mapper.Map<IEnumerable<RantOutputDTO>>(rants);
+            IEnumerable<RantOutputDto> rantsOutputDTO = mapper.Map<IEnumerable<RantOutputDto>>(rants);
             return Ok(rantsOutputDTO);
         }
 
@@ -47,7 +47,7 @@ namespace Megatokyo.Server.Controllers
         /// <response code="200">Return in case the rant exists.</response>
         /// <response code="404">Returned in case the rant is not found.</response>*
         /// <response code="500">Return in case of internal server error.</response>
-        [ProducesResponseType(typeof(RantOutputDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(RantOutputDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -57,7 +57,7 @@ namespace Megatokyo.Server.Controllers
             Rant rant = await mediator.Send(new GetRantQuery(number));
             if (rant == default)
                 return NotFound();
-            return Ok(rant);
+            return Ok(mapper.Map<RantOutputDto>(rant));
         }
     }
 

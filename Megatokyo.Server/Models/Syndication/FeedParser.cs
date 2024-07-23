@@ -19,10 +19,7 @@ namespace Megatokyo.Server.Models.Syndication
 
         public virtual IList<Item> ParseAtom(Uri url)
         {
-            if (url == null)
-            {
-                throw new ArgumentNullException(nameof(url));
-            }
+            ArgumentNullException.ThrowIfNull(url);
 
             try
             {
@@ -41,26 +38,23 @@ namespace Megatokyo.Server.Models.Syndication
                                                 };
                     return entries.ToList();
                 }
-                return new List<Item>();
+                return [];
             }
             catch (UriFormatException e)
             {
                 Debug.WriteLine(e.Message);
-                return new List<Item>();
+                return [];
             }
             catch (FileNotFoundException e)
             {
                 Debug.WriteLine(e.Message);
-                return new List<Item>();
+                return [];
             }
         }
 
         public virtual IList<Item> ParseRss(Uri url)
         {
-            if (url == null)
-            {
-                throw new ArgumentNullException(nameof(url));
-            }
+            ArgumentNullException.ThrowIfNull(url);
 
             try
             {
@@ -79,26 +73,23 @@ namespace Megatokyo.Server.Models.Syndication
                                                 };
                     return entries.ToList();
                 }
-                return new List<Item>();
+                return [];
             }
             catch (UriFormatException e)
             {
                 Debug.WriteLine(e.Message);
-                return new List<Item>();
+                return [];
             }
             catch (FileNotFoundException e)
             {
                 Debug.WriteLine(e.Message);
-                return new List<Item>();
+                return [];
             }
         }
 
         public virtual IList<Item> ParseRdf(Uri url)
         {
-            if (url == null)
-            {
-                throw new ArgumentNullException(nameof(url));
-            }
+            ArgumentNullException.ThrowIfNull(url);
 
             try
             {
@@ -117,23 +108,23 @@ namespace Megatokyo.Server.Models.Syndication
                                                 };
                     return entries.ToList();
                 }
-                return new List<Item>();
+                return [];
             }
             catch (UriFormatException e)
             {
                 Debug.WriteLine(e.Message);
-                return new List<Item>();
+                return [];
             }
             catch (FileNotFoundException e)
             {
                 Debug.WriteLine(e.Message);
-                return new List<Item>();
+                return [];
             }
         }
 
         private static DateTime ParseDate(string date)
         {
-            if (DateTime.TryParse(date, out DateTime result))
+            if (DateTime.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime result))
             {
                 return result;
             }

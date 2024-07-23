@@ -7,7 +7,7 @@ namespace Megatokyo.Logic.Interfaces
         Task<IEnumerable<Strip>> GetAllAsync();
         Task<IEnumerable<Strip>> GetCategoryAsync(string category);
         Task<Strip> GetAsync(int number);
-        Task<Strip> CreateAsync(Strip rantDomain);
+        Task<Strip> CreateAsync(Strip strip);
         Task<int> SaveAsync();
     }
 }

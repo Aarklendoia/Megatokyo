@@ -4,28 +4,16 @@ using Megatokyo.Logic.Interfaces;
 
 namespace Megatokyo.Logic.Commands
 {
-    public class CreateStripCommand : IRequest<Strip>
+    public class CreateStripCommand(Strip stripToCreate) : IRequest<Strip>
     {
-        public Strip StripToCreate { get; }
-
-        public CreateStripCommand(Strip stripToCreate)
-        {
-            StripToCreate = stripToCreate;
-        }
+        public Strip StripToCreate { get; } = stripToCreate;
     }
 
-    public class CreateStripCommandHandler : IRequestHandler<CreateStripCommand, Strip>
+    public class CreateStripCommandHandler(IStripRepository stripRepository) : IRequestHandler<CreateStripCommand, Strip>
     {
-        private readonly IStripRepository _stripRepository;
-
-        public CreateStripCommandHandler(IStripRepository stripRepository)
-        {
-            _stripRepository = stripRepository;
-        }
-
         public async Task<Strip> Handle(CreateStripCommand request, CancellationToken cancellationToken)
         {
-            return await _stripRepository.CreateAsync(request.StripToCreate);
+            return await stripRepository.CreateAsync(request.StripToCreate);
         }
     }
 }

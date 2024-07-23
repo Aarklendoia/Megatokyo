@@ -1,6 +1,6 @@
-﻿namespace Megatokyo.Server.DTO.v1
+﻿namespace Megatokyo.Server.Dto.v1
 {
-    internal class StripOutputDTO
+    internal class StripOutputDto
     {
         public int Number { get; set; }
         public string Title { get; set; } = string.Empty;

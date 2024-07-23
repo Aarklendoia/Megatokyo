@@ -4,28 +4,16 @@ using Megatokyo.Logic.Interfaces;
 
 namespace Megatokyo.Logic.Queries
 {
-    public class GetRantQuery : IRequest<Rant>
+    public class GetRantQuery(int number) : IRequest<Rant>
     {
-        public int Number { get; set; }
-
-        public GetRantQuery(int number)
-        {
-            Number = number;
-        }
+        public int Number { get; set; } = number;
     }
 
-    public class GetRantQueryHandler : IRequestHandler<GetRantQuery, Rant>
+    public class GetRantQueryHandler(IRantRepository entityRepository) : IRequestHandler<GetRantQuery, Rant>
     {
-        private readonly IRantRepository _rantRepository;
-
-        public GetRantQueryHandler(IRantRepository entityRepository)
-        {
-            _rantRepository = entityRepository;
-        }
-
         public async Task<Rant> Handle(GetRantQuery request, CancellationToken cancellationToken)
         {
-            return await _rantRepository.GetAsync(request.Number);
+            return await entityRepository.GetAsync(request.Number);
         }
     }
 }

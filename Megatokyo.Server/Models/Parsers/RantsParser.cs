@@ -16,7 +16,7 @@ namespace Megatokyo.Server.Models.Parsers
 
         public static List<Rant> Parse(int stripNumber, int stripNumberMax)
         {
-            List<Rant> rants = new();
+            List<Rant> rants = [];
             HtmlWeb web = new();
             for (int index = stripNumber; index <= stripNumberMax; index++)
             {
@@ -40,7 +40,7 @@ namespace Megatokyo.Server.Models.Parsers
             StringExtractor stringExtractor = new(node.Attributes["id"].Value);
             stringExtractor.Remove("r", "t", true, out string extractednumber);
             int number = int.Parse(extractednumber, CultureInfo.InvariantCulture);
-            if (rants.Where(r => r.Number == number).Any())
+            if (rants.Exists(r => r.Number == number))
             {
                 return null;
             }
@@ -50,7 +50,15 @@ namespace Megatokyo.Server.Models.Parsers
             DateTimeOffset publishDate = DateTime.ParseExact(node.SelectSingleNode(".//p[contains(@class,'date')]").InnerHtml, "dddd - MMMM d, yyyy", new CultureInfo("en-US"));
             Uri url = new("https://megatokyo.com/" + node.SelectSingleNode(".//img").Attributes["src"].Value);
             string content = node.SelectSingleNode(".//div[contains(@class,'rantbody')]").InnerHtml;
-            return new Rant(title, number, author, url, publishDate, content);
+            return new Rant()
+            {
+                Number = number,
+                Author = author,
+                Title = title,
+                PublishDate = publishDate,
+                Url = url,
+                Content = content
+            };
         }
     }
 }

@@ -7,39 +7,30 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Megatokyo.Infrastructure.Repository.EF
 {
-    public class RantMapRepository : IRantRepository
+    public class RantMapRepository(ApiContext dataContext, IMapper mapper) : IRantRepository
     {
-        private readonly APIContext _context;
-        private readonly IMapper _mapper;
-
-        public RantMapRepository(APIContext dataContext, IMapper mapper)
-        {
-            _context = dataContext;
-            _mapper = mapper;
-        }
-
         public async Task<IEnumerable<Rant>> GetAllAsync()
         {
-            IEnumerable<RantEntity> rants = await _context.Rants.ToListAsync();
-            return _mapper.Map<IEnumerable<Rant>>(rants);
+            IEnumerable<RantEntity> rants = await dataContext.Rants.ToListAsync();
+            return mapper.Map<IEnumerable<Rant>>(rants);
         }
 
         public async Task<Rant> GetAsync(int number)
         {
-            RantEntity? rant = await _context.Rants.SingleOrDefaultAsync(rant => rant.Number == number);
-            return _mapper.Map<Rant>(rant);
+            RantEntity? rant = await dataContext.Rants.SingleOrDefaultAsync(rant => rant.Number == number);
+            return mapper.Map<Rant>(rant);
         }
 
-        public async Task<Rant> CreateAsync(Rant rantDomain)
+        public async Task<Rant> CreateAsync(Rant rant)
         {
-            RantEntity? rantEntity = _mapper.Map<RantEntity>(rantDomain);
-            EntityEntry<RantEntity> entity = await _context.Rants.AddAsync(rantEntity);
-            return _mapper.Map<Rant>(entity.Entity);
+            RantEntity? rantEntity = mapper.Map<RantEntity>(rant);
+            EntityEntry<RantEntity> entity = await dataContext.Rants.AddAsync(rantEntity);
+            return mapper.Map<Rant>(entity.Entity);
         }
 
         public async Task<int> SaveAsync()
         {
-            return await _context.SaveChangesAsync();
+            return await dataContext.SaveChangesAsync();
         }
     }
 }

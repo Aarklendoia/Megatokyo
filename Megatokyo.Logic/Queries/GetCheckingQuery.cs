@@ -4,28 +4,16 @@ using Megatokyo.Logic.Interfaces;
 
 namespace Megatokyo.Logic.Queries
 {
-    public class GetCheckingQuery : IRequest<Checking>
+    public class GetCheckingQuery(int number) : IRequest<Checking>
     {
-        public int Number { get; set; }
-
-        public GetCheckingQuery(int number)
-        {
-            Number = number;
-        }
+        public int Number { get; set; } = number;
     }
 
-    public class GetCheckingQueryHandler : IRequestHandler<GetCheckingQuery, Checking>
+    public class GetCheckingQueryHandler(ICheckingRepository entityRepository) : IRequestHandler<GetCheckingQuery, Checking>
     {
-        private readonly ICheckingRepository _checkingRepository;
-
-        public GetCheckingQueryHandler(ICheckingRepository entityRepository)
-        {
-            _checkingRepository = entityRepository;
-        }
-
         public async Task<Checking> Handle(GetCheckingQuery request, CancellationToken cancellationToken)
         {
-            return await _checkingRepository.GetAsync(request.Number);
+            return await entityRepository.GetAsync(request.Number);
         }
     }
 }

@@ -16,26 +16,24 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace Megatokyo.Infrastructure.Repository.EF
 {
-    public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<APIContext>
+    public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApiContext>
     {
-        public APIContext CreateDbContext(string[] args)
+        public ApiContext CreateDbContext(string[] args)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<APIContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<ApiContext>();
             optionsBuilder.UseSqlite(new SqliteConnectionStringBuilder("FileName=Megatokyo.db").ToString());
 
-            return new APIContext(optionsBuilder.Options);
+            return new ApiContext(optionsBuilder.Options);
         }
     }
 
-    public class APIContext : DbContext
+    public class ApiContext(DbContextOptions<ApiContext> options) : DbContext(options)
     {
         public DbSet<ChapterEntity> Chapters { get; set; } = null!;
         public DbSet<StripEntity> Strips { get; set; } = null!;
         public DbSet<RantEntity> Rants { get; set; } = null!;
         //public DbSet<RantsTranslations> RantsTranslations { get; set; }
         public DbSet<CheckingEntity> Checking { get; set; } = null!;
-
-        public APIContext(DbContextOptions<APIContext> options) : base(options) { }
     }
 }
 

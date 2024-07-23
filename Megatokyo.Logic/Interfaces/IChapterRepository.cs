@@ -6,7 +6,7 @@ namespace Megatokyo.Logic.Interfaces
     {
         Task<IEnumerable<Chapter>> GetAllAsync();
         Task<Chapter> GetAsync(string category);
-        Task<Chapter> CreateAsync(Chapter chapterDomain);
+        Task<Chapter> CreateAsync(Chapter chapter);
         Task<int> SaveAsync();
     }
 }

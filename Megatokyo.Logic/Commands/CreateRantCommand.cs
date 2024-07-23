@@ -4,28 +4,16 @@ using Megatokyo.Logic.Interfaces;
 
 namespace Megatokyo.Logic.Commands
 {
-    public class CreateRantCommand : IRequest<Rant>
+    public class CreateRantCommand(Rant rantToCreate) : IRequest<Rant>
     {
-        public Rant RantToCreate { get; }
-
-        public CreateRantCommand(Rant rantToCreate)
-        {
-            RantToCreate = rantToCreate;
-        }
+        public Rant RantToCreate { get; } = rantToCreate;
     }
 
-    public class CreateRantCommandHandler : IRequestHandler<CreateRantCommand, Rant>
+    public class CreateRantCommandHandler(IRantRepository rantRepository) : IRequestHandler<CreateRantCommand, Rant>
     {
-        private readonly IRantRepository _rantRepository;
-
-        public CreateRantCommandHandler(IRantRepository rantRepository)
-        {
-            _rantRepository = rantRepository;
-        }
-
         public async Task<Rant> Handle(CreateRantCommand request, CancellationToken cancellationToken)
         {
-            return await _rantRepository.CreateAsync(request.RantToCreate);
+            return await rantRepository.CreateAsync(request.RantToCreate);
         }
     }
 }

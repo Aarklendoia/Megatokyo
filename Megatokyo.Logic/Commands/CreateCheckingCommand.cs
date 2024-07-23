@@ -4,28 +4,16 @@ using Megatokyo.Logic.Interfaces;
 
 namespace Megatokyo.Logic.Commands
 {
-    public class CreateChapterCommand : IRequest<Chapter>
+    public class CreateChapterCommand(Chapter chapterToCreate) : IRequest<Chapter>
     {
-        public Chapter ChapterToCreate { get; }
-
-        public CreateChapterCommand(Chapter chapterToCreate)
-        {
-            ChapterToCreate = chapterToCreate;
-        }
+        public Chapter ChapterToCreate { get; } = chapterToCreate;
     }
 
-    public class CreateChapterCommandHandler : IRequestHandler<CreateChapterCommand, Chapter>
+    public class CreateChapterCommandHandler(IChapterRepository chapterRepository) : IRequestHandler<CreateChapterCommand, Chapter>
     {
-        private readonly IChapterRepository _chapterRepository;
-
-        public CreateChapterCommandHandler(IChapterRepository chapterRepository)
-        {
-            _chapterRepository = chapterRepository;
-        }
-
         public async Task<Chapter> Handle(CreateChapterCommand request, CancellationToken cancellationToken)
         {
-            return await _chapterRepository.CreateAsync(request.ChapterToCreate);
+            return await chapterRepository.CreateAsync(request.ChapterToCreate);
         }
     }
 }

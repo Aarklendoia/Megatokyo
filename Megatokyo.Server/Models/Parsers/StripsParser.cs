@@ -13,7 +13,7 @@ namespace Megatokyo.Server.Models.Parsers
 
         public static async Task<List<Strip>> ParseAsync(Uri url, IEnumerable<Chapter> chapters, IEnumerable<Strip> stripsInDatabase)
         {
-            List<Strip> strips = new();
+            List<Strip> strips = [];
             HtmlWeb web = new();
             HtmlDocument htmlDoc = web.Load(url);
 
@@ -39,9 +39,16 @@ namespace Megatokyo.Server.Models.Parsers
             int number = int.Parse(node.Attributes["name"].Value, CultureInfo.InvariantCulture);
             string title = WebUtility.HtmlDecode(stringExtractor.Extract(" - ", "<", false));
             Uri url = new("https://megatokyo.com/strips/" + number.ToString("D4", CultureInfo.InvariantCulture));
-            if (!stripsInDatabase.Where(s => s.Number == number).Any())
+            if (!stripsInDatabase.Any(s => s.Number == number))
             {
-                Strip strip = new(chapter.Category, number, title, url, publishDate);
+                Strip strip = new()
+                {
+                    Category = chapter.Category,
+                    Number = number,
+                    Title = title,
+                    Url = url,
+                    PublishDate = publishDate
+                };
                 if (await GetFileTypeAsync(strip))
                 {
                     return strip;

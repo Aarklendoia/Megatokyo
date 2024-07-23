@@ -8,21 +8,12 @@ using System.Globalization;
 
 namespace Megatokyo.Server.Models
 {
-    internal class FeedManager
+    internal class FeedManager(IMediator mediator)
     {
-        private readonly IMediator _mediator;
-
-        public List<Strip> Strips { get; }
-        public List<Rant> Rants { get; }
+        public List<Strip> Strips { get; } = [];
+        public List<Rant> Rants { get; } = [];
         public int LastStripNumber { get; private set; }
         public int LastRantNumber { get; private set; }
-
-        public FeedManager(IMediator mediator)
-        {
-            _mediator = mediator;
-            Strips = new List<Strip>();
-            Rants = new List<Rant>();
-        }
 
         public async Task LoadAsync()
         {
@@ -32,15 +23,15 @@ namespace Megatokyo.Server.Models
             FeedParser feedParser = new();
             IList<Item> items = feedParser.ParseRss(new Uri("https://megatokyo.com/rss/megatokyo.xml"));
 
-            Checking checking = await _mediator.Send(new GetCheckingQuery(1));
+            Checking checking = await mediator.Send(new GetCheckingQuery(1));
             if (checking == null)
             {
-                checking = new(DateTimeOffset.MinValue, 0, 0);
-                await _mediator.Send(new CreateCheckingCommand(checking));
+                checking = new();
+                await mediator.Send(new CreateCheckingCommand(checking));
             }
 
 #if DEBUG
-            DateTimeOffset lastCheck = DateTime.Now.AddDays(-30);
+            DateTimeOffset lastCheck = DateTime.Now.AddDays(-700);
 #else
             DateTimeOffset lastCheck = checking.LastCheck;
 #endif
@@ -54,8 +45,11 @@ namespace Megatokyo.Server.Models
                     if (item.Title.StartsWith("Comic", StringComparison.InvariantCulture))
                     {
                         StringExtractor stringExtractor = new(item.Title);
-                        Strip strip = new(int.Parse(stringExtractor.Extract("[", "]", false), NumberStyles.Integer, CultureInfo.InvariantCulture));
-                        if (await _mediator.Send(new GetStripQuery(strip.Number)) != null)
+                        Strip strip = new()
+                        {
+                            Number = int.Parse(stringExtractor.Extract("[", "]", false), NumberStyles.Integer, CultureInfo.InvariantCulture)
+                        };
+                        if (await mediator.Send(new GetStripQuery(strip.Number)) != null)
                             Strips.Add(strip);
                         checking.LastStripNumber = strip.Number;
                     }
@@ -63,15 +57,18 @@ namespace Megatokyo.Server.Models
                     {
                         StringExtractor stringExtractor = new(item.Title);
                         string number = stringExtractor.Extract("[", "]", false);
-                        Rant rant = new(int.Parse(number, NumberStyles.Integer, CultureInfo.InvariantCulture));
-                        if (await _mediator.Send(new GetRantQuery(rant.Number)) != null)
+                        Rant rant = new()
+                        {
+                            Number = int.Parse(number, NumberStyles.Integer, CultureInfo.InvariantCulture)
+                        };
+                        if (await mediator.Send(new GetRantQuery(rant.Number)) != null)
                             Rants.Add(rant);
                         checking.LastRantNumber = rant.Number;
                     }
                 }
             }
             checking.LastCheck = DateTimeOffset.UtcNow;
-            await _mediator.Send(new UpdateCheckingCommand(checking));
+            await mediator.Send(new UpdateCheckingCommand(checking));
         }
     }
 }

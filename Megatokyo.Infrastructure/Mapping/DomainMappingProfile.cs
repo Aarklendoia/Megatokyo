@@ -8,20 +8,20 @@ namespace Megatokyo.Infrastructure.Mapping
     {
         public DomainMappingProfile()
         {
-            CreateMap<StripEntity, Strip>()
-                .ConstructUsing(stripEntity => new Strip(stripEntity.Category, stripEntity.Number, stripEntity.Title, stripEntity.Url, stripEntity.PublishDate))
+            CreateMap<Strip, StripEntity>()
+                .ForMember(stripEntity => stripEntity.Id, opt => opt.Ignore())
                 .ReverseMap();
 
-            CreateMap<ChapterEntity, Chapter>()
-                .ConstructUsing(chapterEntity => new Chapter(chapterEntity.Number, chapterEntity.Title, chapterEntity.Category))
+            CreateMap<Chapter, ChapterEntity>()
+                .ForMember(chapterEntity => chapterEntity.Id, opt => opt.Ignore())
                 .ReverseMap();
 
-            CreateMap<RantEntity, Rant>()
-                .ConstructUsing(rantEntity => new Rant(rantEntity.Title, rantEntity.Number, rantEntity.Author, rantEntity.Url, rantEntity.PublishDate, rantEntity.Content))
+            CreateMap<Rant, RantEntity>()
+                .ForMember(rantEntity => rantEntity.Id, opt => opt.Ignore())
                 .ReverseMap();
 
-            CreateMap<CheckingEntity, Checking>()
-                .ConstructUsing(checkingEntity => new Checking(checkingEntity.LastCheck, checkingEntity.LastRantNumber, checkingEntity.LastStripNumber))
+            CreateMap<Checking, CheckingEntity>()
+                .ForMember(checkingEntity => checkingEntity.Id, opt => opt.Ignore())
                 .ReverseMap();
         }
     }

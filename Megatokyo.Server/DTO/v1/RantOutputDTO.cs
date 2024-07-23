@@ -1,6 +1,6 @@
-﻿namespace Megatokyo.Server.DTO.v1
+﻿namespace Megatokyo.Server.Dto.v1
 {
-    internal class RantOutputDTO
+    internal class RantOutputDto
     {
         public int RantId { get; set; }
         public string Title { get; set; } = string.Empty;

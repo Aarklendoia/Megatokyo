@@ -132,6 +132,11 @@
             Extracts a string from a text.
             </summary>
         </member>
+        <member name="M:Megatokyo.Models.StringExtractor.#ctor(System.String)">
+            <summary>
+            Extracts a string from a text.
+            </summary>
+        </member>
         <member name="P:Megatokyo.Models.StringExtractor.Offset">
             <summary>
             Position at which to start the search for the channel to be extracted. Automatically changes after each extraction.

@@ -6,23 +6,13 @@ namespace Megatokyo.Logic.Queries
 {
     public class GetAllStripsQuery : IRequest<IEnumerable<Strip>>
     {
-        public GetAllStripsQuery()
-        {
-        }
     }
 
-    public class GetAllStripsQueryHandler : IRequestHandler<GetAllStripsQuery, IEnumerable<Strip>>
+    public class GetAllStripsQueryHandler(IStripRepository entityRepository) : IRequestHandler<GetAllStripsQuery, IEnumerable<Strip>>
     {
-        private readonly IStripRepository _stripRepository;
-
-        public GetAllStripsQueryHandler(IStripRepository entityRepository)
-        {
-            _stripRepository = entityRepository;
-        }
-
         public async Task<IEnumerable<Strip>> Handle(GetAllStripsQuery request, CancellationToken cancellationToken)
         {
-            return await _stripRepository.GetAllAsync();
+            return await entityRepository.GetAllAsync();
         }
     }
 }

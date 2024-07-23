@@ -1,6 +1,5 @@
 ﻿using Megatokyo.Models;
 using Shouldly;
-using Xunit;
 
 namespace Megatokyo.Server.UnitTest
 {
@@ -63,6 +62,34 @@ namespace Megatokyo.Server.UnitTest
         }
 
         [Fact]
+        public void TestExtractStartDelimiterNull()
+        {
+            StringExtractor stringExtractor = new(TEST_STRING);
+            Should.Throw<ArgumentNullException>(() => stringExtractor.Extract(null!, "&", false));
+        }
+
+        [Fact]
+        public void TestExtractEndDelimiterNull()
+        {
+            StringExtractor stringExtractor = new(TEST_STRING);
+            Should.Throw<ArgumentNullException>(() => stringExtractor.Extract("#", null!, false));
+        }
+
+        [Fact]
+        public void TestExtractStartDelimiterEmpty()
+        {
+            StringExtractor stringExtractor = new(TEST_STRING);
+            Should.Throw<ExtractorException>(() => stringExtractor.Extract("", "&", false));
+        }
+
+        [Fact]
+        public void TestExtractEndDelimiterEmpty()
+        {
+            StringExtractor stringExtractor = new(TEST_STRING);
+            Should.Throw<ArgumentException>(() => stringExtractor.Extract("#", "", false));
+        }
+
+        [Fact]
         public void TestExtractWithAutomaticOffsetNoDelimiters()
         {
             StringExtractor stringExtractor = new(TEST_STRING);
@@ -98,7 +125,7 @@ namespace Megatokyo.Server.UnitTest
         }
 
         [Fact]
-        public void TextRemoveNoDelimiters()
+        public void TestRemoveNoDelimiters()
         {
             StringExtractor stringExtractor = new(TEST_STRING);
 
@@ -115,7 +142,7 @@ namespace Megatokyo.Server.UnitTest
         }
 
         [Fact]
-        public void TextRemoveWithDelimiters()
+        public void TestRemoveWithDelimiters()
         {
             StringExtractor stringExtractor = new(TEST_STRING);
 
@@ -129,6 +156,34 @@ namespace Megatokyo.Server.UnitTest
 
             rest = stringExtractor.Remove("#", "&", true, out _);
             rest.ShouldBe(false);
+        }
+
+        [Fact]
+        public void TestRemoveStartDelimiterNull()
+        {
+            StringExtractor stringExtractor = new(TEST_STRING);
+            Should.Throw<ArgumentNullException>(() => stringExtractor.Remove(null!, "&", false, out _));
+        }
+
+        [Fact]
+        public void TestRemoveEndDelimiterNull()
+        {
+            StringExtractor stringExtractor = new(TEST_STRING);
+            Should.Throw<ArgumentNullException>(() => stringExtractor.Remove("#", null!, false, out _));
+        }
+
+        [Fact]
+        public void TestRemoveStartDelimiterEmpty()
+        {
+            StringExtractor stringExtractor = new(TEST_STRING);
+            Should.Throw<ExtractorException>(() => stringExtractor.Remove("", "&", false, out _));
+        }
+
+        [Fact]
+        public void TestRemoveEndDelimiterEmpty()
+        {
+            StringExtractor stringExtractor = new(TEST_STRING);
+            Should.Throw<ArgumentException>(() => stringExtractor.Remove("#", "", false, out _));
         }
     }
 }

@@ -1,29 +1,21 @@
 ﻿namespace Megatokyo.Server.Models.Services
 {
-    internal class ConsumeScopedServiceHostedService : BackgroundService
+    internal class ConsumeScopedServiceHostedService(IServiceProvider services,
+        ILogger<ConsumeScopedServiceHostedService> logger) : BackgroundService
     {
-        private readonly ILogger<ConsumeScopedServiceHostedService> _logger;
-
-        public ConsumeScopedServiceHostedService(IServiceProvider services,
-            ILogger<ConsumeScopedServiceHostedService> logger)
-        {
-            Services = services;
-            _logger = logger;
-        }
-
-        public IServiceProvider Services { get; }
+        public IServiceProvider Services { get; } = services;
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation(
+            logger.LogInformation(
                 "Consume Scoped Service Hosted Service running.");
 
             await DoWork(stoppingToken);
         }
 
-        private async Task DoWork(CancellationToken stoppingToken)
+        private async Task DoWork(CancellationToken cancellationToken)
         {
-            _logger.LogInformation(
+            logger.LogInformation(
                 "Consume Scoped Service Hosted Service is working.");
 
             using var scope = Services.CreateScope();
@@ -31,15 +23,15 @@
                 scope.ServiceProvider
                     .GetRequiredService<IScopedProcessingService>();
 
-            await scopedProcessingService.DoWork(stoppingToken);
+            await scopedProcessingService.DoWork(cancellationToken);
         }
 
-        public override async Task StopAsync(CancellationToken stoppingToken)
+        public override async Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation(
+            logger.LogInformation(
                 "Consume Scoped Service Hosted Service is stopping.");
 
-            await base.StopAsync(stoppingToken);
+            await base.StopAsync(cancellationToken);
         }
     }
 }

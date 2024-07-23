@@ -4,28 +4,16 @@ using Megatokyo.Logic.Interfaces;
 
 namespace Megatokyo.Logic.Commands
 {
-    public class UpdateCheckingCommand : IRequest<Checking>
+    public class UpdateCheckingCommand(Checking checkingToUpdate) : IRequest<Checking>
     {
-        public Checking CheckingToUpdate { get; }
-
-        public UpdateCheckingCommand(Checking checkingToUpdate)
-        {
-            CheckingToUpdate = checkingToUpdate;
-        }
+        public Checking CheckingToUpdate { get; } = checkingToUpdate;
     }
 
-    public class UpdateCheckingCommandHandler : IRequestHandler<UpdateCheckingCommand, Checking>
+    public class UpdateCheckingCommandHandler(ICheckingRepository checkingRepository) : IRequestHandler<UpdateCheckingCommand, Checking>
     {
-        private readonly ICheckingRepository _checkingRepository;
-
-        public UpdateCheckingCommandHandler(ICheckingRepository checkingRepository)
-        {
-            _checkingRepository = checkingRepository;
-        }
-
         public async Task<Checking> Handle(UpdateCheckingCommand request, CancellationToken cancellationToken)
         {
-            return await _checkingRepository.UpdateAsync(request.CheckingToUpdate);
+            return await checkingRepository.UpdateAsync(request.CheckingToUpdate);
         }
     }
 }

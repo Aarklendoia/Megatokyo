@@ -3,7 +3,7 @@ using AutoMapper;
 using MediatR;
 using Megatokyo.Domain;
 using Megatokyo.Logic.Queries;
-using Megatokyo.Server.DTO.v1;
+using Megatokyo.Server.Dto.v1;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Megatokyo.Server.Controllers.v1
@@ -29,7 +29,7 @@ namespace Megatokyo.Server.Controllers.v1
         /// <response code="200">Return in case the list have some strips.</response>
         /// <response code="204">Return in case the list is empty.</response>
         /// <response code="500">Return in case of internal server error.</response> 
-        [ProducesResponseType(typeof(List<StripOutputDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<StripOutputDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet(Name = nameof(GetAllStrips))]
@@ -38,7 +38,7 @@ namespace Megatokyo.Server.Controllers.v1
             IEnumerable<Strip> strips = await mediator.Send(new GetAllStripsQuery());
             if (!strips.Any())
                 return NoContent();
-            IEnumerable<StripOutputDTO> stripsOutputDTO = mapper.Map<IEnumerable<StripOutputDTO>>(strips);
+            IEnumerable<StripOutputDto> stripsOutputDTO = mapper.Map<IEnumerable<StripOutputDto>>(strips);
             return Ok(stripsOutputDTO);
         }
 
@@ -50,7 +50,7 @@ namespace Megatokyo.Server.Controllers.v1
         /// <response code="200">Return in case the strip exists.</response>
         /// <response code="400">Return in case the parameters are incorect.</response>
         /// <response code="500">Return in case of internal server error.</response>
-        [ProducesResponseType(typeof(List<StripOutputDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<StripOutputDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("category/{category}", Name = nameof(GetCategoryStrips))]
@@ -59,7 +59,7 @@ namespace Megatokyo.Server.Controllers.v1
             IEnumerable<Strip> strips = await mediator.Send(new GetCategoryStripsQuery(category));
             if (!strips.Any())
                 return NoContent();
-            IEnumerable<StripOutputDTO> stripsOutputDTO = mapper.Map<IEnumerable<StripOutputDTO>>(strips);
+            IEnumerable<StripOutputDto> stripsOutputDTO = mapper.Map<IEnumerable<StripOutputDto>>(strips);
             return Ok(stripsOutputDTO);
         }
 
@@ -72,7 +72,7 @@ namespace Megatokyo.Server.Controllers.v1
         /// <response code="400">Return in case the parameters are incorect.</response>*
         /// <response code="404">Returned in case the strip is not found.</response>*
         /// <response code="500">Return in case of internal server error.</response>
-        [ProducesResponseType(typeof(StripOutputDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(StripOutputDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -82,7 +82,7 @@ namespace Megatokyo.Server.Controllers.v1
             Strip strip = await mediator.Send(new GetStripQuery(number));
             if (strip == default)
                 return NotFound();
-            StripOutputDTO stripOutputDTO = mapper.Map<StripOutputDTO>(strip);
+            StripOutputDto stripOutputDTO = mapper.Map<StripOutputDto>(strip);
             return Ok(stripOutputDTO);
         }
     }

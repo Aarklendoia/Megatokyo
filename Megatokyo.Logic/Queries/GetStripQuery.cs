@@ -4,28 +4,16 @@ using Megatokyo.Logic.Interfaces;
 
 namespace Megatokyo.Logic.Queries
 {
-    public class GetStripQuery : IRequest<Strip>
+    public class GetStripQuery(int number) : IRequest<Strip>
     {
-        public int Number { get; set; }
-
-        public GetStripQuery(int number)
-        {
-            Number = number;
-        }
+        public int Number { get; set; } = number;
     }
 
-    public class GetStripQueryHandler : IRequestHandler<GetStripQuery, Strip>
+    public class GetStripQueryHandler(IStripRepository entityRepository) : IRequestHandler<GetStripQuery, Strip>
     {
-        private readonly IStripRepository _stripRepository;
-
-        public GetStripQueryHandler(IStripRepository entityRepository)
-        {
-            _stripRepository = entityRepository;
-        }
-
         public async Task<Strip> Handle(GetStripQuery request, CancellationToken cancellationToken)
         {
-            return await _stripRepository.GetAsync(request.Number);
+            return await entityRepository.GetAsync(request.Number);
         }
     }
 }

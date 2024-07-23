@@ -6,23 +6,13 @@ namespace Megatokyo.Logic.Queries
 {
     public class GetAllRantsQuery : IRequest<IEnumerable<Rant>>
     {
-        public GetAllRantsQuery()
-        {
-        }
     }
 
-    public class GetAllRantsQueryHandler : IRequestHandler<GetAllRantsQuery, IEnumerable<Rant>>
+    public class GetAllRantsQueryHandler(IRantRepository entityRepository) : IRequestHandler<GetAllRantsQuery, IEnumerable<Rant>>
     {
-        private readonly IRantRepository _rantRepository;
-
-        public GetAllRantsQueryHandler(IRantRepository entityRepository)
-        {
-            _rantRepository = entityRepository;
-        }
-
         public async Task<IEnumerable<Rant>> Handle(GetAllRantsQuery request, CancellationToken cancellationToken)
         {
-            return await _rantRepository.GetAllAsync();
+            return await entityRepository.GetAllAsync();
         }
     }
 }

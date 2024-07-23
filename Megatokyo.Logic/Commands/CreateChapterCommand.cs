@@ -4,28 +4,16 @@ using Megatokyo.Logic.Interfaces;
 
 namespace Megatokyo.Logic.Commands
 {
-    public class CreateCheckingCommand : IRequest<Checking>
+    public class CreateCheckingCommand(Checking checkingToCreate) : IRequest<Checking>
     {
-        public Checking CheckingToCreate { get; }
-
-        public CreateCheckingCommand(Checking checkingToCreate)
-        {
-            CheckingToCreate = checkingToCreate;
-        }
+        public Checking CheckingToCreate { get; } = checkingToCreate;
     }
 
-    public class CreateCheckingCommandHandler : IRequestHandler<CreateCheckingCommand, Checking>
+    public class CreateCheckingCommandHandler(ICheckingRepository checkingRepository) : IRequestHandler<CreateCheckingCommand, Checking>
     {
-        private readonly ICheckingRepository _checkingRepository;
-
-        public CreateCheckingCommandHandler(ICheckingRepository checkingRepository)
-        {
-            _checkingRepository = checkingRepository;
-        }
-
         public async Task<Checking> Handle(CreateCheckingCommand request, CancellationToken cancellationToken)
         {
-            return await _checkingRepository.CreateAsync(request.CheckingToCreate);
+            return await checkingRepository.CreateAsync(request.CheckingToCreate);
         }
     }
 }

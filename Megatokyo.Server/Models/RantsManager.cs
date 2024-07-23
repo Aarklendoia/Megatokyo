@@ -6,15 +6,8 @@ using Megatokyo.Server.Models.Parsers;
 
 namespace Megatokyo.Server.Models
 {
-    internal class RantsManager
+    internal class RantsManager(IMediator mediator)
     {
-        private readonly IMediator _mediator;
-
-        public RantsManager(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
         public async Task<bool> ParseRantsAsync()
         {
             return await ParseRantsAsync(1);
@@ -22,21 +15,27 @@ namespace Megatokyo.Server.Models
 
         public async Task<bool> ParseRantsAsync(int stripNumber)
         {
-            IEnumerable<Strip> StripsInDatabase = await _mediator.Send(new GetAllStripsQuery());
+            IEnumerable<Strip> StripsInDatabase = await mediator.Send(new GetAllStripsQuery());
 
             List<Rant> rants = RantsParser.Parse(stripNumber, StripsInDatabase.Max(s => s.Number));
 
-            IEnumerable<Rant> rantsInDatabase = await _mediator.Send(new GetAllRantsQuery());
+            IEnumerable<Rant> rantsInDatabase = await mediator.Send(new GetAllRantsQuery());
 
             foreach (Rant rant in rants)
             {
-                if (!rantsInDatabase.Where(c => c.Number == rant.Number).Any())
+                if (!rantsInDatabase.Any(c => c.Number == rant.Number))
                 {
-                    Rant newRant = new(rant.Title, rant.Number, rant.Author, rant.Url, rant.PublishDate, rant.Content);
-                    await _mediator.Send(new CreateRantCommand(newRant));
+                    Rant newRant = new()
+                    {
+                        Number = rant.Number,
+                        Title = rant.Title,
+                        Content = rant.Content,
+                        Url = rant.Url
+                    };
+                    await mediator.Send(new CreateRantCommand(newRant));
                 }
             }
-            await _mediator.Send(new SaveRantCommand());
+            await mediator.Send(new SaveRantCommand());
 
             //IEnumerable<RantsTranslations> rantsTranslationInDatabase = await _repository.RantsTranslations.FindAllAsync();
             //foreach (Rant rant in rants)
@@ -60,12 +59,12 @@ namespace Megatokyo.Server.Models
 
         public async Task<Rant> GetRantByNumber(int number)
         {
-            return await _mediator.Send(new GetRantQuery(number));
+            return await mediator.Send(new GetRantQuery(number));
         }
 
         public async Task<bool> CheckIfDataExistsAsync()
         {
-            IEnumerable<Rant> rants = await _mediator.Send(new GetAllRantsQuery());
+            IEnumerable<Rant> rants = await mediator.Send(new GetAllRantsQuery());
             return rants.Any();
         }
     }

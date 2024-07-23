@@ -1,12 +1,6 @@
 ﻿namespace Megatokyo.Domain.Exceptions
 {
-    public class NotFoundEntityException : Exception
+    public class NotFoundEntityException(string entityname, object entityid) : Exception($"{entityname} with id [{entityid}] not found.")
     {
-
-        public NotFoundEntityException(string entityname, object entityid)
-            : base($"{entityname} with id [{entityid}] not found.")
-        {
-
-        }
     }
 }

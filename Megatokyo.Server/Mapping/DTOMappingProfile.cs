@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Megatokyo.Domain;
-using Megatokyo.Server.DTO.v1;
+using Megatokyo.Server.Dto.v1;
 
 namespace Megatokyo.Server.Mapping
 {
@@ -8,8 +8,8 @@ namespace Megatokyo.Server.Mapping
     {
         public DTOMappingProfile()
         {
-            CreateMap<Strip, StripOutputDTO>()
-                    .ConstructUsing(dest => new StripOutputDTO()
+            CreateMap<Strip, StripOutputDto>()
+                    .ConstructUsing(dest => new StripOutputDto()
                     {
                         Category = dest.Category,
                         Number = dest.Number,
@@ -18,16 +18,16 @@ namespace Megatokyo.Server.Mapping
                         Url = dest.Url
                     });
 
-            CreateMap<Chapter, ChapterOutputDTO>()
-                    .ConstructUsing(dest => new ChapterOutputDTO()
+            CreateMap<Chapter, ChapterOutputDto>()
+                    .ConstructUsing(dest => new ChapterOutputDto()
                     {
                         Category = dest.Category,
                         Number = dest.Number,
                         Title = dest.Title
                     });
 
-            CreateMap<Rant, RantOutputDTO>()
-                .ConstructUsing(dest => new RantOutputDTO()
+            CreateMap<Rant, RantOutputDto>()
+                .ConstructUsing(dest => new RantOutputDto()
                 {
                     Author = dest.Author,
                     Content = dest.Content,

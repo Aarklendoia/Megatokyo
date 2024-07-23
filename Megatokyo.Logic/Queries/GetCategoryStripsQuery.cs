@@ -4,28 +4,16 @@ using Megatokyo.Logic.Interfaces;
 
 namespace Megatokyo.Logic.Queries
 {
-    public class GetCategoryStripsQuery : IRequest<IEnumerable<Strip>>
+    public class GetCategoryStripsQuery(string category) : IRequest<IEnumerable<Strip>>
     {
-        public string Category { get; set; }
-
-        public GetCategoryStripsQuery(string category)
-        {
-            Category = category;
-        }
+        public string Category { get; set; } = category;
     }
 
-    public class GetCategoryStripsQueryHandler : IRequestHandler<GetCategoryStripsQuery, IEnumerable<Strip>>
+    public class GetCategoryStripsQueryHandler(IStripRepository entityRepository) : IRequestHandler<GetCategoryStripsQuery, IEnumerable<Strip>>
     {
-        private readonly IStripRepository _stripRepository;
-
-        public GetCategoryStripsQueryHandler(IStripRepository entityRepository)
-        {
-            _stripRepository = entityRepository;
-        }
-
         public async Task<IEnumerable<Strip>> Handle(GetCategoryStripsQuery request, CancellationToken cancellationToken)
         {
-            return await _stripRepository.GetCategoryAsync(request.Category);
+            return await entityRepository.GetCategoryAsync(request.Category);
         }
     }
 }

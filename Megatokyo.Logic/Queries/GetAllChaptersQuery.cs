@@ -6,23 +6,13 @@ namespace Megatokyo.Logic.Queries
 {
     public class GetAllChaptersQuery : IRequest<IEnumerable<Chapter>>
     {
-        public GetAllChaptersQuery()
-        {
-        }
     }
 
-    public class GetAllChaptersQueryHandler : IRequestHandler<GetAllChaptersQuery, IEnumerable<Chapter>>
+    public class GetAllChaptersQueryHandler(IChapterRepository entityRepository) : IRequestHandler<GetAllChaptersQuery, IEnumerable<Chapter>>
     {
-        private readonly IChapterRepository _chapterRepository;
-
-        public GetAllChaptersQueryHandler(IChapterRepository entityRepository)
-        {
-            _chapterRepository = entityRepository;
-        }
-
         public async Task<IEnumerable<Chapter>> Handle(GetAllChaptersQuery request, CancellationToken cancellationToken)
         {
-            return await _chapterRepository.GetAllAsync();
+            return await entityRepository.GetAllAsync();
         }
     }
 }
