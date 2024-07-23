@@ -1,6 +1,6 @@
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Aarklendoia/Megatokyo/.NET)
-
 # Megatokyo
+
+[![.NET](https://github.com/Aarklendoia/Megatokyo/actions/workflows/dotnet.yml/badge.svg)](https://github.com/Aarklendoia/Megatokyo/actions/workflows/dotnet.yml)
 
 Megatokyo is an application that allows you to consult Fred Gallager's eponymous work. It allows you to browse all the strips by chapter, category or to search directly for a strip.
 
@@ -10,7 +10,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-To compile the application, you need Visual Studio 2022 at least updated with the latest SDK for Windows 11 and .NET 6.0.
+To compile the application, you need Visual Studio 2022 at least updated with the latest SDK for Windows 11 and .NET 8.0.
 You must install the [WinUI 3 Project Templates](https://marketplace.visualstudio.com/items?itemName=Microsoft-WinUI.WinUIProjectTemplates).
 
 ### Installing
