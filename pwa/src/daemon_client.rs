@@ -244,3 +244,42 @@ pub async fn fetch_rant(
 
     response.json::<Rant>().await.map_err(|err| err.to_string())
 }
+
+#[derive(Clone, Deserialize)]
+pub struct Status {
+    pub last_check: Option<String>,
+    pub last_strip_number: i32,
+    pub last_rant_number: i32,
+    pub backfilling: bool,
+}
+
+pub async fn fetch_status(base_url: &str, token: &str) -> Result<Status, String> {
+    let url = format!("{}/status", base_url.trim_end_matches('/'));
+    let response = gloo_net::http::Request::get(&url)
+        .header(TOKEN_HEADER, token)
+        .send()
+        .await
+        .map_err(|err| err.to_string())?;
+
+    if !response.ok() {
+        return Err(format!("daemon returned {}", response.status()));
+    }
+
+    response
+        .json::<Status>()
+        .await
+        .map_err(|err| err.to_string())
+}
+
+/// Nudges the daemon's poll loop to check for new content right away
+/// instead of waiting for its regular interval — the poll itself still
+/// happens in the background, so this doesn't block on the result.
+pub async fn trigger_check(base_url: &str, token: &str) -> Result<(), String> {
+    let url = format!("{}/check", base_url.trim_end_matches('/'));
+    let response = gloo_net::http::Request::post(&url)
+        .header(TOKEN_HEADER, token)
+        .send()
+        .await
+        .map_err(|err| err.to_string())?;
+    ok_or_status(&response).await
+}

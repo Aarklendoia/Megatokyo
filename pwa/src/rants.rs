@@ -8,6 +8,7 @@ use leptos::task::spawn_local;
 use megatokyo_core::domain::Rant;
 
 use crate::daemon_client;
+use crate::format::human_date;
 use crate::ripple;
 
 /// The primary language subtag from `navigator.language` (e.g. `"fr"` from
@@ -125,7 +126,7 @@ pub fn Rants(
                                     view! {
                                         <li on:click=move |_| open(number)>
                                             <span class="rants-item-title">{rant.title.clone()}</span>
-                                            <span class="rants-item-date">{rant.publish_date.clone()}</span>
+                                            <span class="rants-item-date">{human_date(&rant.publish_date)}</span>
                                         </li>
                                     }
                                 }).collect_view()}
@@ -154,7 +155,7 @@ pub fn Rants(
                             Some(Ok(rant)) => view! {
                                 <h2>{rant.title.clone()}</h2>
                                 <p class="rants-meta">
-                                    {format!("{} — {}", rant.author, rant.publish_date)}
+                                    {format!("{} — {}", rant.author, human_date(&rant.publish_date))}
                                 </p>
                                 <div class="rants-content" inner_html=rant.content.clone()></div>
                             }
