@@ -294,3 +294,57 @@
 [data-theme="android"] .dashboard-continue p {
   margin: 0 0 0.75rem;
 }
+
+[data-theme="android"] .gallery-filters {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 0 1rem 1rem;
+}
+
+[data-theme="android"] .gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 0 1rem 6rem;
+}
+
+[data-theme="android"] .gallery-item {
+  position: relative;
+  cursor: pointer;
+  border-radius: 16px 16px 6px 16px;
+  overflow: hidden;
+}
+
+[data-theme="android"] .gallery-thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  background: var(--md-surface-variant);
+}
+
+[data-theme="android"] .gallery-favorite {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  appearance: none;
+  border: none;
+  border-radius: 999px;
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 0.95rem;
+  line-height: 1;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  cursor: pointer;
+}
+
+[data-theme="android"] .gallery-favorite.active {
+  background: var(--md-primary-container);
+  color: var(--md-on-primary-container);
+}

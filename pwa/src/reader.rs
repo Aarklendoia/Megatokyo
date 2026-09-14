@@ -10,7 +10,16 @@ use crate::daemon_client;
 use crate::ripple;
 
 #[component]
-pub fn Reader(base_url: ReadSignal<String>, token: ReadSignal<String>) -> impl IntoView {
+pub fn Reader(
+    base_url: ReadSignal<String>,
+    token: ReadSignal<String>,
+    /// Set by the Gallery before switching here, to open a tapped strip
+    /// instead of resuming the daemon's saved progress. Cleared back to
+    /// `None` once consumed, so a later plain switch to Reader (e.g. from
+    /// the tab bar) resumes progress again as usual.
+    requested_strip: ReadSignal<Option<i32>>,
+    set_requested_strip: WriteSignal<Option<i32>>,
+) -> impl IntoView {
     let (strips, set_strips) = signal(None::<Result<Vec<Strip>, String>>);
     let (index, set_index) = signal(0usize);
     let (favorite_numbers, set_favorite_numbers) = signal(Vec::<i32>::new());
@@ -21,11 +30,20 @@ pub fn Reader(base_url: ReadSignal<String>, token: ReadSignal<String>) -> impl I
     Effect::new(move |_| {
         let base_url = base_url.get_untracked();
         let token = token.get_untracked();
+        let requested = requested_strip.get_untracked();
+        set_requested_strip.set(None);
         spawn_local(async move {
             let strips_result = daemon_client::fetch_strips(&base_url, &token).await;
             if let Ok(list) = &strips_result {
-                if let Ok(Some(saved)) = daemon_client::fetch_progress(&base_url, &token).await {
-                    if let Some(pos) = list.iter().position(|s| s.number == saved) {
+                let wanted = match requested {
+                    Some(number) => Some(number),
+                    None => daemon_client::fetch_progress(&base_url, &token)
+                        .await
+                        .ok()
+                        .flatten(),
+                };
+                if let Some(number) = wanted {
+                    if let Some(pos) = list.iter().position(|s| s.number == number) {
                         set_index.set(pos);
                     }
                 }
