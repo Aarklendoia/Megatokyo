@@ -250,6 +250,26 @@
   margin: 0 0 0.75rem;
 }
 
+[data-theme="ios"] .dashboard-search {
+  margin: 0 0 1rem;
+}
+
+[data-theme="ios"] .dashboard-search-results li {
+  cursor: pointer;
+}
+
+[data-theme="ios"] .dashboard-latest-rant {
+  cursor: pointer;
+}
+
+[data-theme="ios"] .dashboard-latest-rant h2 {
+  margin: 0 0 0.4rem;
+}
+
+[data-theme="ios"] .dashboard-latest-rant p {
+  margin: 0;
+}
+
 [data-theme="ios"] .gallery-filters {
   display: flex;
   gap: 0.4rem;

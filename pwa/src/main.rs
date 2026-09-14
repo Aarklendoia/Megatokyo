@@ -44,10 +44,12 @@ fn App() -> impl IntoView {
     } else {
         Screen::Settings
     });
-    // Set by Gallery before switching to Reader, so Reader opens the
-    // tapped strip instead of resuming the daemon's saved progress;
+    // Set by Gallery/Dashboard before switching to Reader, so Reader opens
+    // the tapped strip instead of resuming the daemon's saved progress;
     // Reader clears it back to `None` once consumed.
     let (requested_strip, set_requested_strip) = signal(None::<i32>);
+    // Same idea, set by Dashboard before switching to Rants.
+    let (requested_rant, set_requested_rant) = signal(None::<i32>);
 
     let go_dashboard = move |ev: web_sys::MouseEvent| {
         ripple::spawn(&ev);
@@ -104,7 +106,10 @@ fn App() -> impl IntoView {
             </button>
         </nav>
         {move || match screen.get() {
-            Screen::Dashboard => view! { <Dashboard base_url token set_screen /> }.into_any(),
+            Screen::Dashboard => view! {
+                <Dashboard base_url token set_screen set_requested_strip set_requested_rant />
+            }
+            .into_any(),
             Screen::Reader => view! {
                 <Reader base_url token requested_strip set_requested_strip />
             }
@@ -113,7 +118,10 @@ fn App() -> impl IntoView {
                 <Gallery base_url token set_screen set_requested_strip />
             }
             .into_any(),
-            Screen::Rants => view! { <Rants base_url token /> }.into_any(),
+            Screen::Rants => view! {
+                <Rants base_url token requested_rant set_requested_rant />
+            }
+            .into_any(),
             Screen::Settings => view! {
                 <Settings base_url set_base_url token set_token />
             }

@@ -21,16 +21,25 @@ fn system_lang() -> Option<String> {
 }
 
 #[component]
-pub fn Rants(base_url: ReadSignal<String>, token: ReadSignal<String>) -> impl IntoView {
+pub fn Rants(
+    base_url: ReadSignal<String>,
+    token: ReadSignal<String>,
+    /// Set by the Dashboard before switching here, to open a specific rant
+    /// directly instead of showing the list. Cleared back to `None` once
+    /// consumed.
+    requested_rant: ReadSignal<Option<i32>>,
+    set_requested_rant: WriteSignal<Option<i32>>,
+) -> impl IntoView {
     let (rants, set_rants) = signal(None::<Result<Vec<Rant>, String>>);
     let (search, set_search) = signal(String::new());
-    let (selected, set_selected) = signal(None::<i32>);
+    let (selected, set_selected) = signal(requested_rant.get_untracked());
     let (translated, set_translated) = signal(false);
     let (detail, set_detail) = signal(None::<Result<Rant, String>>);
     let (cache, set_cache) = signal(HashMap::<(i32, bool), Rant>::new());
     let target_lang = system_lang();
     let has_target_lang = target_lang.is_some();
     let target_lang_for_fetch = target_lang.clone();
+    set_requested_rant.set(None);
 
     Effect::new(move |_| {
         let base_url = base_url.get_untracked();
