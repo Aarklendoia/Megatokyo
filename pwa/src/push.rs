@@ -48,6 +48,29 @@ pub async fn subscribe(base_url: &str, token: &str) -> Result<(), String> {
     daemon_client::push_subscribe(base_url, token, &endpoint, &p256dh, &auth).await
 }
 
+/// Unsubscribes both sides: tells the daemon to forget this browser's
+/// subscription, then tells the browser itself to drop it. A no-op
+/// (`Ok(())`) if there was never a subscription to begin with.
+pub async fn unsubscribe(base_url: &str, token: &str) -> Result<(), String> {
+    let registration = service_worker_registration().await?;
+    let push_manager: PushManager = registration.push_manager().map_err(js_err)?;
+    let subscription = JsFuture::from(push_manager.get_subscription().map_err(js_err)?)
+        .await
+        .map_err(js_err)?;
+    if subscription.is_null() {
+        return Ok(());
+    }
+    let subscription: web_sys::PushSubscription = subscription.unchecked_into();
+    let endpoint = subscription.endpoint();
+
+    daemon_client::push_unsubscribe(base_url, token, &endpoint).await?;
+
+    JsFuture::from(subscription.unsubscribe().map_err(js_err)?)
+        .await
+        .map_err(js_err)?;
+    Ok(())
+}
+
 async fn request_notification_permission() -> Result<String, String> {
     let promise = web_sys::Notification::request_permission().map_err(js_err)?;
     let result = JsFuture::from(promise).await.map_err(js_err)?;
