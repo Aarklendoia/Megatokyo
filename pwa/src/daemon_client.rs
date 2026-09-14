@@ -2,7 +2,7 @@
 //! `x-megatokyo-daemon-token` header convention the desktop GUI already uses
 //! (see `gui/src/background.rs`'s `fetch_status`).
 
-use megatokyo_core::domain::{Chapter, Favorite, Strip};
+use megatokyo_core::domain::{Chapter, Favorite, Rant, Strip};
 use serde::Deserialize;
 
 const TOKEN_HEADER: &str = "x-megatokyo-daemon-token";
@@ -195,4 +195,52 @@ pub async fn push_subscribe(
         return Err(format!("daemon returned {}", response.status()));
     }
     Ok(())
+}
+
+pub async fn fetch_rants(base_url: &str, token: &str) -> Result<Vec<Rant>, String> {
+    let url = format!("{}/rants", base_url.trim_end_matches('/'));
+    let response = gloo_net::http::Request::get(&url)
+        .header(TOKEN_HEADER, token)
+        .send()
+        .await
+        .map_err(|err| err.to_string())?;
+
+    if !response.ok() {
+        return Err(format!("daemon returned {}", response.status()));
+    }
+
+    response
+        .json::<Vec<Rant>>()
+        .await
+        .map_err(|err| err.to_string())
+}
+
+/// `lang: None` (or `Some("en")`) gets the original content back; any other
+/// language code asks the daemon to DeepL-translate it. The response is a
+/// superset of `Rant`'s fields (it also carries `lang`), which `Rant`'s
+/// `Deserialize` happily ignores.
+pub async fn fetch_rant(
+    base_url: &str,
+    token: &str,
+    number: i32,
+    lang: Option<&str>,
+) -> Result<Rant, String> {
+    let url = match lang {
+        Some(lang) => format!(
+            "{}/rant?number={number}&lang={lang}",
+            base_url.trim_end_matches('/')
+        ),
+        None => format!("{}/rant?number={number}", base_url.trim_end_matches('/')),
+    };
+    let response = gloo_net::http::Request::get(&url)
+        .header(TOKEN_HEADER, token)
+        .send()
+        .await
+        .map_err(|err| err.to_string())?;
+
+    if !response.ok() {
+        return Err(format!("daemon returned {}", response.status()));
+    }
+
+    response.json::<Rant>().await.map_err(|err| err.to_string())
 }
