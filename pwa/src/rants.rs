@@ -9,6 +9,7 @@ use megatokyo_core::domain::Rant;
 
 use crate::daemon_client;
 use crate::format::human_date;
+use crate::i18n::{t, Key, Locale};
 use crate::ripple;
 
 /// The primary language subtag from `navigator.language` (e.g. `"fr"` from
@@ -25,6 +26,7 @@ fn system_lang() -> Option<String> {
 pub fn Rants(
     base_url: ReadSignal<String>,
     token: ReadSignal<String>,
+    locale: ReadSignal<Locale>,
     /// Set by the Dashboard before switching here, to open a specific rant
     /// directly instead of showing the list. Cleared back to `None` once
     /// consumed.
@@ -101,10 +103,10 @@ pub fn Rants(
 
     view! {
         <main>
-            <h1>"Rants"</h1>
+            <h1>{move || t(locale.get(), Key::TabRants)}</h1>
             {move || match selected.get() {
                 None => match rants.get() {
-                    None => view! { <p class="status">"Loading..."</p> }.into_any(),
+                    None => view! { <p class="status">{t(locale.get(), Key::Loading)}</p> }.into_any(),
                     Some(Err(err)) => view! { <p class="status error">{err}</p> }.into_any(),
                     Some(Ok(list)) => {
                         let query = search.get().to_ascii_lowercase();
@@ -112,7 +114,7 @@ pub fn Rants(
                             <input
                                 type="text"
                                 class="rants-search"
-                                placeholder="Search rants..."
+                                placeholder=t(locale.get(), Key::SearchRants)
                                 prop:value=move || search.get()
                                 on:input=move |ev| set_search.set(event_target_value(&ev))
                             />
@@ -137,7 +139,7 @@ pub fn Rants(
                 },
                 Some(_) => view! {
                     <div class="card rants-detail">
-                        <button class="btn" on:click=back>"Back"</button>
+                        <button class="btn" on:click=back>{move || t(locale.get(), Key::Back)}</button>
                         {has_target_lang.then(|| {
                             let target_lang = target_lang.clone();
                             let label = move || if translated.get() {
@@ -150,7 +152,7 @@ pub fn Rants(
                             }
                         })}
                         {move || match detail.get() {
-                            None => view! { <p class="status">"Loading..."</p> }.into_any(),
+                            None => view! { <p class="status">{t(locale.get(), Key::Loading)}</p> }.into_any(),
                             Some(Err(err)) => view! { <p class="status error">{err}</p> }.into_any(),
                             Some(Ok(rant)) => view! {
                                 <h2>{rant.title.clone()}</h2>

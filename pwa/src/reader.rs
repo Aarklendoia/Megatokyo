@@ -7,12 +7,14 @@ use leptos::task::spawn_local;
 use megatokyo_core::domain::Strip;
 
 use crate::daemon_client;
+use crate::i18n::{t, Key, Locale};
 use crate::ripple;
 
 #[component]
 pub fn Reader(
     base_url: ReadSignal<String>,
     token: ReadSignal<String>,
+    locale: ReadSignal<Locale>,
     /// Set by the Gallery before switching here, to open a tapped strip
     /// instead of resuming the daemon's saved progress. Cleared back to
     /// `None` once consumed, so a later plain switch to Reader (e.g. from
@@ -157,17 +159,18 @@ pub fn Reader(
 
     view! {
         <main class="reader">
-            <h1>"Reader"</h1>
+            <h1>{move || t(locale.get(), Key::TabReader)}</h1>
             {move || match strips.get() {
-                None => view! { <p class="status">"Loading strips..."</p> }.into_any(),
+                None => view! { <p class="status">{t(locale.get(), Key::LoadingStrips)}</p> }.into_any(),
                 Some(Err(err)) => view! { <p class="status error">{err}</p> }.into_any(),
                 Some(Ok(list)) if list.is_empty() => {
-                    view! { <p class="status">"No strips yet — the daemon hasn't backfilled anything."</p> }
+                    view! { <p class="status">{t(locale.get(), Key::NoStripsYet)}</p> }
                         .into_any()
                 }
                 Some(Ok(_)) => view! {
                     <section class="card reader-strip">
                         {move || current().map(|strip| {
+                            let locale = locale.get();
                             let src = daemon_client::image_url(&base_url.get(), &token.get(), strip.number);
                             let is_favorite = favorite_numbers.get().contains(&strip.number);
                             view! {
@@ -180,7 +183,7 @@ pub fn Reader(
                                     <img class="reader-image" src=src alt=strip.title.clone() />
                                 </div>
                                 <div class="reader-nav">
-                                    <button class="btn" on:click=go_prev>"Previous"</button>
+                                    <button class="btn" on:click=go_prev>{t(locale, Key::Previous)}</button>
                                     <button
                                         class=move || if is_favorite {
                                             "btn btn-favorite active"
@@ -191,7 +194,7 @@ pub fn Reader(
                                     >
                                         {if is_favorite { "♥" } else { "♡" }}
                                     </button>
-                                    <button class="btn" on:click=go_next>"Next"</button>
+                                    <button class="btn" on:click=go_next>{t(locale, Key::Next)}</button>
                                 </div>
                             }
                         })}

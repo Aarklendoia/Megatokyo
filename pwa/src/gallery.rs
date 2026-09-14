@@ -7,6 +7,7 @@ use leptos::task::spawn_local;
 use megatokyo_core::domain::Strip;
 
 use crate::daemon_client;
+use crate::i18n::{t, Key, Locale};
 use crate::ripple;
 use crate::Screen;
 
@@ -21,6 +22,7 @@ enum Filter {
 pub fn Gallery(
     base_url: ReadSignal<String>,
     token: ReadSignal<String>,
+    locale: ReadSignal<Locale>,
     set_screen: WriteSignal<Screen>,
     set_requested_strip: WriteSignal<Option<i32>>,
 ) -> impl IntoView {
@@ -76,11 +78,12 @@ pub fn Gallery(
 
     view! {
         <main>
-            <h1>"Gallery"</h1>
+            <h1>{move || t(locale.get(), Key::TabGallery)}</h1>
             {move || match strips.get() {
-                None => view! { <p class="status">"Loading..."</p> }.into_any(),
+                None => view! { <p class="status">{t(locale.get(), Key::Loading)}</p> }.into_any(),
                 Some(Err(err)) => view! { <p class="status error">{err}</p> }.into_any(),
                 Some(Ok(list)) => {
+                    let locale = locale.get();
                     let mut categories = Vec::new();
                     for strip in &list {
                         if !categories.contains(&strip.category) {
@@ -94,13 +97,13 @@ pub fn Gallery(
                                 class=move || if filter.get() == Filter::All { "btn tab active" } else { "btn tab" }
                                 on:click=move |ev| { ripple::spawn(&ev); set_filter.set(Filter::All); }
                             >
-                                "All"
+                                {t(locale, Key::FilterAll)}
                             </button>
                             <button
                                 class=move || if filter.get() == Filter::Favorites { "btn tab active" } else { "btn tab" }
                                 on:click=move |ev| { ripple::spawn(&ev); set_filter.set(Filter::Favorites); }
                             >
-                                "Favorites"
+                                {t(locale, Key::FilterFavorites)}
                             </button>
                             {categories.into_iter().map(|category| {
                                 let for_class = category.clone();

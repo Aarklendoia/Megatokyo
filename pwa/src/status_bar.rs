@@ -10,12 +10,17 @@ use leptos::task::spawn_local;
 
 use crate::daemon_client::{self, Status};
 use crate::format::human_datetime;
+use crate::i18n::{self, t, Key, Locale};
 use crate::ripple;
 
 const REFRESH_INTERVAL: Duration = Duration::from_secs(20);
 
 #[component]
-pub fn StatusBar(base_url: ReadSignal<String>, token: ReadSignal<String>) -> impl IntoView {
+pub fn StatusBar(
+    base_url: ReadSignal<String>,
+    token: ReadSignal<String>,
+    locale: ReadSignal<Locale>,
+) -> impl IntoView {
     let (status, set_status) = signal(None::<Result<Status, String>>);
     let (checking, set_checking) = signal(false);
 
@@ -61,25 +66,26 @@ pub fn StatusBar(base_url: ReadSignal<String>, token: ReadSignal<String>) -> imp
     view! {
         <div class="status-bar">
             {move || match status.get() {
-                None => view! { <span class="status-bar-text">"Checking daemon..."</span> }.into_any(),
+                None => view! {
+                    <span class="status-bar-text">{t(locale.get(), Key::CheckingDaemon)}</span>
+                }
+                .into_any(),
                 Some(Err(err)) => {
                     view! { <span class="status-bar-text error">{err}</span> }.into_any()
                 }
                 Some(Ok(s)) => {
+                    let locale = locale.get();
                     let text = if s.backfilling {
-                        format!(
-                            "Backfilling... (up to strip #{}, rant #{})",
-                            s.last_strip_number, s.last_rant_number
-                        )
+                        i18n::backfilling_status(locale, s.last_strip_number, s.last_rant_number)
                     } else {
                         match &s.last_check {
-                            Some(when) => format!(
-                                "Up to date (strip #{}, rant #{}) — checked {}",
+                            Some(when) => i18n::up_to_date_status(
+                                locale,
                                 s.last_strip_number,
                                 s.last_rant_number,
-                                human_datetime(when)
+                                &human_datetime(when),
                             ),
-                            None => "Never checked yet".to_string(),
+                            None => t(locale, Key::NeverCheckedYet).to_string(),
                         }
                     };
                     view! { <span class="status-bar-text">{text}</span> }.into_any()
@@ -90,7 +96,10 @@ pub fn StatusBar(base_url: ReadSignal<String>, token: ReadSignal<String>) -> imp
                 on:click=check_now
                 disabled=move || checking.get()
             >
-                {move || if checking.get() { "Checking..." } else { "Check now" }}
+                {move || {
+                    let locale = locale.get();
+                    if checking.get() { t(locale, Key::Checking) } else { t(locale, Key::CheckNow) }
+                }}
             </button>
         </div>
     }

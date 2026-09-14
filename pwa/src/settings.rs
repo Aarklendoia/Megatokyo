@@ -8,6 +8,7 @@ use leptos::prelude::*;
 use leptos::task::spawn_local;
 
 use crate::daemon_client;
+use crate::i18n::{t, Key, Locale};
 use crate::push;
 use crate::ripple;
 
@@ -17,6 +18,8 @@ pub fn Settings(
     set_base_url: WriteSignal<String>,
     token: ReadSignal<String>,
     set_token: WriteSignal<String>,
+    locale: ReadSignal<Locale>,
+    set_locale: WriteSignal<Locale>,
 ) -> impl IntoView {
     let (chapters, set_chapters) = signal(None::<Result<Vec<String>, String>>);
     let (notifications_status, set_notifications_status) = signal(None::<Result<(), String>>);
@@ -87,6 +90,24 @@ pub fn Settings(
         });
     };
 
+    // Tracked separately from `locale` itself: "Auto" and a manually-picked
+    // locale can produce the *same* active language, but should still
+    // highlight different buttons.
+    let (has_override, set_has_override) = signal(crate::storage::load_locale_override().is_some());
+
+    let pick_locale = move |ev: web_sys::MouseEvent, new_locale: Locale| {
+        ripple::spawn(&ev);
+        crate::storage::save_locale_override(Some(new_locale.code()));
+        set_has_override.set(true);
+        set_locale.set(new_locale);
+    };
+    let use_auto_locale = move |ev: web_sys::MouseEvent| {
+        ripple::spawn(&ev);
+        crate::storage::save_locale_override(None);
+        set_has_override.set(false);
+        set_locale.set(crate::i18n::detect());
+    };
+
     let load_chapters = move |ev: web_sys::MouseEvent| {
         ripple::spawn(&ev);
         let base_url = base_url.get();
@@ -108,9 +129,34 @@ pub fn Settings(
         <main>
             <h1>"Megatokyo"</h1>
             <section class="card">
-                <h2>"Daemon settings"</h2>
+                <h2>{move || t(locale.get(), Key::LanguageHeading)}</h2>
+                <div class="settings-language-picker">
+                    <button
+                        class=move || if !has_override.get() { "btn tab active" } else { "btn tab" }
+                        on:click=use_auto_locale
+                    >
+                        {move || t(locale.get(), Key::LanguageAuto)}
+                    </button>
+                    {Locale::ALL.iter().map(|&candidate| {
+                        view! {
+                            <button
+                                class=move || if locale.get() == candidate && has_override.get() {
+                                    "btn tab active"
+                                } else {
+                                    "btn tab"
+                                }
+                                on:click=move |ev| pick_locale(ev, candidate)
+                            >
+                                {candidate.own_name()}
+                            </button>
+                        }
+                    }).collect_view()}
+                </div>
+            </section>
+            <section class="card">
+                <h2>{move || t(locale.get(), Key::DaemonSettingsHeading)}</h2>
                 <label>
-                    "Base URL "
+                    {move || t(locale.get(), Key::BaseUrlLabel)}
                     <input
                         type="text"
                         placeholder="http://127.0.0.1:8420"
@@ -119,27 +165,35 @@ pub fn Settings(
                     />
                 </label>
                 <label>
-                    "Token "
+                    {move || t(locale.get(), Key::TokenLabel)}
                     <input
                         type="password"
                         prop:value=move || token.get()
                         on:input=move |ev| set_token.set(event_target_value(&ev))
                     />
                 </label>
-                <button class="btn btn-primary" on:click=save_settings>"Save"</button>
-                <button class="btn" on:click=load_chapters>"Load chapters"</button>
-                <button class="btn" on:click=enable_notifications>"Enable notifications"</button>
-                <button class="btn" on:click=disable_notifications>"Disable notifications"</button>
+                <button class="btn btn-primary" on:click=save_settings>
+                    {move || t(locale.get(), Key::Save)}
+                </button>
+                <button class="btn" on:click=load_chapters>
+                    {move || t(locale.get(), Key::LoadChapters)}
+                </button>
+                <button class="btn" on:click=enable_notifications>
+                    {move || t(locale.get(), Key::EnableNotifications)}
+                </button>
+                <button class="btn" on:click=disable_notifications>
+                    {move || t(locale.get(), Key::DisableNotifications)}
+                </button>
                 {move || match notifications_status.get() {
                     None => ().into_any(),
-                    Some(Ok(())) => view! { <p class="status">"Done."</p> }.into_any(),
+                    Some(Ok(())) => view! { <p class="status">{t(locale.get(), Key::Done)}</p> }.into_any(),
                     Some(Err(err)) => view! { <p class="status error">{err}</p> }.into_any(),
                 }}
             </section>
             <section class="card">
-                <h2>"Translation and polling"</h2>
+                <h2>{move || t(locale.get(), Key::TranslationHeading)}</h2>
                 <label>
-                    "DeepL API key "
+                    {move || t(locale.get(), Key::DeeplKeyLabel)}
                     <input
                         type="password"
                         prop:value=move || deepl_key.get()
@@ -147,7 +201,7 @@ pub fn Settings(
                     />
                 </label>
                 <label>
-                    "Poll interval (minutes) "
+                    {move || t(locale.get(), Key::PollIntervalLabel)}
                     <input
                         type="text"
                         inputmode="numeric"
@@ -155,17 +209,19 @@ pub fn Settings(
                         on:input=move |ev| set_poll_interval.set(event_target_value(&ev))
                     />
                 </label>
-                <button class="btn btn-primary" on:click=save_config>"Save"</button>
+                <button class="btn btn-primary" on:click=save_config>
+                    {move || t(locale.get(), Key::Save)}
+                </button>
                 {move || match config_status.get() {
                     None => ().into_any(),
-                    Some(Ok(())) => view! { <p class="status">"Saved."</p> }.into_any(),
+                    Some(Ok(())) => view! { <p class="status">{t(locale.get(), Key::Saved)}</p> }.into_any(),
                     Some(Err(err)) => view! { <p class="status error">{err}</p> }.into_any(),
                 }}
             </section>
             <section class="card">
-                <h2>"Chapters"</h2>
+                <h2>{move || t(locale.get(), Key::ChaptersHeading)}</h2>
                 {move || match chapters.get() {
-                    None => view! { <p class="status">"Not loaded yet."</p> }.into_any(),
+                    None => view! { <p class="status">{t(locale.get(), Key::NotLoadedYet)}</p> }.into_any(),
                     Some(Ok(list)) => view! {
                         <ul>
                             {list.into_iter().map(|c| view! { <li>{c}</li> }).collect_view()}
