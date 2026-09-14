@@ -7,6 +7,7 @@ use leptos::task::spawn_local;
 use megatokyo_core::domain::{Rant, Strip};
 
 use crate::daemon_client;
+use crate::i18n::{self, t, Key, Locale};
 use crate::ripple;
 use crate::Screen;
 
@@ -23,6 +24,7 @@ struct Summary {
 pub fn Dashboard(
     base_url: ReadSignal<String>,
     token: ReadSignal<String>,
+    locale: ReadSignal<Locale>,
     set_screen: WriteSignal<Screen>,
     set_requested_strip: WriteSignal<Option<i32>>,
     set_requested_rant: WriteSignal<Option<i32>>,
@@ -72,17 +74,18 @@ pub fn Dashboard(
         <main>
             <h1>"Megatokyo"</h1>
             {move || match summary.get() {
-                None => view! { <p class="status">"Loading..."</p> }.into_any(),
+                None => view! { <p class="status">{t(locale.get(), Key::Loading)}</p> }.into_any(),
                 Some(Err(err)) => view! { <p class="status error">{err}</p> }.into_any(),
                 Some(Ok(data)) => {
+                    let locale = locale.get();
                     let continue_label = if data.current_strip.is_some() {
-                        "Continue reading"
+                        t(locale, Key::ContinueReading)
                     } else {
-                        "Start reading"
+                        t(locale, Key::StartReading)
                     };
                     let continue_subtitle = match &data.current_strip {
-                        Some(strip) => format!("Last read: #{} — {}", strip.number, strip.title),
-                        None => "You haven't started reading yet.".to_string(),
+                        Some(strip) => i18n::last_read_subtitle(locale, strip.number, &strip.title),
+                        None => t(locale, Key::NotStartedReading).to_string(),
                     };
                     let query = search.get().to_ascii_lowercase();
                     let matching_strips: Vec<Strip> = if query.is_empty() {
@@ -116,21 +119,21 @@ pub fn Dashboard(
                         <input
                             type="text"
                             class="dashboard-search"
-                            placeholder="Search strips and rants..."
+                            placeholder=t(locale, Key::SearchStripsAndRants)
                             prop:value=move || search.get()
                             on:input=move |ev| set_search.set(event_target_value(&ev))
                         />
                         {(!query.is_empty()).then(|| view! {
                             <section class="card dashboard-search-results">
                                 {(matching_strips.is_empty() && matching_rants.is_empty()).then(|| {
-                                    view! { <p class="status">"No matches."</p> }
+                                    view! { <p class="status">{t(locale, Key::NoMatches)}</p> }
                                 })}
                                 <ul>
                                     {matching_strips.into_iter().map(|strip| {
                                         let number = strip.number;
                                         view! {
                                             <li on:click=move |_| open_strip(number)>
-                                                {format!("Strip #{} — {}", strip.number, strip.title)}
+                                                {i18n::strip_result(locale, strip.number, &strip.title)}
                                             </li>
                                         }
                                     }).collect_view()}
@@ -138,7 +141,7 @@ pub fn Dashboard(
                                         let number = rant.number;
                                         view! {
                                             <li on:click=move |_| open_rant(number)>
-                                                {format!("Rant — {}", rant.title)}
+                                                {i18n::rant_result(locale, &rant.title)}
                                             </li>
                                         }
                                     }).collect_view()}
@@ -158,15 +161,15 @@ pub fn Dashboard(
                                     class="card dashboard-latest-rant"
                                     on:click=move |_| open_rant(number)
                                 >
-                                    <h2>"Latest rant"</h2>
+                                    <h2>{t(locale, Key::LatestRant)}</h2>
                                     <p>{rant.title.clone()}</p>
                                 </section>
                             }
                         })}
                         <section class="card dashboard-stats">
-                            <p>{format!("{} strips", data.strips.len())}</p>
-                            <p>{format!("{} rants", data.rants.len())}</p>
-                            <p>{format!("{} favorites", data.favorite_count)}</p>
+                            <p>{i18n::strip_count(locale, data.strips.len())}</p>
+                            <p>{i18n::rant_count(locale, data.rants.len())}</p>
+                            <p>{i18n::favorite_count(locale, data.favorite_count)}</p>
                         </section>
                     }
                     .into_any()

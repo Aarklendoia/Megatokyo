@@ -2,6 +2,7 @@ mod daemon_client;
 mod dashboard;
 mod format;
 mod gallery;
+mod i18n;
 mod push;
 mod rants;
 mod reader;
@@ -14,6 +15,7 @@ use leptos::prelude::*;
 
 use dashboard::Dashboard;
 use gallery::Gallery;
+use i18n::{t, Key};
 use rants::Rants;
 use reader::Reader;
 use settings::Settings;
@@ -58,6 +60,9 @@ fn App() -> impl IntoView {
     // flips, not on every keystroke while editing Settings.
     let has_daemon_link =
         Memo::new(move |_| !base_url.get().trim().is_empty() && !token.get().trim().is_empty());
+    let (locale, set_locale) = signal(i18n::effective_locale(
+        storage::load_locale_override().as_deref(),
+    ));
 
     let go_dashboard = move |ev: web_sys::MouseEvent| {
         ripple::spawn(&ev);
@@ -86,53 +91,53 @@ fn App() -> impl IntoView {
                 class=move || if screen.get() == Screen::Dashboard { "btn tab active" } else { "btn tab" }
                 on:click=go_dashboard
             >
-                "Home"
+                {move || t(locale.get(), Key::TabHome)}
             </button>
             <button
                 class=move || if screen.get() == Screen::Reader { "btn tab active" } else { "btn tab" }
                 on:click=go_reader
             >
-                "Reader"
+                {move || t(locale.get(), Key::TabReader)}
             </button>
             <button
                 class=move || if screen.get() == Screen::Gallery { "btn tab active" } else { "btn tab" }
                 on:click=go_gallery
             >
-                "Gallery"
+                {move || t(locale.get(), Key::TabGallery)}
             </button>
             <button
                 class=move || if screen.get() == Screen::Rants { "btn tab active" } else { "btn tab" }
                 on:click=go_rants
             >
-                "Rants"
+                {move || t(locale.get(), Key::TabRants)}
             </button>
             <button
                 class=move || if screen.get() == Screen::Settings { "btn tab active" } else { "btn tab" }
                 on:click=go_settings
             >
-                "Settings"
+                {move || t(locale.get(), Key::TabSettings)}
             </button>
         </nav>
-        {move || has_daemon_link.get().then(|| view! { <StatusBar base_url token /> })}
+        {move || has_daemon_link.get().then(|| view! { <StatusBar base_url token locale /> })}
         {move || match screen.get() {
             Screen::Dashboard => view! {
-                <Dashboard base_url token set_screen set_requested_strip set_requested_rant />
+                <Dashboard base_url token locale set_screen set_requested_strip set_requested_rant />
             }
             .into_any(),
             Screen::Reader => view! {
-                <Reader base_url token requested_strip set_requested_strip />
+                <Reader base_url token locale requested_strip set_requested_strip />
             }
             .into_any(),
             Screen::Gallery => view! {
-                <Gallery base_url token set_screen set_requested_strip />
+                <Gallery base_url token locale set_screen set_requested_strip />
             }
             .into_any(),
             Screen::Rants => view! {
-                <Rants base_url token requested_rant set_requested_rant />
+                <Rants base_url token locale requested_rant set_requested_rant />
             }
             .into_any(),
             Screen::Settings => view! {
-                <Settings base_url set_base_url token set_token />
+                <Settings base_url set_base_url token set_token locale set_locale />
             }
             .into_any(),
         }}

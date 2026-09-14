@@ -273,6 +273,12 @@
   margin: 0 0 0.75rem;
 }
 
+[data-theme="ios"] .settings-language-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
 [data-theme="ios"] .dashboard-search {
   margin: 0 0 1rem;
 }
