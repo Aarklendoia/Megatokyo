@@ -2,6 +2,7 @@ mod daemon_client;
 mod dashboard;
 mod gallery;
 mod push;
+mod rants;
 mod reader;
 mod ripple;
 mod settings;
@@ -11,6 +12,7 @@ use leptos::prelude::*;
 
 use dashboard::Dashboard;
 use gallery::Gallery;
+use rants::Rants;
 use reader::Reader;
 use settings::Settings;
 
@@ -22,6 +24,7 @@ pub enum Screen {
     Dashboard,
     Reader,
     Gallery,
+    Rants,
     Settings,
 }
 
@@ -58,6 +61,10 @@ fn App() -> impl IntoView {
         ripple::spawn(&ev);
         set_screen.set(Screen::Gallery);
     };
+    let go_rants = move |ev: web_sys::MouseEvent| {
+        ripple::spawn(&ev);
+        set_screen.set(Screen::Rants);
+    };
     let go_settings = move |ev: web_sys::MouseEvent| {
         ripple::spawn(&ev);
         set_screen.set(Screen::Settings);
@@ -84,6 +91,12 @@ fn App() -> impl IntoView {
                 "Gallery"
             </button>
             <button
+                class=move || if screen.get() == Screen::Rants { "btn tab active" } else { "btn tab" }
+                on:click=go_rants
+            >
+                "Rants"
+            </button>
+            <button
                 class=move || if screen.get() == Screen::Settings { "btn tab active" } else { "btn tab" }
                 on:click=go_settings
             >
@@ -100,6 +113,7 @@ fn App() -> impl IntoView {
                 <Gallery base_url token set_screen set_requested_strip />
             }
             .into_any(),
+            Screen::Rants => view! { <Rants base_url token /> }.into_any(),
             Screen::Settings => view! {
                 <Settings base_url set_base_url token set_token />
             }

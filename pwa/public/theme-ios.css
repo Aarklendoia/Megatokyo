@@ -302,3 +302,38 @@
 [data-theme="ios"] .gallery-favorite.active {
   background: var(--ios-danger);
 }
+
+[data-theme="ios"] .rants-search {
+  margin: 0 0 1rem;
+}
+
+[data-theme="ios"] .rants-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+[data-theme="ios"] .rants-item-date {
+  color: rgba(127, 127, 127, 0.9);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+[data-theme="ios"] .rants-meta {
+  color: rgba(127, 127, 127, 0.9);
+  font-size: 0.85rem;
+  margin: 0 0 1rem;
+}
+
+/* rants-content is set via inner_html (see pwa/src/rants.rs) with the
+ * comic author's own HTML markup — reset it to inherit the theme's type
+ * instead of the browser's default article styles. */
+[data-theme="ios"] .rants-content {
+  line-height: 1.5;
+}
+
+[data-theme="ios"] .rants-content img {
+  max-width: 100%;
+  border-radius: 12px;
+}

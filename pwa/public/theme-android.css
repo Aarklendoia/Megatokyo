@@ -348,3 +348,38 @@
   background: var(--md-primary-container);
   color: var(--md-on-primary-container);
 }
+
+[data-theme="android"] .rants-search {
+  margin: 0 0 1rem;
+}
+
+[data-theme="android"] .rants-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+[data-theme="android"] .rants-item-date {
+  color: var(--md-outline);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+[data-theme="android"] .rants-meta {
+  color: var(--md-outline);
+  font-size: 0.85rem;
+  margin: 0 0 1rem;
+}
+
+/* rants-content is set via inner_html (see pwa/src/rants.rs) with the
+ * comic author's own HTML markup — reset it to inherit the theme's type
+ * instead of the browser's default article styles. */
+[data-theme="android"] .rants-content {
+  line-height: 1.5;
+}
+
+[data-theme="android"] .rants-content img {
+  max-width: 100%;
+  border-radius: 12px 12px 4px 12px;
+}
