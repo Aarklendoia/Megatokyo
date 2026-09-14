@@ -249,3 +249,56 @@
 [data-theme="ios"] .dashboard-continue p {
   margin: 0 0 0.75rem;
 }
+
+[data-theme="ios"] .gallery-filters {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 0 1rem 1rem;
+}
+
+[data-theme="ios"] .gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 0 1rem 3rem;
+}
+
+[data-theme="ios"] .gallery-item {
+  position: relative;
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+[data-theme="ios"] .gallery-thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  background: rgba(127, 127, 127, 0.12);
+}
+
+[data-theme="ios"] .gallery-favorite {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  appearance: none;
+  border: none;
+  border-radius: 999px;
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 0.95rem;
+  line-height: 1;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  cursor: pointer;
+}
+
+[data-theme="ios"] .gallery-favorite.active {
+  background: var(--ios-danger);
+}

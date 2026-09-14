@@ -1,5 +1,6 @@
 mod daemon_client;
 mod dashboard;
+mod gallery;
 mod push;
 mod reader;
 mod ripple;
@@ -9,6 +10,7 @@ mod storage;
 use leptos::prelude::*;
 
 use dashboard::Dashboard;
+use gallery::Gallery;
 use reader::Reader;
 use settings::Settings;
 
@@ -19,6 +21,7 @@ use settings::Settings;
 pub enum Screen {
     Dashboard,
     Reader,
+    Gallery,
     Settings,
 }
 
@@ -38,6 +41,10 @@ fn App() -> impl IntoView {
     } else {
         Screen::Settings
     });
+    // Set by Gallery before switching to Reader, so Reader opens the
+    // tapped strip instead of resuming the daemon's saved progress;
+    // Reader clears it back to `None` once consumed.
+    let (requested_strip, set_requested_strip) = signal(None::<i32>);
 
     let go_dashboard = move |ev: web_sys::MouseEvent| {
         ripple::spawn(&ev);
@@ -46,6 +53,10 @@ fn App() -> impl IntoView {
     let go_reader = move |ev: web_sys::MouseEvent| {
         ripple::spawn(&ev);
         set_screen.set(Screen::Reader);
+    };
+    let go_gallery = move |ev: web_sys::MouseEvent| {
+        ripple::spawn(&ev);
+        set_screen.set(Screen::Gallery);
     };
     let go_settings = move |ev: web_sys::MouseEvent| {
         ripple::spawn(&ev);
@@ -67,6 +78,12 @@ fn App() -> impl IntoView {
                 "Reader"
             </button>
             <button
+                class=move || if screen.get() == Screen::Gallery { "btn tab active" } else { "btn tab" }
+                on:click=go_gallery
+            >
+                "Gallery"
+            </button>
+            <button
                 class=move || if screen.get() == Screen::Settings { "btn tab active" } else { "btn tab" }
                 on:click=go_settings
             >
@@ -75,7 +92,14 @@ fn App() -> impl IntoView {
         </nav>
         {move || match screen.get() {
             Screen::Dashboard => view! { <Dashboard base_url token set_screen /> }.into_any(),
-            Screen::Reader => view! { <Reader base_url token /> }.into_any(),
+            Screen::Reader => view! {
+                <Reader base_url token requested_strip set_requested_strip />
+            }
+            .into_any(),
+            Screen::Gallery => view! {
+                <Gallery base_url token set_screen set_requested_strip />
+            }
+            .into_any(),
             Screen::Settings => view! {
                 <Settings base_url set_base_url token set_token />
             }
