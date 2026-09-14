@@ -51,26 +51,51 @@ pub fn Reader(base_url: ReadSignal<String>, token: ReadSignal<String>) -> impl I
         }
     };
 
-    let go_prev = move |ev: web_sys::MouseEvent| {
-        ripple::spawn(&ev);
-        let i = index.get_untracked();
-        if i > 0 {
-            set_index.set(i - 1);
-            save_progress_for(i - 1);
-        }
-    };
-
-    let go_next = move |ev: web_sys::MouseEvent| {
-        ripple::spawn(&ev);
+    // Shared by the Previous/Next buttons and the swipe gesture below, so
+    // both agree on bounds-checking and progress-saving.
+    let navigate = move |delta: i32| {
         let len = strips
             .get_untracked()
             .and_then(|r| r.ok())
             .map(|list| list.len())
             .unwrap_or(0);
-        let i = index.get_untracked();
-        if i + 1 < len {
-            set_index.set(i + 1);
-            save_progress_for(i + 1);
+        let new_index = index.get_untracked() as i32 + delta;
+        if new_index >= 0 && (new_index as usize) < len {
+            set_index.set(new_index as usize);
+            save_progress_for(new_index as usize);
+        }
+    };
+
+    let go_prev = move |ev: web_sys::MouseEvent| {
+        ripple::spawn(&ev);
+        navigate(-1);
+    };
+
+    let go_next = move |ev: web_sys::MouseEvent| {
+        ripple::spawn(&ev);
+        navigate(1);
+    };
+
+    // Touch/pen/mouse swipe on the strip image — Pointer Events unify all
+    // three input types instead of needing separate touch/mouse handlers.
+    // A short horizontal drag (more horizontal than vertical, past
+    // SWIPE_THRESHOLD_PX) pages forward/back; anything else (a tap, a
+    // vertical scroll attempt) is left alone.
+    const SWIPE_THRESHOLD_PX: f64 = 40.0;
+    let (swipe_start, set_swipe_start) = signal(None::<(f64, f64)>);
+
+    let on_pointer_down = move |ev: web_sys::PointerEvent| {
+        set_swipe_start.set(Some((ev.client_x() as f64, ev.client_y() as f64)));
+    };
+    let on_pointer_up = move |ev: web_sys::PointerEvent| {
+        let Some((start_x, start_y)) = swipe_start.get_untracked() else {
+            return;
+        };
+        set_swipe_start.set(None);
+        let dx = ev.client_x() as f64 - start_x;
+        let dy = ev.client_y() as f64 - start_y;
+        if dx.abs() > SWIPE_THRESHOLD_PX && dx.abs() > dy.abs() {
+            navigate(if dx < 0.0 { 1 } else { -1 });
         }
     };
 
@@ -129,7 +154,13 @@ pub fn Reader(base_url: ReadSignal<String>, token: ReadSignal<String>) -> impl I
                             let is_favorite = favorite_numbers.get().contains(&strip.number);
                             view! {
                                 <p class="reader-title">{format!("#{} — {}", strip.number, strip.title)}</p>
-                                <img class="reader-image" src=src alt=strip.title.clone() />
+                                <div
+                                    class="reader-swipe"
+                                    on:pointerdown=on_pointer_down
+                                    on:pointerup=on_pointer_up
+                                >
+                                    <img class="reader-image" src=src alt=strip.title.clone() />
+                                </div>
                                 <div class="reader-nav">
                                     <button class="btn" on:click=go_prev>"Previous"</button>
                                     <button
