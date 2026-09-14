@@ -1,11 +1,13 @@
 mod daemon_client;
 mod dashboard;
+mod format;
 mod gallery;
 mod push;
 mod rants;
 mod reader;
 mod ripple;
 mod settings;
+mod status_bar;
 mod storage;
 
 use leptos::prelude::*;
@@ -15,6 +17,7 @@ use gallery::Gallery;
 use rants::Rants;
 use reader::Reader;
 use settings::Settings;
+use status_bar::StatusBar;
 
 /// First run (no base URL/token saved yet) has nothing to show on a
 /// Dashboard, so it lands on Settings instead; every later run starts on
@@ -50,6 +53,11 @@ fn App() -> impl IntoView {
     let (requested_strip, set_requested_strip) = signal(None::<i32>);
     // Same idea, set by Dashboard before switching to Rants.
     let (requested_rant, set_requested_rant) = signal(None::<i32>);
+    // A `Memo` (not a plain reactive closure) so the StatusBar below only
+    // mounts/unmounts — restarting its polling loop — when this actually
+    // flips, not on every keystroke while editing Settings.
+    let has_daemon_link =
+        Memo::new(move |_| !base_url.get().trim().is_empty() && !token.get().trim().is_empty());
 
     let go_dashboard = move |ev: web_sys::MouseEvent| {
         ripple::spawn(&ev);
@@ -105,6 +113,7 @@ fn App() -> impl IntoView {
                 "Settings"
             </button>
         </nav>
+        {move || has_daemon_link.get().then(|| view! { <StatusBar base_url token /> })}
         {move || match screen.get() {
             Screen::Dashboard => view! {
                 <Dashboard base_url token set_screen set_requested_strip set_requested_rant />

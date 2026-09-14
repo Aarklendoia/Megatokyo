@@ -196,6 +196,29 @@
   color: #fff;
 }
 
+[data-theme="ios"] .status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 0.5rem 1rem 0;
+  font-size: 0.8rem;
+  color: rgba(127, 127, 127, 0.9);
+}
+
+[data-theme="ios"] .status-bar-text.error {
+  color: var(--ios-danger);
+}
+
+[data-theme="ios"] .status-bar-check {
+  padding: 0.3rem 0.8rem;
+  font-size: 0.8rem;
+  margin: 0;
+  flex-shrink: 0;
+}
+
 [data-theme="ios"] .reader-strip {
   text-align: center;
 }
