@@ -283,3 +283,81 @@ pub async fn trigger_check(base_url: &str, token: &str) -> Result<(), String> {
         .map_err(|err| err.to_string())?;
     ok_or_status(&response).await
 }
+
+#[derive(Clone, Deserialize)]
+pub struct DaemonConfig {
+    pub deepl_api_key: String,
+    pub poll_interval_minutes: u64,
+}
+
+pub async fn fetch_config(base_url: &str, token: &str) -> Result<DaemonConfig, String> {
+    let url = format!("{}/config", base_url.trim_end_matches('/'));
+    let response = gloo_net::http::Request::get(&url)
+        .header(TOKEN_HEADER, token)
+        .send()
+        .await
+        .map_err(|err| err.to_string())?;
+
+    if !response.ok() {
+        return Err(format!("daemon returned {}", response.status()));
+    }
+
+    response
+        .json::<DaemonConfig>()
+        .await
+        .map_err(|err| err.to_string())
+}
+
+/// Each field is independently optional: only the ones passed as `Some`
+/// get updated, matching the daemon's own `POST /config` semantics.
+pub async fn update_config(
+    base_url: &str,
+    token: &str,
+    deepl_api_key: Option<&str>,
+    poll_interval_minutes: Option<u64>,
+) -> Result<DaemonConfig, String> {
+    let mut params = Vec::new();
+    if let Some(key) = deepl_api_key {
+        params.push(format!(
+            "deepl_api_key={}",
+            js_sys::encode_uri_component(key)
+        ));
+    }
+    if let Some(minutes) = poll_interval_minutes {
+        params.push(format!("poll_interval_minutes={minutes}"));
+    }
+    let query = if params.is_empty() {
+        String::new()
+    } else {
+        format!("?{}", params.join("&"))
+    };
+    let url = format!("{}/config{query}", base_url.trim_end_matches('/'));
+    let response = gloo_net::http::Request::post(&url)
+        .header(TOKEN_HEADER, token)
+        .send()
+        .await
+        .map_err(|err| err.to_string())?;
+
+    if !response.ok() {
+        return Err(format!("daemon returned {}", response.status()));
+    }
+
+    response
+        .json::<DaemonConfig>()
+        .await
+        .map_err(|err| err.to_string())
+}
+
+pub async fn push_unsubscribe(base_url: &str, token: &str, endpoint: &str) -> Result<(), String> {
+    let encoded_endpoint = js_sys::encode_uri_component(endpoint);
+    let url = format!(
+        "{}/push/unsubscribe?endpoint={encoded_endpoint}",
+        base_url.trim_end_matches('/'),
+    );
+    let response = gloo_net::http::Request::post(&url)
+        .header(TOKEN_HEADER, token)
+        .send()
+        .await
+        .map_err(|err| err.to_string())?;
+    ok_or_status(&response).await
+}
