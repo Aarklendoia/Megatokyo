@@ -295,6 +295,26 @@
   margin: 0 0 0.75rem;
 }
 
+[data-theme="android"] .dashboard-search {
+  margin: 0 0 1rem;
+}
+
+[data-theme="android"] .dashboard-search-results li {
+  cursor: pointer;
+}
+
+[data-theme="android"] .dashboard-latest-rant {
+  cursor: pointer;
+}
+
+[data-theme="android"] .dashboard-latest-rant h2 {
+  margin: 0 0 0.4rem;
+}
+
+[data-theme="android"] .dashboard-latest-rant p {
+  margin: 0;
+}
+
 [data-theme="android"] .gallery-filters {
   display: flex;
   gap: 0.4rem;
