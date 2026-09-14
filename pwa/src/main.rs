@@ -1,10 +1,26 @@
 mod daemon_client;
+mod dashboard;
 mod push;
+mod reader;
 mod ripple;
+mod settings;
 mod storage;
 
 use leptos::prelude::*;
-use leptos::task::spawn_local;
+
+use dashboard::Dashboard;
+use reader::Reader;
+use settings::Settings;
+
+/// First run (no base URL/token saved yet) has nothing to show on a
+/// Dashboard, so it lands on Settings instead; every later run starts on
+/// the Dashboard, matching the desktop GUI's shell.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Screen {
+    Dashboard,
+    Reader,
+    Settings,
+}
 
 fn main() {
     console_error_panic_hook::set_once();
@@ -14,90 +30,56 @@ fn main() {
 #[component]
 fn App() -> impl IntoView {
     let initial = storage::load();
+    let is_configured = !initial.base_url.trim().is_empty() && !initial.token.trim().is_empty();
     let (base_url, set_base_url) = signal(initial.base_url);
     let (token, set_token) = signal(initial.token);
-    let (chapters, set_chapters) = signal(None::<Result<Vec<String>, String>>);
-    let (notifications_status, set_notifications_status) = signal(None::<Result<(), String>>);
+    let (screen, set_screen) = signal(if is_configured {
+        Screen::Dashboard
+    } else {
+        Screen::Settings
+    });
 
-    let save_settings = move |ev: web_sys::MouseEvent| {
+    let go_dashboard = move |ev: web_sys::MouseEvent| {
         ripple::spawn(&ev);
-        storage::save(&storage::DaemonLink {
-            base_url: base_url.get(),
-            token: token.get(),
-        });
+        set_screen.set(Screen::Dashboard);
     };
-
-    let enable_notifications = move |ev: web_sys::MouseEvent| {
+    let go_reader = move |ev: web_sys::MouseEvent| {
         ripple::spawn(&ev);
-        let base_url = base_url.get();
-        let token = token.get();
-        set_notifications_status.set(None);
-        spawn_local(async move {
-            let result = push::subscribe(&base_url, &token).await;
-            set_notifications_status.set(Some(result));
-        });
+        set_screen.set(Screen::Reader);
     };
-
-    let load_chapters = move |ev: web_sys::MouseEvent| {
+    let go_settings = move |ev: web_sys::MouseEvent| {
         ripple::spawn(&ev);
-        let base_url = base_url.get();
-        let token = token.get();
-        set_chapters.set(None);
-        spawn_local(async move {
-            let result = daemon_client::fetch_chapters(&base_url, &token)
-                .await
-                .map(|chs| {
-                    chs.into_iter()
-                        .map(|c| format!("#{} — {}", c.number, c.title))
-                        .collect()
-                });
-            set_chapters.set(Some(result));
-        });
+        set_screen.set(Screen::Settings);
     };
 
     view! {
-        <main>
-            <h1>"Megatokyo"</h1>
-            <section class="card">
-                <h2>"Daemon settings"</h2>
-                <label>
-                    "Base URL "
-                    <input
-                        type="text"
-                        placeholder="http://127.0.0.1:8420"
-                        prop:value=move || base_url.get()
-                        on:input=move |ev| set_base_url.set(event_target_value(&ev))
-                    />
-                </label>
-                <label>
-                    "Token "
-                    <input
-                        type="password"
-                        prop:value=move || token.get()
-                        on:input=move |ev| set_token.set(event_target_value(&ev))
-                    />
-                </label>
-                <button class="btn btn-primary" on:click=save_settings>"Save"</button>
-                <button class="btn" on:click=load_chapters>"Load chapters"</button>
-                <button class="btn" on:click=enable_notifications>"Enable notifications"</button>
-                {move || match notifications_status.get() {
-                    None => ().into_any(),
-                    Some(Ok(())) => view! { <p class="status">"Notifications enabled."</p> }.into_any(),
-                    Some(Err(err)) => view! { <p class="status error">{err}</p> }.into_any(),
-                }}
-            </section>
-            <section class="card">
-                <h2>"Chapters"</h2>
-                {move || match chapters.get() {
-                    None => view! { <p class="status">"Not loaded yet."</p> }.into_any(),
-                    Some(Ok(list)) => view! {
-                        <ul>
-                            {list.into_iter().map(|c| view! { <li>{c}</li> }).collect_view()}
-                        </ul>
-                    }.into_any(),
-                    Some(Err(err)) => view! { <p class="status error">{err}</p> }.into_any(),
-                }}
-            </section>
-        </main>
+        <nav class="tabs">
+            <button
+                class=move || if screen.get() == Screen::Dashboard { "btn tab active" } else { "btn tab" }
+                on:click=go_dashboard
+            >
+                "Home"
+            </button>
+            <button
+                class=move || if screen.get() == Screen::Reader { "btn tab active" } else { "btn tab" }
+                on:click=go_reader
+            >
+                "Reader"
+            </button>
+            <button
+                class=move || if screen.get() == Screen::Settings { "btn tab active" } else { "btn tab" }
+                on:click=go_settings
+            >
+                "Settings"
+            </button>
+        </nav>
+        {move || match screen.get() {
+            Screen::Dashboard => view! { <Dashboard base_url token set_screen /> }.into_any(),
+            Screen::Reader => view! { <Reader base_url token /> }.into_any(),
+            Screen::Settings => view! {
+                <Settings base_url set_base_url token set_token />
+            }
+            .into_any(),
+        }}
     }
 }

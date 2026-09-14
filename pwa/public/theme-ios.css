@@ -182,3 +182,70 @@
 [data-theme="ios"] li:last-child {
   border-bottom: none;
 }
+
+[data-theme="ios"] .tabs {
+  display: flex;
+  gap: 0.4rem;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 1rem 1rem 0;
+}
+
+[data-theme="ios"] .tab.active {
+  background: var(--ios-accent);
+  color: #fff;
+}
+
+[data-theme="ios"] .reader-strip {
+  text-align: center;
+}
+
+[data-theme="ios"] .reader-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+}
+
+/* touch-action: pan-y lets a vertical scroll still pass through while
+ * pwa/src/reader.rs's pointerdown/pointerup handlers own horizontal
+ * drags — without it, a swipe can start a native horizontal pan that
+ * fights the JS-driven page change. */
+[data-theme="ios"] .reader-swipe {
+  touch-action: pan-y;
+}
+
+[data-theme="ios"] .reader-image {
+  max-width: 100%;
+  border-radius: 16px;
+  display: block;
+  margin: 0 auto 1rem;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+[data-theme="ios"] .reader-nav {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* At least a 44pt touch target (Apple HIG) for the buttons users tap most
+ * — plain .btn's padding alone comes in under that. */
+[data-theme="ios"] .reader-nav .btn {
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+  font-size: 1rem;
+}
+
+[data-theme="ios"] .btn-favorite {
+  font-size: 1.2rem;
+}
+
+[data-theme="ios"] .btn-favorite.active {
+  background: var(--ios-danger);
+  color: #fff;
+}
+
+[data-theme="ios"] .dashboard-continue p {
+  margin: 0 0 0.75rem;
+}

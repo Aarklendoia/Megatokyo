@@ -6,19 +6,49 @@ const SHELL_URLS = ["/", "/manifest.json", "/icon.svg"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(SHELL_URLS))
+    caches
+      .open(CACHE_NAME)
+      .then((cache) => cache.addAll(SHELL_URLS))
+      // Without this, a new sw.js sits "waiting" until every tab showing
+      // the old one closes — so a deploy's fix (like #84) wouldn't reach
+      // an already-open tab without the user manually closing it first.
+      .then(() => self.skipWaiting())
   );
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))
-    )
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))
+      )
+      // Takes control of already-open tabs immediately instead of only
+      // the next navigation, pairing with skipWaiting() above.
+      .then(() => self.clients.claim())
   );
 });
 
+// Navigations (the HTML shell) are network-first: index.html references
+// content-hashed JS/WASM filenames, so a cached copy from an earlier
+// deploy would keep pointing at assets a later deploy no longer serves —
+// a permanent NetworkError/SRI-mismatch trap (#84) once installed. Only
+// fall back to the cache when the network is unreachable (offline).
+// Everything else (the hashed assets themselves, effectively immutable)
+// stays cache-first for speed and offline use.
 self.addEventListener("fetch", (event) => {
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+          return response;
+        })
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
   event.respondWith(
     caches.match(event.request).then((cached) => cached || fetch(event.request))
   );
