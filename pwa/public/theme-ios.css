@@ -182,3 +182,48 @@
 [data-theme="ios"] li:last-child {
   border-bottom: none;
 }
+
+[data-theme="ios"] .tabs {
+  display: flex;
+  gap: 0.4rem;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 1rem 1rem 0;
+}
+
+[data-theme="ios"] .tab.active {
+  background: var(--ios-accent);
+  color: #fff;
+}
+
+[data-theme="ios"] .reader-strip {
+  text-align: center;
+}
+
+[data-theme="ios"] .reader-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+}
+
+[data-theme="ios"] .reader-image {
+  max-width: 100%;
+  border-radius: 16px;
+  display: block;
+  margin: 0 auto 1rem;
+}
+
+[data-theme="ios"] .reader-nav {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+[data-theme="ios"] .btn-favorite {
+  font-size: 1.1rem;
+}
+
+[data-theme="ios"] .btn-favorite.active {
+  background: var(--ios-danger);
+  color: #fff;
+}

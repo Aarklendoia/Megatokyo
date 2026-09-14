@@ -9,10 +9,10 @@
  * two read as distinct products rather than a re-skin of each other.
  *
  * Android back-button behavior is intentionally NOT implemented here: the
- * app has no multi-view navigation yet (one settings+chapters shell), so
- * there's nothing to wire a back gesture to until a reader/gallery view
- * exists — building that now would be handling a navigation stack that
- * doesn't exist.
+ * Reader/Settings switch (pwa/src/main.rs) is a plain in-memory signal, not
+ * a router with real browser history — there's still no navigation stack to
+ * wire a back gesture to. Revisit once routing lands (see the PWA parity
+ * issues).
  */
 
 [data-theme="android"] {
@@ -229,4 +229,46 @@
 
 [data-theme="android"] li:last-child {
   border-bottom: none;
+}
+
+[data-theme="android"] .tabs {
+  display: flex;
+  gap: 0.4rem;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 1rem 1rem 0;
+}
+
+[data-theme="android"] .tab.active {
+  background: var(--md-primary-container);
+  color: var(--md-on-primary-container);
+}
+
+[data-theme="android"] .reader-strip {
+  text-align: center;
+}
+
+[data-theme="android"] .reader-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0 0 0.75rem;
+  color: var(--md-primary);
+}
+
+[data-theme="android"] .reader-image {
+  max-width: 100%;
+  border-radius: 20px 20px 8px 20px;
+  display: block;
+  margin: 0 auto 1rem;
+}
+
+[data-theme="android"] .reader-nav {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+[data-theme="android"] .btn-favorite.active {
+  background: var(--md-primary-container);
+  color: var(--md-on-primary-container);
 }
