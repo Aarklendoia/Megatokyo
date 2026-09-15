@@ -1,8 +1,7 @@
-//! Daemon settings screen: base URL/token entry, chapter list smoke test,
-//! push notification opt-in/out, and daemon-side config (DeepL key, poll
-//! interval). Split out of `main.rs` so the app shell can route between
-//! this and other screens while sharing the same `base_url`/`token`
-//! signals.
+//! Daemon settings screen: base URL/token entry, push notification
+//! opt-in/out, and daemon-side config (DeepL key, poll interval). Split
+//! out of `main.rs` so the app shell can route between this and other
+//! screens while sharing the same `base_url`/`token` signals.
 
 use leptos::prelude::*;
 use leptos::task::spawn_local;
