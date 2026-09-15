@@ -2,7 +2,7 @@
 //! `x-megatokyo-daemon-token` header convention the desktop GUI already uses
 //! (see `gui/src/background.rs`'s `fetch_status`).
 
-use megatokyo_core::domain::{Chapter, Favorite, Rant, Strip};
+use megatokyo_core::domain::{Favorite, Rant, Strip};
 use serde::Deserialize;
 
 const TOKEN_HEADER: &str = "x-megatokyo-daemon-token";
@@ -13,24 +13,6 @@ async fn ok_or_status(response: &gloo_net::http::Response) -> Result<(), String>
     } else {
         Err(format!("daemon returned {}", response.status()))
     }
-}
-
-pub async fn fetch_chapters(base_url: &str, token: &str) -> Result<Vec<Chapter>, String> {
-    let url = format!("{}/chapters", base_url.trim_end_matches('/'));
-    let response = gloo_net::http::Request::get(&url)
-        .header(TOKEN_HEADER, token)
-        .send()
-        .await
-        .map_err(|err| err.to_string())?;
-
-    if !response.ok() {
-        return Err(format!("daemon returned {}", response.status()));
-    }
-
-    response
-        .json::<Vec<Chapter>>()
-        .await
-        .map_err(|err| err.to_string())
 }
 
 pub async fn fetch_strips(base_url: &str, token: &str) -> Result<Vec<Strip>, String> {
