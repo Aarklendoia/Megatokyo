@@ -47,3 +47,20 @@ Description: Megatokyo webcomic reader (QML client)
  Talks to a megatokyo-daemon instance, local (installed by the
  Recommends above and started automatically) or remote (configured in
  Settings).
+
+Package: megatokyo-pwa
+Architecture: all
+Depends: ${misc:Depends}
+Recommends: megatokyo-daemon
+Suggests: nginx
+Description: Megatokyo webcomic reader (mobile PWA, static bundle)
+ A static, installable web-app build of the Megatokyo reader (Leptos/WASM),
+ for browsing chapters and strips, favoriting, reading rants with on-demand
+ translation, and push notifications when a new strip or rant goes up —
+ the mobile/browser counterpart of megatokyo-gui, talking to the same
+ megatokyo-daemon HTTP API (configured in the app's own Settings screen,
+ not by this package).
+ .
+ Installs the built bundle to /usr/share/megatokyo-pwa/www; serve it with
+ any static web server — see /usr/share/doc/megatokyo-pwa/examples/ for a
+ ready-made nginx site config.

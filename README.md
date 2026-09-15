@@ -20,14 +20,17 @@ A Rust + QML desktop client for Fred Gallagher's [Megatokyo](https://megatokyo.c
 sudo add-apt-repository ppa:aarklendoia-edtech/megatokyo
 sudo apt update
 sudo apt install megatokyo-daemon megatokyo-gui
+# Mobile/browser client (static PWA bundle, serve with any web server):
+sudo apt install megatokyo-pwa
 ```
 
 ### From a GitHub Release
 
-Download the `megatokyo-daemon` and `megatokyo-gui` `.deb` files for your architecture from the [Releases page](https://github.com/Aarklendoia/megatokyo/releases), then:
+Download the `.deb` files for your architecture from the [Releases page](https://github.com/Aarklendoia/megatokyo/releases), then:
 
 ```sh
 sudo apt install ./megatokyo-daemon_*.deb ./megatokyo-gui_*.deb
+sudo apt install ./megatokyo-pwa_*.deb   # optional: mobile/browser client
 ```
 
 (`apt install ./file.deb` rather than `dpkg -i` so apt resolves the Qt/QML dependencies automatically.)
@@ -82,6 +85,7 @@ systemctl --user disable --now megatokyo-gui-background   # to turn it off
 - **`daemon`** (`megatokyo-daemon`) — background service: scrapes and caches strips/rants/chapters, serves them over a small hand-rolled HTTP API. Can run co-located with the GUI (loopback) or on a real server reachable by several clients.
 - **`gui`** (`megatokyo-gui`) — a thin Rust launcher that spawns Qt's own `qml6` runtime against `qml/`. No Qt/Rust binding crate: the QML talks to the daemon's HTTP API directly. Also runs in `--background` mode as a login-time notification watcher.
 - **`qml/`** — the QML UI itself.
+- **`pwa`** (`megatokyo-pwa`) — a Leptos/WASM mobile/browser client, built with [Trunk](https://trunkrs.dev) into a static bundle (`/usr/share/megatokyo-pwa/www` once packaged) served by any web server — see [debian/examples/megatokyo-pwa-nginx.conf](debian/examples/megatokyo-pwa-nginx.conf) for a ready-made nginx config. Talks to the same daemon HTTP API as the desktop GUI, configured in its own Settings screen.
 
 The daemon has no built-in TLS: for a real remote deployment, put it behind a TLS-terminating reverse proxy (or a VPN) rather than exposing it directly. See `daemon`'s doc comments for the API's authentication model.
 
