@@ -86,7 +86,6 @@ pub enum Key {
     BaseUrlLabel,
     TokenLabel,
     Save,
-    LoadChapters,
     EnableNotifications,
     DisableNotifications,
     Done,
@@ -94,8 +93,6 @@ pub enum Key {
     DeeplKeyLabel,
     PollIntervalLabel,
     Saved,
-    ChaptersHeading,
-    NotLoadedYet,
     LanguageHeading,
     LanguageAuto,
     CheckingDaemon,
@@ -206,10 +203,6 @@ pub fn t(locale: Locale, key: Key) -> &'static str {
             Locale::En => "Save",
             Locale::Fr => "Enregistrer",
         },
-        LoadChapters => match locale {
-            Locale::En => "Load chapters",
-            Locale::Fr => "Charger les chapitres",
-        },
         EnableNotifications => match locale {
             Locale::En => "Enable notifications",
             Locale::Fr => "Activer les notifications",
@@ -237,14 +230,6 @@ pub fn t(locale: Locale, key: Key) -> &'static str {
         Saved => match locale {
             Locale::En => "Saved.",
             Locale::Fr => "Enregistré.",
-        },
-        ChaptersHeading => match locale {
-            Locale::En => "Chapters",
-            Locale::Fr => "Chapitres",
-        },
-        NotLoadedYet => match locale {
-            Locale::En => "Not loaded yet.",
-            Locale::Fr => "Pas encore chargé.",
         },
         LanguageHeading => match locale {
             Locale::En => "Language",

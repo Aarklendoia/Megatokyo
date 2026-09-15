@@ -21,7 +21,6 @@ pub fn Settings(
     locale: ReadSignal<Locale>,
     set_locale: WriteSignal<Locale>,
 ) -> impl IntoView {
-    let (chapters, set_chapters) = signal(None::<Result<Vec<String>, String>>);
     let (notifications_status, set_notifications_status) = signal(None::<Result<(), String>>);
     let (deepl_key, set_deepl_key) = signal(String::new());
     let (poll_interval, set_poll_interval) = signal(String::new());
@@ -108,23 +107,6 @@ pub fn Settings(
         set_locale.set(crate::i18n::detect());
     };
 
-    let load_chapters = move |ev: web_sys::MouseEvent| {
-        ripple::spawn(&ev);
-        let base_url = base_url.get();
-        let token = token.get();
-        set_chapters.set(None);
-        spawn_local(async move {
-            let result = daemon_client::fetch_chapters(&base_url, &token)
-                .await
-                .map(|chs| {
-                    chs.into_iter()
-                        .map(|c| format!("#{} — {}", c.number, c.title))
-                        .collect()
-                });
-            set_chapters.set(Some(result));
-        });
-    };
-
     view! {
         <main>
             <h1>"Megatokyo"</h1>
@@ -175,9 +157,6 @@ pub fn Settings(
                 <button class="btn btn-primary" on:click=save_settings>
                     {move || t(locale.get(), Key::Save)}
                 </button>
-                <button class="btn" on:click=load_chapters>
-                    {move || t(locale.get(), Key::LoadChapters)}
-                </button>
                 <button class="btn" on:click=enable_notifications>
                     {move || t(locale.get(), Key::EnableNotifications)}
                 </button>
@@ -215,18 +194,6 @@ pub fn Settings(
                 {move || match config_status.get() {
                     None => ().into_any(),
                     Some(Ok(())) => view! { <p class="status">{t(locale.get(), Key::Saved)}</p> }.into_any(),
-                    Some(Err(err)) => view! { <p class="status error">{err}</p> }.into_any(),
-                }}
-            </section>
-            <section class="card">
-                <h2>{move || t(locale.get(), Key::ChaptersHeading)}</h2>
-                {move || match chapters.get() {
-                    None => view! { <p class="status">{t(locale.get(), Key::NotLoadedYet)}</p> }.into_any(),
-                    Some(Ok(list)) => view! {
-                        <ul>
-                            {list.into_iter().map(|c| view! { <li>{c}</li> }).collect_view()}
-                        </ul>
-                    }.into_any(),
                     Some(Err(err)) => view! { <p class="status error">{err}</p> }.into_any(),
                 }}
             </section>
