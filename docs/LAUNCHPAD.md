@@ -75,8 +75,14 @@ Launchpad identity.
 
 Launchpad's builders can't reach crates.io during a build. Unlike
 linux-hello/kio-protondrive, this workspace is pure Cargo (no
-CMake/Corrosion, no build.rs downloading model files), so there is exactly
-one thing to vendor:
+CMake/Corrosion, no build.rs downloading model files) for `megatokyo-daemon`
+and `megatokyo-gui` — but `megatokyo-pwa` (a Leptos/WASM bundle trunk
+assembles) needs a lot more: `trunk` and `wasm-bindgen-cli` aren't apt
+packages, and Ubuntu's own apt-packaged rustc cannot build `std` for
+`wasm32-unknown-unknown` at all, prebuilt or from source (see the script's
+own comments for the two things that were tried and why both are
+fundamentally impossible against Ubuntu's rustc, not just inconvenient).
+One command handles everything:
 
 ```bash
 # Check the target series' packaged cargo version first:
@@ -85,14 +91,30 @@ rmadison -u ubuntu cargo | grep resolute
 RUST_TOOLCHAIN=1.93.1 ./debian/scripts/prepare-offline-build.sh
 ```
 
-This vendors Cargo dependencies into `vendor/` (+ `.cargo/config.toml`) —
-see the script's comments for **why the toolchain version matters** (a
-newer local cargo can vendor a tree an older, series-packaged cargo can't
-verify — already hit and documented in linux-hello's equivalent script).
-`vendor/` and `.cargo/` are git-ignored: regenerated per release, not part
-of normal `main` history. Since `debian/source/format` is `3.0 (native)`,
+This vendors Cargo dependencies into `vendor/` (+ `.cargo/config.toml`) for
+the main workspace, pre-populates a cargo registry cache for building
+`trunk`/`wasm-bindgen-cli` from source, and vendors a complete official
+rustc+cargo+std toolchain (host **and** wasm32 target) used only for
+`pwa/`'s build — `megatokyo-daemon`/`megatokyo-gui`/`megatokyo-core` still
+build with the apt rustc, untouched, and RUST_TOOLCHAIN's version only
+matters for *that* vendoring: see the script's comments for **why the
+toolchain version matters** (a newer local cargo can vendor a tree an
+older, series-packaged cargo can't verify — already hit and documented in
+linux-hello's equivalent script). The vendored toolchain used for `pwa/` is
+self-contained and never mixed with the apt rustc, so it isn't subject to
+that same version-matching requirement.
+None of `vendor/`, `.cargo/config.toml`, `debian/build-tools/cargo-home/`,
+or `debian/vendor-rust-toolchain/` are git-ignored by accident: they're
+regenerated per release, not part of normal `main` history. Since
+`debian/source/format` is `3.0 (native)`,
 `debuild -S` tars up whatever is physically present at that moment,
-`.gitignore` notwithstanding.
+`.gitignore` notwithstanding — except files named exactly `*.so`/`*.a`/
+`*.o`/`*.la`, which "3.0 (native)" silently drops unconditionally (a
+dpkg-source default, confirmed unrelated to `.gitignore` and not
+reachable through `--tar-ignore`/`debian/source/include-binaries` for this
+format); `prepare-offline-build.sh`'s last step renames every such file it
+just vendored to dodge this, and `debian/rules` renames them back before
+building.
 
 ## 3. Building and uploading a release
 
@@ -120,5 +142,5 @@ exist (step 1 above) before it can succeed.
 ## 5. Once published
 
 Add the `add-apt-repository ppa:aarklendoia-edtech/megatokyo` /
-`apt install megatokyo-daemon megatokyo-gui` instructions to the README's
-install section and a Launchpad badge to the badge row.
+`apt install megatokyo-daemon megatokyo-gui megatokyo-pwa` instructions to
+the README's install section and a Launchpad badge to the badge row.

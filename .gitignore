@@ -17,6 +17,18 @@ Cargo.lock
 /.cargo/*
 !/.cargo/audit.toml
 
+# Same idea for the pre-populated cargo registry cache used to build trunk
+# and wasm-bindgen-cli offline (see debian/scripts/prepare-offline-build.sh
+# and debian/rules) and the vendored wasm32 rust-std component — all
+# generated fresh right before a PPA upload, never committed.
+/debian/build-tools/cargo-home/
+/debian/vendor-rust-toolchain/
+
+# trunk build output for the megatokyo-pwa Debian package (see
+# debian/rules) — distinct from /pwa/dist/ above, which is trunk's normal
+# dev-build output.
+/debian/pwa-dist/
+
 # IDEs
 .vscode/
 .idea/
@@ -39,6 +51,7 @@ debian/tmp/
 debian/.debhelper/
 debian/megatokyo-daemon/
 debian/megatokyo-gui/
+debian/megatokyo-pwa/
 debian/*.substvars
 debian/*.debhelper
 debian/files

@@ -14,7 +14,12 @@ export PATH:=$(HOME)/.cargo/bin:$(PATH)
 override_dh_auto_clean:
 	# Do not erase the cargo cache: preserves incremental compilation.
 	# In CI, the target directory is absent anyway (clean clone).
-	true
+	# debian/pwa-dist and debian/build-tools/out ARE build output though
+	# (trunk's dist bundle, the installed trunk/wasm-bindgen-cli binaries)
+	# — dh_clean doesn't know about either custom path, so without this
+	# they'd ride along into a source tarball built without a prior manual
+	# `debian/rules clean` (bloating it with a stale/rebuilt-anyway copy).
+	rm -rf $(CURDIR)/debian/pwa-dist $(CURDIR)/debian/build-tools/out
 
 override_dh_clean:
 	# dh_clean's default cruft-removal (part of every `debian/rules clean`,
@@ -28,6 +33,21 @@ override_dh_clean:
 	dh_clean -Xvendor
 
 override_dh_auto_build:
+	# "3.0 (native)" source packages silently drop any file named exactly
+	# *.so/*.a/*.o/*.la when dpkg-source tars up the tree (confirmed via a
+	# from-scratch repro — dpkg-source's documented tar-ignore default,
+	# applied unconditionally for this format) — prepare-offline-build.sh
+	# renames every such file across vendor/, debian/build-tools/cargo-home/
+	# and debian/vendor-rust-toolchain/ before packaging specifically to
+	# dodge that; undo it here, once, before anything tries to use those
+	# directories (ring's pregenerated asm objects and the vendored
+	# toolchain's own shared libraries are load-bearing, not incidental).
+	if [ -d $(CURDIR)/vendor ] && [ -f $(CURDIR)/.cargo/config.toml ]; then \
+		for d in $(CURDIR)/vendor $(CURDIR)/debian/build-tools/cargo-home $(CURDIR)/debian/vendor-rust-toolchain; do \
+			find "$$d" -type f -name '*.dpkg-source-workaround' | while IFS= read -r f; do mv "$$f" "$${f%.dpkg-source-workaround}"; done; \
+		done; \
+	fi
+
 	# If vendor/ + .cargo/config.toml are present (see
 	# debian/scripts/prepare-offline-build.sh), build fully offline — this
 	# is what a Launchpad PPA build needs, since its builders have no
@@ -37,6 +57,38 @@ override_dh_auto_build:
 		cargo build --release --workspace --verbose --offline; \
 	else \
 		cargo build --release --workspace --verbose; \
+	fi
+
+	# pwa/ isn't a normal cargo binary: it's a Leptos/WASM bundle trunk
+	# assembles from a wasm32-unknown-unknown build + wasm-bindgen's JS
+	# glue, so it needs its own build step. Same offline/online split as
+	# above, but see debian/scripts/prepare-offline-build.sh for why
+	# building this offline is the hard part: neither trunk nor
+	# wasm-bindgen-cli are apt packages (built from source here too, from
+	# a pre-populated cargo registry cache), and — the harder problem —
+	# Ubuntu's own apt rustc cannot build std for wasm32 at all, prebuilt
+	# or from source (see that script's comment for why), so pwa/'s
+	# compile alone uses a vendored, self-consistent official
+	# rustc+cargo+std toolchain instead; daemon/gui/core above still use
+	# the apt rustc, untouched.
+	if [ -d $(CURDIR)/vendor ] && [ -f $(CURDIR)/.cargo/config.toml ]; then \
+		rm -rf $(CURDIR)/debian/build-tools/out; \
+		tmp_cargo_home="$$(mktemp -d)"; \
+		cp -r $(CURDIR)/debian/build-tools/cargo-home/. "$$tmp_cargo_home"; \
+		CARGO_HOME="$$tmp_cargo_home" cargo install --offline --locked --root $(CURDIR)/debian/build-tools/out trunk; \
+		CARGO_HOME="$$tmp_cargo_home" cargo install --offline --root $(CURDIR)/debian/build-tools/out wasm-bindgen-cli; \
+		rm -rf "$$tmp_cargo_home"; \
+		wbg_version="$$($(CURDIR)/debian/build-tools/out/bin/wasm-bindgen --version | awk '{print $$2}')"; \
+		mkdir -p $(HOME)/.cache/trunk/wasm-bindgen-$$wbg_version; \
+		cp $(CURDIR)/debian/build-tools/out/bin/wasm-bindgen $(HOME)/.cache/trunk/wasm-bindgen-$$wbg_version/wasm-bindgen; \
+		cd $(CURDIR)/pwa && PATH="$(CURDIR)/debian/vendor-rust-toolchain/bin:$(CURDIR)/debian/build-tools/out/bin:$$PATH" $(CURDIR)/debian/build-tools/out/bin/trunk build --release --offline --dist $(CURDIR)/debian/pwa-dist; \
+	else \
+		rustup target add wasm32-unknown-unknown > /dev/null 2>&1 || true; \
+		if ! command -v trunk > /dev/null; then \
+			cargo install --locked --root $(CURDIR)/debian/build-tools/out trunk; \
+		fi; \
+		trunk_bin="$$(command -v trunk || echo $(CURDIR)/debian/build-tools/out/bin/trunk)"; \
+		cd $(CURDIR)/pwa && "$$trunk_bin" build --release --dist $(CURDIR)/debian/pwa-dist; \
 	fi
 
 override_dh_auto_test:
@@ -59,6 +111,9 @@ override_dh_auto_install:
 	mkdir -p $(CURDIR)/debian/tmp/usr/lib/systemd/user
 	cp $(CURDIR)/debian/megatokyo-daemon.user.service $(CURDIR)/debian/tmp/usr/lib/systemd/user/megatokyo-daemon.service
 	cp $(CURDIR)/debian/megatokyo-gui-background.user.service $(CURDIR)/debian/tmp/usr/lib/systemd/user/megatokyo-gui-background.service
+
+	mkdir -p $(CURDIR)/debian/tmp/usr/share/megatokyo-pwa/www
+	cp -r $(CURDIR)/debian/pwa-dist/. $(CURDIR)/debian/tmp/usr/share/megatokyo-pwa/www/
 
 override_dh_install:
 	dh_install
